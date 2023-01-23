@@ -1,11 +1,10 @@
-package com.example.demo;
+package com.example.demo.model;
 
 import javafx.scene.Node;
-import javafx.scene.shape.Shape;
 
-public class NodeMeta {
+public class NodeMeta<T extends Node> {
 
-    private final Shape shape;
+    private final T node;
     private final int x;
     private final int y;
 
@@ -14,20 +13,20 @@ public class NodeMeta {
     @Override
     public String toString() {
         return "NodeMeta{" +
-            "node=" + shape +
+            "node=" + node +
             ", x=" + x +
             ", y=" + y +
             '}';
     }
 
-    public NodeMeta(Shape shape, int x, int y) {
-        this.shape = shape;
+    public NodeMeta(T node, int x, int y) {
+        this.node = node;
         this.x = x;
         this.y = y;
     }
 
-    public Shape getShape() {
-        return shape;
+    public T getNode() {
+        return node;
     }
 
     public int getX() {
