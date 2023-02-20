@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -10,10 +11,17 @@ import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ElementsService {
 
-    public Rectangle createRectangle() {
+
+
+
+
+    public static Rectangle createRectangle() {
         Rectangle recrangle = new Rectangle();
         recrangle.setWidth(300);
         recrangle.setHeight(300);
@@ -26,8 +34,23 @@ public class ElementsService {
         return recrangle;
     }
 
+    public static StackPane createRectanglePane(Double value) {
+        StackPane stackPane = new StackPane();
 
-    public StackPane createTransformerPane(Double value) {
+        Rectangle recrangle = new Rectangle();
+        recrangle.setWidth(value);
+        recrangle.setHeight(value);
+        recrangle.setFill(Paint.valueOf("#363636"));
+        recrangle.setStroke(Color.TRANSPARENT);
+        recrangle.setStrokeWidth(0);
+
+        stackPane.getChildren().add(recrangle);
+
+        return stackPane;
+    }
+
+
+    public static StackPane createTransformerPane(Double value) {
         StackPane stackPane = new StackPane();
 
         Rectangle recrangle = new Rectangle();
@@ -58,7 +81,7 @@ public class ElementsService {
         return stackPane;
     }
 
-    public StackPane createGeneratorPane(Double value) {
+    public static StackPane createGeneratorPane(Double value) {
         StackPane stackPane = new StackPane();
 
         Rectangle recrangle = new Rectangle();
@@ -93,7 +116,7 @@ public class ElementsService {
         return stackPane;
     }
 
-    public Path drawSemiRing(double centerX, double centerY, double radius, double innerRadius, Color bgColor, Color strkColor, boolean sweepFlag) {
+    public static Path drawSemiRing(double centerX, double centerY, double radius, double innerRadius, Color bgColor, Color strkColor, boolean sweepFlag) {
         Path path = new Path();
         path.setFill(bgColor);
         path.setStroke(strkColor);

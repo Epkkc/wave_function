@@ -1,101 +1,154 @@
 package com.example.demo.model;
 
-import javafx.scene.Node;
+import com.example.demo.model.power.node.Coordinates;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class Matrix<T extends Node> {
+// TODO сделать Iterable
+public class Matrix<T extends Coordinates> implements Iterable<T> {
 
-    private final List<List<NodeMeta<T>>> matrix;
+    private final List<List<T>> matrix;
 
-    private final int x;
-    private final int y;
+    private int rows;
+    private int columns;
 
     public Matrix(int range) {
         this.matrix = new ArrayList<>(range);
         for (int i = 0; i < range; i++) {
             matrix.add(new ArrayList<>(range));
         }
-        this.x = range;
-        this.y = range;
+        this.rows = range;
+        this.columns = range;
     }
 
-    public Matrix(int x, int y) {
-        this.matrix = new ArrayList<>();
-        for (int i = 0; i < x; i++) {
-            matrix.add(new ArrayList<>());
+    public Matrix(int rows, int columns) {
+        this.matrix = new ArrayList<>(rows);
+        for (int i = 0; i < rows; i++) {
+            matrix.add(new ArrayList<>(columns));
         }
-        this.x = x;
-        this.y = y;
+        this.rows = rows;
+        this.columns = columns;
     }
 
-    public void add(NodeMeta<T> nodeMeta) {
-        matrix.get(nodeMeta.getX()).add(nodeMeta.getY(), nodeMeta);
+    public void add(T node) {
+//        matrix.get(node.getX()).add(node.getY(), node);
+        matrix.get(node.getX()).replaceAll(n -> {
+            if (n.getX() == node.getX() && n.getY() == node.getY()) {
+                return node;
+            }
+            return n;
+        });
     }
 
-    public Optional<NodeMeta<T>> getNodeMeta(int x, int y) {
-        if (x < 0 || y < 0 || x >= this.x || y >= this.y) return Optional.empty();
+    public void fill(T node) {
+        matrix.get(node.getX()).add(node.getY(), node);
+    }
+
+    public Optional<T> getNode(int x, int y) {
+        if (x < 0 || y < 0 || x >= this.rows || y >= this.columns) return Optional.empty();
         return Optional.ofNullable(matrix.get(x)).map(l -> l.get(y));
     }
 
-    public Optional<Node> getNode(int x, int y) {
-        return Optional.ofNullable(matrix.get(x).get(y).getNode());
-    }
-
-    public List<NodeMeta<T>> toNodeMetaList() {
-        List<NodeMeta<T>> nodeMetas = new ArrayList<>(x * y);
-        for (List<NodeMeta<T>> metas : matrix) {
-            nodeMetas.addAll(metas);
+    public List<T> toNodeList() {
+        List<T> result = new ArrayList<>(rows * columns);
+        for (List<T> nodes : matrix) {
+            result.addAll(nodes);
         }
-        return nodeMetas;
+        return result;
     }
 
-    public List<Node> toNodeList() {
-        return toNodeMetaList().stream().map(NodeMeta::getNode).collect(Collectors.toList());
+    public List<T> toOrderedNodeList() {
+        List<T> nodes = new ArrayList<>(rows * columns);
+
+        int max = Math.max(rows, columns);
+        for (int i = 0; i < max; i++) {
+            for (int j = 0; j <= Math.min(i, rows - 1); j++) {
+                if (i < columns) {
+                    nodes.add(matrix.get(j).get(i));
+                }
+            }
+            for (int j = Math.min(i, columns) - 1; j >= 0; j--) {
+                if (i < rows) {
+                    nodes.add(matrix.get(i).get(j));
+                }
+            }
+        }
+
+        return nodes;
     }
 
-    public Optional<NodeMeta<T>> getTopNode(int x, int y) {
+    public Optional<T> getTopNode(int x, int y) {
         if (x <= 0) return Optional.empty();
-        return getNodeMeta(x - 1, y);
+        return getNode(x - 1, y);
     }
 
-    public Optional<NodeMeta<T>> getTopNode(NodeMeta<T> meta) {
-        return getTopNode(meta.getX(), meta.getY());
-    }
-
-    public Optional<NodeMeta<T>> getLeftNode(int x, int y) {
+    public Optional<T> getLeftNode(int x, int y) {
         if (y <= 0) return Optional.empty();
-        return getNodeMeta(x, y - 1);
+        return getNode(x, y - 1);
     }
 
-    public Optional<NodeMeta<T>> getLeftNode(NodeMeta<T> meta) {
-        return getLeftNode(meta.getX(), meta.getY());
+    public Optional<T> getBottomNode(int x, int y) {
+        return getNode(x - 1, y);
     }
 
-    public Optional<NodeMeta<T>> getBottomNode(int x, int y) {
-        return getNodeMeta(x - 1, y);
+    public Optional<T> getRightNode(int x, int y) {
+        return getNode(x, y + 1);
     }
 
-    public Optional<NodeMeta<T>> getBottomNode(NodeMeta<T> meta) {
-        return getBottomNode(meta.getX(), meta.getY());
+    public List<T> getArea(int row, int column) {
+        return getArea(row, column, 1);
     }
 
-    public Optional<NodeMeta<T>> getRightNode(int x, int y) {
-        return getNodeMeta(x, y + 1);
+    public List<T> getArea(int row, int column, int radius) {
+        List<T> result = new ArrayList<>();
+
+        for (int x = row-radius; x <= (row + radius); x++) {
+            for (int y = column-radius; y <= (column + radius); y++) {
+                if (x == row && y == column) continue;
+                getNode(x, y).ifPresent(result::add);
+            }
+        }
+
+        return result;
     }
 
-    public Optional<NodeMeta<T>> getRightNode(NodeMeta<T> meta) {
-        return getRightNode(meta.getX(), meta.getY());
+    public void addRow() {
+        matrix.add(new ArrayList<>(columns));
+        rows++;
     }
 
-    public List<Optional<NodeMeta<T>>> getArea(int x, int y) {
-        return List.of(getTopNode(x, y), getLeftNode(x, y), getBottomNode(x, y), getRightNode(x, y));
+    public void addColumn() {
+        matrix.add(new ArrayList<>(columns));
+        columns++;
     }
 
-    public List<Optional<NodeMeta<T>>> getArea(NodeMeta<T> meta) {
-        return getArea(meta.getX(), meta.getY());
+    public Optional<T> get(Predicate<T> predicate) {
+        return toNodeList().stream().filter(predicate).findFirst();
+    }
+
+    public List<T> getAll(Predicate<T> predicate) {
+        return toNodeList().stream().filter(predicate).collect(Collectors.toList());
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return toOrderedNodeList().iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super T> action) {
+        Iterable.super.forEach(action);
+    }
+
+    @Override
+    public Spliterator<T> spliterator() {
+        return Iterable.super.spliterator();
     }
 }
