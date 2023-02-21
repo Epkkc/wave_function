@@ -73,6 +73,8 @@ public class PowerNode implements GridElement {
         return basePane.getStatusPane().getStatuses().stream().map(StatusMeta.class::cast).toList();
     }
 
-    public void setOpacity(double value, VoltageLevel voltageLevel){}
+    public void setHoverOpacity(VoltageLevel voltageLevel){}
+
+    public void setDefaultOpacity(VoltageLevel voltageLevel){}
 
 }

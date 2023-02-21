@@ -14,7 +14,9 @@ import com.example.demo.services.FilterServiceImpl;
 import com.example.demo.services.StatusService;
 import com.example.demo.thread.StoppableThread;
 import javafx.application.Application;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -24,7 +26,11 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -101,11 +107,15 @@ public class NewMain extends Application {
 
         Rectangle maximumWindowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 
+        Group sceneRoot = new Group();
+
         javafx.scene.control.ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefViewportHeight(maximumWindowBounds.getHeight() - 38);
         scrollPane.setPrefViewportWidth(maximumWindowBounds.getWidth() - 15);
 
-        Scene scene = new Scene(scrollPane, Color.WHITE); // 969faf
+        sceneRoot.getChildren().add(scrollPane);
+
+        Scene scene = new Scene(sceneRoot, Color.WHITE); // 969faf
         scene.setFill(Color.WHITE);
 
         Group root = new Group();
@@ -119,16 +129,54 @@ public class NewMain extends Application {
         stage.setScene(scene);
         stage.setMaximized(true);
 
+        StackPane stopMessage = getStopMessageBlock("Для продолжения работы нажмите CAPS LOCK");
+        stopMessage.setAlignment(Pos.BOTTOM_CENTER);
+        stopMessage.setOpacity(0);
+        sceneRoot.getChildren().add(stopMessage);
         scene.setOnKeyPressed(keyEvent -> {
             if (KeyCode.CAPS.equals(keyEvent.getCode())) {
                 thread.changeStopped();
-                System.out.println("Нажатие на SPACE");
+                System.out.println("Нажатие на CAPS");
                 System.out.println("Thread 1 stopped = " + thread.isStopped());
                 // TODO вывести подсказку снизу экрана, которая бы затухала через несколько секунд
+                if (thread.isStopped()) {
+//                    sceneRoot.getChildren().add(stopMessage);
+                    stopMessage.setOpacity(1);
+                } else {
+//                    sceneRoot.getChildren().remove(stopMessage);
+                    stopMessage.setOpacity(0);
+                }
             }
         });
 
         elementService = new ElementServiceImpl(cfg, stage, scene, scrollPane, root, gridPane, matrix);
+    }
+
+    private static StackPane getStopMessageBlock(String message) {
+        double hPadding = 10;
+        double vPadding = 7;
+
+        StackPane stackPane = new StackPane();
+
+        Text text = new Text();
+        text.setFont(Font.getDefault());
+        text.setText(message);
+        text.setLayoutX(hPadding);
+        text.setTranslateY(-vPadding);
+
+        Bounds textBounds = text.getBoundsInLocal();
+
+        javafx.scene.shape.Rectangle rectangle = new javafx.scene.shape.Rectangle();
+        rectangle.setFill(Paint.valueOf("#e7e7e7")); // #363636 Paint.valueOf("#e7e7e7")
+        rectangle.setStroke(Color.TRANSPARENT);
+        rectangle.setStrokeWidth(0);
+        rectangle.setWidth(textBounds.getWidth() + 2 * hPadding);
+        rectangle.setHeight(textBounds.getHeight() + 2 * vPadding);
+
+        stackPane.getChildren().add(rectangle);
+        stackPane.getChildren().add(text);
+
+        return stackPane;
     }
 
 }

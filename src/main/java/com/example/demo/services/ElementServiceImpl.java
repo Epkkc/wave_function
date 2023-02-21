@@ -10,12 +10,11 @@ import javafx.concurrent.Task;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -29,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Data
 @RequiredArgsConstructor
@@ -91,8 +91,6 @@ public class ElementServiceImpl {
             Platform.runLater(() -> {
                 root.getChildren().add(line);
             });
-
-
         }
     }
 
@@ -123,13 +121,13 @@ public class ElementServiceImpl {
                 line.setOpacity(0.2); // Меняем прозрачноть(цвет) элемента, на который навели мышью
                 lowText.setText(joiner.toString());
                 popup.show(line, x, y);
-                powerLine.point1().setOpacity(0.5d, powerLine.voltageLevel()); // TODO можно заменить на метод, что-то типо setHoverOpacity
-                powerLine.point2().setOpacity(0.5d, powerLine.voltageLevel());
+                powerLine.point1().setHoverOpacity(powerLine.voltageLevel());
+                powerLine.point2().setHoverOpacity(powerLine.voltageLevel());
             } else {
-                line.setOpacity(0.5); // Возвращаем дефолтную прозрачность 1
+                line.setOpacity(0.5); // Возвращаем дефолтную прозрачность
                 popup.hide();
-                powerLine.point1().setOpacity(1d, powerLine.voltageLevel());
-                powerLine.point2().setOpacity(1d, powerLine.voltageLevel()); // TODO а здесь метод setDefaultOpacity
+                powerLine.point1().setDefaultOpacity(powerLine.voltageLevel());
+                powerLine.point2().setDefaultOpacity(powerLine.voltageLevel());
             }
         });
     }

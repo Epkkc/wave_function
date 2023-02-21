@@ -26,6 +26,9 @@ public class SubStation extends PowerNode {
 
     private Map<VoltageLevel, Circle> circlesMap = new HashMap<>();
 
+    private final double hoverOpacity = 0.5d;
+    private final double defaultOpacity = 1d;
+
 
     public SubStation(double size, VoltageLevel highVoltage, VoltageLevel lowVoltage, BasePane basePane) {
         super(size, basePane);
@@ -126,18 +129,23 @@ public class SubStation extends PowerNode {
                 Bounds bnds = circle.localToScreen(circle.getLayoutBounds());
                 double x = bnds.getMinX() - (stickyNotesPane.getWidth() / 2) + (circle.getRadius());
                 double y = bnds.getMinY() - stickyNotesPane.getHeight();
-                circle.setOpacity(0.5); // Меняем прозрачноть(цвет) элемента, на который навели мышью
+                circle.setOpacity(hoverOpacity); // Меняем прозрачноть(цвет) элемента, на который навели мышью
                 lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription()));
                 popup.show(circle, x, y);
             } else {
-                circle.setOpacity(1); // Возвращаем дефолтную прозрачность 1
+                circle.setOpacity(defaultOpacity); // Возвращаем дефолтную прозрачность 1
                 popup.hide();
             }
         });
     }
 
     @Override
-    public void setOpacity(double value, VoltageLevel voltageLevel) {
-        circlesMap.get(voltageLevel).setOpacity(value);
+    public void setHoverOpacity(VoltageLevel voltageLevel) {
+        circlesMap.get(voltageLevel).setOpacity(hoverOpacity);
+    }
+
+    @Override
+    public void setDefaultOpacity(VoltageLevel voltageLevel) {
+        circlesMap.get(voltageLevel).setOpacity(defaultOpacity);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.model.power.node.PowerNode;
+import javafx.application.Platform;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
@@ -34,11 +35,11 @@ public class ConnectionServiceImpl implements ConnectionService {
                 )
                 .filter(n -> n.getConnectionPoints().containsKey(voltageLevel))
                 .limit(2) // TODO Заменить эту логику на максимальное количество выходящих из ноды линий
-                .forEach(n -> elementService.connectTwoNodes(
+                .forEach(n -> Platform.runLater(() -> elementService.connectTwoNodes(
                         n, n.getConnectionPoints().get(voltageLevel),
                         node, node.getConnectionPoints().get(voltageLevel),
                         voltageLevel
-                    )
+                    ))
                 )
         );
     }
