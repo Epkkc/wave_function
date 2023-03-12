@@ -1,7 +1,11 @@
 package com.example.demo;
 
 import com.example.demo.model.Matrix;
+import com.example.demo.model.power.node.BaseNode;
+import com.example.demo.model.power.node.Generator;
+import com.example.demo.model.power.node.Load;
 import com.example.demo.model.power.node.PowerNode;
+import com.example.demo.model.power.node.VoltageLevel;
 import com.example.demo.model.status.StatusSupplier;
 import com.example.demo.model.status.StatusSupplierImpl;
 import com.example.demo.services.Algorithm;
@@ -14,6 +18,7 @@ import com.example.demo.services.FilterServiceImpl;
 import com.example.demo.services.StatusService;
 import com.example.demo.thread.StoppableThread;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -82,12 +87,21 @@ public class NewMain extends Application {
 
         thread.start();
 
+
+        PowerNode generator = new Generator(elementService.getBaseSize(), VoltageLevel.LEVEL_220);
+        GridPane.setConstraints(generator.getStackPane(), 0, rows + 1);
+        gridPane.getChildren().add(generator.getStackPane());
+
+        PowerNode load = new Load(elementService.getBaseSize(), VoltageLevel.LEVEL_110);
+        GridPane.setConstraints(load.getStackPane(), 1, rows + 1);
+        gridPane.getChildren().add(load.getStackPane());
+
     }
 
     private static void fillMatrix() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                PowerNode powerNode = new PowerNode(elementService.getBaseSize());
+                PowerNode powerNode = new BaseNode(elementService.getBaseSize());
                 powerNode.setX(i);
                 powerNode.setY(j);
                 matrix.fill(powerNode);
@@ -132,18 +146,17 @@ public class NewMain extends Application {
         StackPane stopMessage = getStopMessageBlock("Для продолжения работы нажмите CAPS LOCK");
         stopMessage.setAlignment(Pos.BOTTOM_CENTER);
         stopMessage.setOpacity(0);
+        stopMessage.mouseTransparentProperty().set(true);
+
         sceneRoot.getChildren().add(stopMessage);
         scene.setOnKeyPressed(keyEvent -> {
             if (KeyCode.CAPS.equals(keyEvent.getCode())) {
                 thread.changeStopped();
                 System.out.println("Нажатие на CAPS");
                 System.out.println("Thread 1 stopped = " + thread.isStopped());
-                // TODO вывести подсказку снизу экрана, которая бы затухала через несколько секунд
                 if (thread.isStopped()) {
-//                    sceneRoot.getChildren().add(stopMessage);
-                    stopMessage.setOpacity(1);
+                    stopMessage.setOpacity(0.85);
                 } else {
-//                    sceneRoot.getChildren().remove(stopMessage);
                     stopMessage.setOpacity(0);
                 }
             }
@@ -153,27 +166,17 @@ public class NewMain extends Application {
     }
 
     private static StackPane getStopMessageBlock(String message) {
-        double hPadding = 10;
-        double vPadding = 7;
-
-        StackPane stackPane = new StackPane();
+        int hPadding = 10;
+        int vPadding = 7;
 
         Text text = new Text();
         text.setFont(Font.getDefault());
         text.setText(message);
-        text.setLayoutX(hPadding);
-        text.setTranslateY(-vPadding);
 
-        Bounds textBounds = text.getBoundsInLocal();
+        StackPane stackPane = new StackPane();
+        stackPane.setPadding(new Insets(vPadding, hPadding, vPadding, hPadding));
+        stackPane.setStyle("-fx-background-color: rgba(255, 255, 255, 0.85);");
 
-        javafx.scene.shape.Rectangle rectangle = new javafx.scene.shape.Rectangle();
-        rectangle.setFill(Paint.valueOf("#e7e7e7")); // #363636 Paint.valueOf("#e7e7e7")
-        rectangle.setStroke(Color.TRANSPARENT);
-        rectangle.setStrokeWidth(0);
-        rectangle.setWidth(textBounds.getWidth() + 2 * hPadding);
-        rectangle.setHeight(textBounds.getHeight() + 2 * vPadding);
-
-        stackPane.getChildren().add(rectangle);
         stackPane.getChildren().add(text);
 
         return stackPane;

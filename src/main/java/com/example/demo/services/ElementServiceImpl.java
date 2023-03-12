@@ -95,14 +95,14 @@ public class ElementServiceImpl {
     }
 
     private void addHoverListener(PowerLine powerLine) {
-        Text lowText = new Text();
-        lowText.setTextAlignment(TextAlignment.CENTER);
-        lowText.setFont(Font.getDefault());
+        Text text = new Text();
+        text.setTextAlignment(TextAlignment.CENTER);
+        text.setFont(Font.getDefault());
 
         StackPane stickyNotesPane = new StackPane();
         stickyNotesPane.setPadding(new Insets(2));
         stickyNotesPane.setStyle("-fx-background-color: rgba(255, 255, 255, 0.85);");
-        stickyNotesPane.getChildren().add(lowText);
+        stickyNotesPane.getChildren().add(text);
 
         Popup popup = new Popup();
         popup.getContent().add(stickyNotesPane);
@@ -119,7 +119,7 @@ public class ElementServiceImpl {
                 double x = bnds.getCenterX();
                 double y = bnds.getCenterY() + stickyNotesPane.getHeight();
                 line.setOpacity(0.2); // Меняем прозрачноть(цвет) элемента, на который навели мышью
-                lowText.setText(joiner.toString());
+                text.setText(joiner.toString());
                 popup.show(line, x, y);
                 powerLine.point1().setHoverOpacity(powerLine.voltageLevel());
                 powerLine.point2().setHoverOpacity(powerLine.voltageLevel());

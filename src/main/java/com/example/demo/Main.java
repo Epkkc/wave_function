@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.model.power.node.BaseNode;
 import com.example.demo.model.power.node.ConnectionPoint;
 import com.example.demo.model.Matrix;
 import com.example.demo.model.power.node.PowerNode;
@@ -259,7 +260,7 @@ public class Main extends Application {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
 //                StackPane stackPane = (i + j) % 2 == 0 ? elementsService.createGeneratorPane(size) : elementsService.createTransformerPane(size);
-                PowerNode powerNode = new PowerNode(value);
+                PowerNode powerNode = new BaseNode(value);
                 powerNode.setX(i);
                 powerNode.setY(j);
                 matrix.fill(powerNode);

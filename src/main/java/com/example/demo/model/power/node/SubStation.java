@@ -1,13 +1,10 @@
 package com.example.demo.model.power.node;
 
-import com.example.demo.model.visual.elements.BasePane;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -18,96 +15,55 @@ import java.util.Map;
 
 public class SubStation extends PowerNode {
 
-    private VoltageLevel highVoltage;
-    private VoltageLevel lowVoltage;
-
-    private Circle highVoltageCircle;
-    private Circle lowVoltageCircle;
-
     private Map<VoltageLevel, Circle> circlesMap = new HashMap<>();
+    private VoltageLevel level1;
+    private VoltageLevel level2;
 
-    private final double hoverOpacity = 0.5d;
-    private final double defaultOpacity = 1d;
-
-
-    public SubStation(double size, VoltageLevel highVoltage, VoltageLevel lowVoltage, BasePane basePane) {
-        super(size, basePane);
-        this.highVoltage = highVoltage;
-        this.lowVoltage = lowVoltage;
-        setNodeType(PowerNodeType.SUBSTATION);
-        createAndFillStackPane(size, highVoltage, lowVoltage);
+    public SubStation(double size, VoltageLevel level1, VoltageLevel level2) {
+        super(size, PowerNodeType.SUBSTATION);
+        this.level1 = level1;
+        this.level2 = level2;
+        fillBasePane();
     }
 
-    public SubStation(double size, VoltageLevel highVoltage, VoltageLevel lowVoltage) {
-        super(size);
-        this.highVoltage = highVoltage;
-        this.lowVoltage = lowVoltage;
-        setNodeType(PowerNodeType.SUBSTATION);
-        createAndFillStackPane(size, highVoltage, lowVoltage);
-    }
-
-    @Override
-    public StackPane getStackPane() {
-        return this.stackPane;
-    }
-
-    private void createAndFillStackPane(double size, VoltageLevel highVoltageLevel, VoltageLevel lowVoltageLevel) {
-        // TODO Заменить ручное создание прямоугольника на кастомный объект,
-        //  который представлял бы сам прямоугольник с набором статусов внутри
-        //  метод можно сделать в супер классе
-        Rectangle recrangle = new Rectangle();
-        recrangle.setWidth(size);
-        recrangle.setHeight(size);
-//        recrangle.setFill(Paint.valueOf("#363636"));
-        recrangle.setFill(Paint.valueOf("#e7e7e7"));
-        recrangle.setStroke(Color.TRANSPARENT);
-        recrangle.setStrokeWidth(0);
+    protected void fillBasePane() {
 
         double radius = size * 7 / 30;
         double offset = radius / 2;
 
-        highVoltageCircle = new Circle();
-        highVoltageCircle.setRadius(radius);
-        highVoltageCircle.setFill(Color.TRANSPARENT);
-        highVoltageCircle.setStroke(highVoltageLevel.getColor());
-        highVoltageCircle.setStrokeWidth(size * 8 / 300);
-        highVoltageCircle.setTranslateX(-offset);
+        Circle circle1 = new Circle();
+        circle1.setRadius(radius);
+        circle1.setFill(Color.TRANSPARENT);
+        circle1.setStroke(level1.getColor());
+        circle1.setStrokeWidth(size * 8 / 300);
+        circle1.setTranslateX(-offset);
 
-        lowVoltageCircle = new Circle();
-        lowVoltageCircle.setRadius(radius);
-        lowVoltageCircle.setFill(Color.TRANSPARENT);
-        lowVoltageCircle.setStroke(lowVoltageLevel.getColor());
-        lowVoltageCircle.setStrokeWidth(size * 8 / 300);
-        lowVoltageCircle.setTranslateX(offset);
+        Circle circle2 = new Circle();
+        circle2.setRadius(radius);
+        circle2.setFill(Color.TRANSPARENT);
+        circle2.setStroke(level2.getColor());
+        circle2.setStrokeWidth(size * 8 / 300);
+        circle2.setTranslateX(offset);
 
-        connectionPoints.put(
-            highVoltageLevel,
-            new ConnectionPoint(
-                -offset - radius,
-                0,
-//                highVoltageLevel,
-                0, 2,
-                0, 2
-            ));
+        connectionPoints.put(level1, new ConnectionPoint(-offset - radius, 0, level1, 0, 2, 0, 2));
 
-        connectionPoints.put(
-            lowVoltageLevel,
-            new ConnectionPoint(
-                offset + radius,
-                0,
-//                lowVoltageLevel,
-                0, 2,
-                0, 2
-            ));
+        connectionPoints.put(level2, new ConnectionPoint(offset + radius, 0, level2, 0, 2, 0, 2));
 
-        addHoverListener(lowVoltageCircle, lowVoltageLevel);
-        addHoverListener(highVoltageCircle, highVoltageLevel);
+        Bounds bounds1 = circle1.localToScreen(circle1.getLayoutBounds());
 
-        stackPane.getChildren().add(highVoltageCircle);
-        stackPane.getChildren().add(lowVoltageCircle);
+//        addHoverListener(circle1, level1,
+//            String.join("\n", getUuid(), level1.getDescription()),
+//
+//            );
 
-        circlesMap.put(highVoltageLevel, highVoltageCircle);
-        circlesMap.put(lowVoltageLevel, lowVoltageCircle);
+        addHoverListener(circle1, level1);
+        addHoverListener(circle2, level2);
+
+        basePane.getStackPane().getChildren().add(circle1);
+        basePane.getStackPane().getChildren().add(circle2);
+
+        circlesMap.put(level1, circle1);
+        circlesMap.put(level2, circle2);
     }
 
     private void addHoverListener(Circle circle, VoltageLevel voltageLevel) {
@@ -129,23 +85,18 @@ public class SubStation extends PowerNode {
                 Bounds bnds = circle.localToScreen(circle.getLayoutBounds());
                 double x = bnds.getMinX() - (stickyNotesPane.getWidth() / 2) + (circle.getRadius());
                 double y = bnds.getMinY() - stickyNotesPane.getHeight();
-                circle.setOpacity(hoverOpacity); // Меняем прозрачноть(цвет) элемента, на который навели мышью
+                setHoverOpacity(voltageLevel);
                 lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription()));
                 popup.show(circle, x, y);
             } else {
-                circle.setOpacity(defaultOpacity); // Возвращаем дефолтную прозрачность 1
+                setDefaultOpacity(voltageLevel);
                 popup.hide();
             }
         });
     }
 
     @Override
-    public void setHoverOpacity(VoltageLevel voltageLevel) {
-        circlesMap.get(voltageLevel).setOpacity(hoverOpacity);
-    }
-
-    @Override
-    public void setDefaultOpacity(VoltageLevel voltageLevel) {
-        circlesMap.get(voltageLevel).setOpacity(defaultOpacity);
+    protected void setOpacity(VoltageLevel voltageLevel, double value) {
+        circlesMap.get(voltageLevel).setOpacity(value);
     }
 }
