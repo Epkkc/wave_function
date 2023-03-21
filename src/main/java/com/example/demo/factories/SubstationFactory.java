@@ -25,12 +25,7 @@ public class SubstationFactory extends PowerNodeFactory {
 
     @Override
     public Optional<PowerNode> createNode(FilterContext context) {
-        PowerNodeStatusMeta status = context.possibleStatuses()
-            .stream()
-            .filter(s -> getType().equals(s.powerNodeType()))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException(String.format("Не найден статус с type=%s\ncontext=%s", getType(), context)));
-
+        PowerNodeStatusMeta status = findStatus(context);
 
         if (status.voltageLevels().size() >= 2) {
             PowerNode node = context.node();

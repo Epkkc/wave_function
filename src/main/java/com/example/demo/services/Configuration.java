@@ -32,7 +32,7 @@ public class Configuration {
     private int rows = 10;
     private int columns = 20;
     private double baseSize = 120;
-    private int delay = 50;
+    private int delay = 500;
 
     public Configuration(int rows, int columns) {
         this.rows = rows;

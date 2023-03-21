@@ -9,7 +9,7 @@ public class RandomUtils {
 
     private static final Random random = new Random();
 
-    public static <T> List<T> randomUniqueValues(List<T> list, int amount) {
+    public static <T> List<T> randomUniqueValues(Collection<T> list, int amount) {
         int size = list.size();
 
         if (amount < 1 || size < amount) return List.of();
@@ -30,5 +30,14 @@ public class RandomUtils {
         return result;
     }
 
+    public static <T> T randomValue(Collection<T> list) {
+        int size = list.size();
+
+        List<T> copy = new ArrayList<>(list);
+
+        if (size < 1) return null;
+
+        return copy.get(random.nextInt(size));
+    }
 
 }

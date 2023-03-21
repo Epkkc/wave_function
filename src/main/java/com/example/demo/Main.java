@@ -281,10 +281,10 @@ public class Main extends Application {
 
             Platform.runLater(() -> {
                 Line line1 = new Line();
-                line1.setStartX(boundsP1.getCenterX() + connectionPoint1.x());
-                line1.setStartY(boundsP1.getCenterY() + connectionPoint1.y());
-                line1.setEndX(boundsP2.getCenterX() + connectionPoint2.x());
-                line1.setEndY(boundsP2.getCenterY() + connectionPoint2.y());
+                line1.setStartX(boundsP1.getCenterX() + connectionPoint1.getX());
+                line1.setStartY(boundsP1.getCenterY() + connectionPoint1.getY());
+                line1.setEndX(boundsP2.getCenterX() + connectionPoint2.getX());
+                line1.setEndY(boundsP2.getCenterY() + connectionPoint2.getY());
                 line1.setStroke(voltageLevel.getColor());
                 line1.setStrokeWidth(size * 8 / 300);
                 line1.setOpacity(0.5d);

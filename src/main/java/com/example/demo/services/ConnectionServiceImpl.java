@@ -1,11 +1,16 @@
 package com.example.demo.services;
 
 import com.example.demo.model.power.node.PowerNode;
+import com.example.demo.model.power.node.PowerNodeType;
 import javafx.application.Platform;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
@@ -21,25 +26,34 @@ public class ConnectionServiceImpl implements ConnectionService {
 
         Collections.reverse(powerNodes);
 
-        //TODO убираем саму ноду node
+        // Убираем саму ноду node, чтобы не соединять её саму с собой
         powerNodes.remove(0);
+
+        // Этот сэт для того, чтобы трансформаторы не были соединены друг с другом обоими обмотками
+        Set<String> connectedNodes = new HashSet<>();
 
         node.getConnectionPoints().forEach((voltageLevel, connectionPoint) ->
             powerNodes.stream()
-                .filter(n -> n.getNodeType() != null)
+                .filter(n -> !PowerNodeType.EMPTY.equals(n.getNodeType()))
+                .filter(n -> PowerNodeType.SUBSTATION.equals(node.getNodeType()) || PowerNodeType.SUBSTATION.equals(n.getNodeType()))
+                .filter(n -> !connectedNodes.contains(n.getUuid()))
+                .filter(n -> !n.getUuid().equals(node.getUuid()))
                 .filter(n -> (n.getX() <= node.getX()
                     || n.getY() <= node.getY())
-                    && sqrt(pow(node.getX() - n.getX(), 2) + pow(node.getY() - n.getY(), 2)) <= 3 * voltageLevel.getBoundingArea()
-                    && n.getX() != node.getX()
-                    && n.getY() != node.getY()
+                    // TODO Определиться с тем, насколько длинными могут быть линии
+                    && sqrt(pow(node.getX() - n.getX(), 2) + pow(node.getY() - n.getY(), 2)) <= 2 * voltageLevel.getBoundingArea()
                 )
                 .filter(n -> n.getConnectionPoints().containsKey(voltageLevel))
-                .limit(2) // TODO Заменить эту логику на максимальное количество выходящих из ноды линий
-                .forEach(n -> Platform.runLater(() -> elementService.connectTwoNodes(
-                        n, n.getConnectionPoints().get(voltageLevel),
-                        node, node.getConnectionPoints().get(voltageLevel),
-                        voltageLevel
-                    ))
+                .filter(n -> n.getConnectionPoints().get(voltageLevel).getLimit() > n.getConnectionPoints().get(voltageLevel).getConnections())
+                .limit(connectionPoint.getLimit() - connectionPoint.getConnections())
+                .forEach(n -> {
+                        connectedNodes.add(n.getUuid());
+                        Platform.runLater(() -> elementService.connectTwoNodes(
+                            n, n.getConnectionPoints().get(voltageLevel),
+                            node, node.getConnectionPoints().get(voltageLevel),
+                            voltageLevel
+                        ));
+                    }
                 )
         );
     }

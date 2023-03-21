@@ -14,12 +14,13 @@ import java.util.stream.Collectors;
 
 public class StatusSupplierImpl implements StatusSupplier {
 
-    private Map<PowerNodeType, StatusProvider> statusProviderMap;
-
-    {
-        statusProviderMap = new HashMap<>();
-        statusProviderMap.put(PowerNodeType.SUBSTATION, new SubstationStatusProvider());
-    }
+//    private Map<PowerNodeType, StatusProvider> statusProviderMap;
+//
+//    {
+//        statusProviderMap = new HashMap<>();
+//        statusProviderMap.put(PowerNodeType.SUBSTATION, new CommonStatusProvider());
+//    }
+    private StatusProvider statusProvider = new CommonStatusProvider();
 
     @Override
     public Set<PowerNodeStatusMeta> getAllPowerNodeStatuses() {
@@ -32,12 +33,14 @@ public class StatusSupplierImpl implements StatusSupplier {
 //        }
 
         result.add(new PowerNodeStatusMeta(PowerNodeType.SUBSTATION, allPossibleVoltages));
+        result.add(new PowerNodeStatusMeta(PowerNodeType.GENERATOR, allPossibleVoltages)); // TODO раскоментить
+        result.add(new PowerNodeStatusMeta(PowerNodeType.LOAD, allPossibleVoltages));
 
         return result;
     }
 
     public List<StatusMeta> getStatusByNode(PowerNode node) {
-        return statusProviderMap.get(node.getNodeType()).provideStatuses(node);
+        return statusProvider.provideStatuses(node);
     }
 
 }

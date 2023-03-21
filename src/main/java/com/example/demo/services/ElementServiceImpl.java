@@ -74,10 +74,10 @@ public class ElementServiceImpl {
             Bounds boundsP2 = node2.getStackPane().getBoundsInParent();
 
             Line line = new Line();
-            line.setStartX(boundsP1.getCenterX() + point1.x());
-            line.setStartY(boundsP1.getCenterY() + point1.y());
-            line.setEndX(boundsP2.getCenterX() + point2.x());
-            line.setEndY(boundsP2.getCenterY() + point2.y());
+            line.setStartX(boundsP1.getCenterX() + point1.getX());
+            line.setStartY(boundsP1.getCenterY() + point1.getY());
+            line.setEndX(boundsP2.getCenterX() + point2.getX());
+            line.setEndY(boundsP2.getCenterY() + point2.getY());
             line.setStroke(voltageLevel.getColor());
             line.setStrokeWidth(configuration.getBaseSize() * 8 / 300);
             line.setOpacity(0.5d);
@@ -86,11 +86,12 @@ public class ElementServiceImpl {
             PowerLine powerLine = new PowerLine(node1, node2, voltageLevel, line, UUID.randomUUID().toString());
             lines.add(powerLine);
 
+            point1.addConnection();
+            point2.addConnection();
+
             addHoverListener(powerLine);
 
-            Platform.runLater(() -> {
-                root.getChildren().add(line);
-            });
+            Platform.runLater(() -> root.getChildren().add(line));
         }
     }
 

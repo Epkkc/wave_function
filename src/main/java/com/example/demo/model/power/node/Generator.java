@@ -33,8 +33,9 @@ public class Generator extends PowerNode {
     }
 
     public void fillBasePane() {
+        double circleRadius = size * 9 / 30;
         circle = new Circle();
-        circle.setRadius(size * 9 / 30);
+        circle.setRadius(circleRadius);
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(voltageLevel.getColor());
         circle.setStrokeWidth(size * 8 / 300);
@@ -60,8 +61,7 @@ public class Generator extends PowerNode {
 
         addHoverListeners();
 
-        connectionPoints.put(voltageLevel, new ConnectionPoint(0, - radius, voltageLevel, 0, 2, 0, 2));
-
+        connectionPoints.put(voltageLevel, new ConnectionPoint(0, - circleRadius, voltageLevel, 0, 1));
     }
 
     public Path drawSemiRing(double centerX, double centerY, double radius, double innerRadius, Paint paint, boolean sweepFlag) {

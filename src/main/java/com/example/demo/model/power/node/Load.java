@@ -20,7 +20,6 @@ import java.util.List;
 
 public class Load extends PowerNode {
     private VoltageLevel voltageLevel;
-    private Path path;
 
     private List<Shape> shapes = new ArrayList<>();
 
@@ -28,48 +27,6 @@ public class Load extends PowerNode {
         super(size, PowerNodeType.LOAD);
         this.voltageLevel = voltageLevel;
         fillBasePane1();
-    }
-
-    protected void fillBasePane() {
-        path = new Path();
-        path.setFill(voltageLevel.getColor());
-        path.setStroke(voltageLevel.getColor());
-        path.setFillRule(FillRule.EVEN_ODD);
-
-        double width = size / 6;
-
-        MoveTo move1 = new MoveTo();
-        move1.setX(-width);
-        move1.setY(0);
-
-        LineTo topLine = new LineTo(width, 0);
-
-        MoveTo move2 = new MoveTo();
-        move2.setX(0);
-        move2.setY(0);
-
-        LineTo centerLine = new LineTo(0, -width * 2);
-
-        double v = -width * 2 + width * Math.sin(Math.PI / 3);
-        LineTo rightLine = new LineTo(-width * Math.cos(Math.PI / 3), v);
-
-        MoveTo move3 = new MoveTo();
-        move2.setX(0);
-        move2.setY(0);
-
-        LineTo leftLine = new LineTo(width * Math.cos(Math.PI / 3), v);
-
-        path.getElements().add(move1);
-        path.getElements().add(topLine);
-        path.getElements().add(move2);
-        path.getElements().add(centerLine);
-        path.getElements().add(rightLine);
-        path.getElements().add(move3);
-        path.getElements().add(leftLine);
-
-        addHoverListener();
-
-        basePane.getStackPane().getChildren().add(path);
     }
 
     protected void fillBasePane1() {
@@ -113,6 +70,8 @@ public class Load extends PowerNode {
         shapes.add(leftLine);
 
         addHoverListener();
+
+        connectionPoints.put(voltageLevel, new ConnectionPoint(0, -length, voltageLevel, 0, 1));
     }
 
     @Override

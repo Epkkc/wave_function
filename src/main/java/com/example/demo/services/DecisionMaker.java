@@ -1,5 +1,7 @@
 package com.example.demo.services;
 
+import com.example.demo.factories.GeneratorFactory;
+import com.example.demo.factories.LoadFactory;
 import com.example.demo.factories.PowerNodeFactory;
 import com.example.demo.factories.SubstationFactory;
 import com.example.demo.model.filter.FilterContext;
@@ -25,6 +27,8 @@ public class DecisionMaker {
         // TODO:SPRING От этого конструктора можно будет отказаться, потому что elementService будет автоваириться в SubstationFactory
         //  также, поскольку HashMap будет заполняться автоматически
         factoriesMap.put(PowerNodeType.SUBSTATION, new SubstationFactory(elementsService));
+        factoriesMap.put(PowerNodeType.GENERATOR, new GeneratorFactory(elementsService)); // TODO раскоментить
+        factoriesMap.put(PowerNodeType.LOAD, new LoadFactory(elementsService));
     }
 
     public Optional<PowerNode> makeDecision(FilterContext context) {

@@ -45,16 +45,11 @@ public class SubStation extends PowerNode {
         circle2.setStrokeWidth(size * 8 / 300);
         circle2.setTranslateX(offset);
 
-        connectionPoints.put(level1, new ConnectionPoint(-offset - radius, 0, level1, 0, 2, 0, 2));
+        connectionPoints.put(level1, new ConnectionPoint(-offset - radius, 0, level1, 0, 2));
 
-        connectionPoints.put(level2, new ConnectionPoint(offset + radius, 0, level2, 0, 2, 0, 2));
+        connectionPoints.put(level2, new ConnectionPoint(offset + radius, 0, level2, 0, 2));
 
         Bounds bounds1 = circle1.localToScreen(circle1.getLayoutBounds());
-
-//        addHoverListener(circle1, level1,
-//            String.join("\n", getUuid(), level1.getDescription()),
-//
-//            );
 
         addHoverListener(circle1, level1);
         addHoverListener(circle2, level2);

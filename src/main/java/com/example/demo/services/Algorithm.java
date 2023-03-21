@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
 public class Algorithm {
@@ -44,7 +43,7 @@ public class Algorithm {
 
             // Убираем из всех возможных вариантов ноды те, которые противоречат статусам текущей ноды
             FilterContext context = filterService.filter(new FilterContext(allPowerNodeStatuses, new HashSet<>(), node));
-            
+            context.clearPossibleStatuses();
             // Из оставшихся возможных статусов выбираем рандомно единственный и создаём для него PowerNode
             Optional<PowerNode> resultNode = decisionMaker.makeDecision(context);
             resultNode.ifPresent(result -> {

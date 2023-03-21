@@ -1,10 +1,38 @@
 package com.example.demo.model.power.node;
 
-public enum PowerNodeType {
-    EMPTY,
+import com.example.demo.model.status.StatusType;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    SUBSTATION,
-    GENERATOR,
-    LOAD
+import java.util.Collection;
+import java.util.List;
+
+@RequiredArgsConstructor
+@Getter
+public enum PowerNodeType {
+    EMPTY(0, 0),
+    SUBSTATION(1, 60),
+    GENERATOR(2, 30),
+    LOAD(1, 10);
+
+    static {
+        SUBSTATION.blockingStatus = StatusType.BLOCK_SUBSTATION;
+        GENERATOR.blockingStatus = StatusType.BLOCK_GENERATOR;
+        LOAD.blockingStatus = StatusType.BLOCK_LOAD;
+
+        double counter = 0;
+        for (PowerNodeType value : values()) {
+            counter += value.getGenerationRate();
+        }
+        assert Double.compare(1.0,counter) == 0;
+    }
+
+    private StatusType blockingStatus;
+    private final int boundingAreaKoef;
+    private final double generationRate;
+
+    public static Collection<PowerNodeType> getValidValues() {
+        return List.of(SUBSTATION, GENERATOR, LOAD);
+    }
 
 }
