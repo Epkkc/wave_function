@@ -2,8 +2,9 @@ module com.example.demo {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires javafx.graphics;
     requires static lombok;
-    exports com.example.demo;
+    requires org.apache.commons.collections4;
     exports com.example.demo.model;
     opens com.example.demo.model to javafx.fxml;
     exports com.example.demo.services;
@@ -21,4 +22,7 @@ module com.example.demo {
     opens com.example.demo.model.filter to javafx.fxml;
     exports com.example.demo.thread;
     opens com.example.demo.thread to javafx.fxml;
+    exports com.example.demo.procedure;
+    opens com.example.demo.procedure to javafx.fxml;
+    opens com.example.demo to javafx.fxml, javafx.graphics;
 }

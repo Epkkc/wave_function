@@ -4,6 +4,7 @@ import com.example.demo.model.filter.FilterContext;
 import com.example.demo.model.power.node.Generator;
 import com.example.demo.model.power.node.PowerNode;
 import com.example.demo.model.power.node.PowerNodeType;
+import com.example.demo.model.power.node.VoltageLevel;
 import com.example.demo.model.status.PowerNodeStatusMeta;
 import com.example.demo.services.ElementServiceImpl;
 import com.example.demo.utils.RandomUtils;
@@ -29,4 +30,5 @@ public class GeneratorFactory extends PowerNodeFactory{
         generator.setY(context.node().getY());
         return Optional.of(generator);
     }
+
 }

@@ -4,10 +4,12 @@ import com.example.demo.model.power.node.PowerNode;
 import com.example.demo.model.status.PowerNodeStatusMeta;
 import com.example.demo.model.status.Status;
 import com.example.demo.model.status.StatusMeta;
+import lombok.Builder;
 
 import java.util.Iterator;
 import java.util.Set;
 
+@Builder
 public record FilterContext(
     Set<PowerNodeStatusMeta> possibleStatuses,
     Set<Status> mustStatuses,

@@ -1,6 +1,7 @@
 package com.example.demo.model.visual.elements;
 
 import com.example.demo.model.Matrix;
+import com.example.demo.model.status.BlockType;
 import com.example.demo.model.status.Status;
 import com.example.demo.model.status.StatusMeta;
 import com.example.demo.model.status.StatusType;
@@ -10,7 +11,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +52,10 @@ public class StatusPane {
 
     public void addStatus(StatusType type, boolean show, VoltageLevel... voltageLevel) {
         Optional<Status> status1 = statusMatrix.get(s -> type.equals(s.getType()));
+
+        // Если это should статус, то нужно сначала проверить, что нет такого же блокирующего статуса
+        // Блокирующий приоритетнее should статуса
+
         if (status1.isPresent()) {
             status1.get().addVoltageLevel(voltageLevel);
         } else {
@@ -65,6 +74,69 @@ public class StatusPane {
 
             numberOfElements++;
         }
+
+//        if ()
+//        // todo удаляем уровень напряжения, если есть противоположный BlockType с таким же уровнем напряжения
+//        Optional<Status> opposite = statusMatrix.get(s -> type.getNodeType().equals(s.getType().getNodeType()) && !type.getBlockType().equals(s.getType().getBlockType()));
+//        opposite.ifPresent(opp -> opp.removeVoltageLevel(List.of(voltageLevel)));
+
+    }
+
+    public Collection<Runnable> addStatusP(StatusType type, boolean show, VoltageLevel... voltageLevel) {
+        Collection<VoltageLevel> levels = List.of(voltageLevel);
+        Collection<Runnable> runnables = new ArrayList<>();
+
+        Optional<Status> status1 = statusMatrix.get(s -> type.equals(s.getType()));
+        Optional<Status> opposite = statusMatrix.get(s -> type.getNodeType().equals(s.getType().getNodeType()) && !s.getType().getBlockType().equals(type.getBlockType()));
+
+        // Если статус такой уже есть, то проверяем два сценария:
+        //  1. BlockType = Block -> добавляем в существующий статус новые voltageLevel-ы, если в матрцие есть
+        //      статус с таким же nodeType, но с BlockType.Should, то убираем из него пришедшие voltageLevel-ы
+        //  2. BlockType = Should -> проверяем, если есть в матрице статус с таким же nodeType, но с BlockType.Block, то ничего не делаем,
+        //      если такого нет, то просто добавляем новые voltageLevel-ы в существующий статус
+        // Если статуса такого ещё нет, то алгоритм такой же, только вместо добавления voltageLevel-ов в существующие статусы мы создаём новый статус
+
+
+        if (opposite.isPresent()) {
+
+            if (BlockType.BLOCK.equals(type.getBlockType())) {
+                Collection<VoltageLevel> finalLevels = levels;
+                opposite.ifPresent(opp -> opp.removeVoltageLevel(finalLevels.stream().toList()));
+            } else {
+                // SHOULD Оставляю только те уровни напряжения, которых нет в блокирующем статусе
+                levels = opposite.map(opp -> CollectionUtils.subtract(List.of(voltageLevel), opp.getVoltageLevels())).orElse(List.of());
+            }
+
+        }
+
+        if (levels.isEmpty()) return List.of();
+
+        if (status1.isPresent()) {
+
+            status1.get().addVoltageLevel(levels);
+
+        } else {
+            int x = numberOfElements / limitInOneRow;
+            int y = numberOfElements - x * limitInOneRow;
+            if (y == 0) statusMatrix.addRow();
+
+            Status status = new Status(type, x, y, size, voltageLevel);
+            statusMatrix.fill(status);
+
+            runnables.add(() -> statusPane.add(status.getShape(), status.getY(), status.getX()));
+
+            numberOfElements++;
+        }
+
+        // todo необходимо удалить статусы, которые не имеют voltageLevel-ов
+        List<Status> statusesWithoutVoltageLevels = statusMatrix.getAll(s -> s.getVoltageLevels().isEmpty());
+
+        for (Status status : statusesWithoutVoltageLevels) {
+            runnables.add(() -> statusPane.getChildren().remove(status.getShape()));
+        }
+
+
+        return runnables;
     }
 
     public void addStatus(StatusMeta statusMeta, boolean show) {

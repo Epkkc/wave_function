@@ -1,6 +1,7 @@
 package com.example.demo.model.status;
 
 import com.example.demo.model.power.node.VoltageLevel;
+import javafx.application.Platform;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -28,8 +29,13 @@ public class StatusMeta {
         this.voltageLevels.addAll(Arrays.asList(voltageLevel));
     }
 
+    public void addVoltageLevel(Collection<VoltageLevel> voltageLevel) {
+        this.voltageLevels.addAll(voltageLevel);
+    }
+
     public void removeVoltageLevel(VoltageLevel voltageLevel) {
         this.voltageLevels.remove(voltageLevel);
+        // todo сделать удаление статуса, если в нём не осталось уровней напряжения
     }
 
     public void removeVoltageLevel(Collection<VoltageLevel> voltageLevels) {

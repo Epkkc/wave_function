@@ -41,7 +41,7 @@ public class ConnectionServiceImpl implements ConnectionService {
                 .filter(n -> (n.getX() <= node.getX()
                     || n.getY() <= node.getY())
                     // TODO Определиться с тем, насколько длинными могут быть линии
-                    && sqrt(pow(node.getX() - n.getX(), 2) + pow(node.getY() - n.getY(), 2)) <= 2 * voltageLevel.getBoundingArea()
+                    && sqrt(pow(node.getX() - n.getX(), 2) + pow(node.getY() - n.getY(), 2)) <= 1.3 * voltageLevel.getBoundingArea()
                 )
                 .filter(n -> n.getConnectionPoints().containsKey(voltageLevel))
                 .filter(n -> n.getConnectionPoints().get(voltageLevel).getLimit() > n.getConnectionPoints().get(voltageLevel).getConnections())

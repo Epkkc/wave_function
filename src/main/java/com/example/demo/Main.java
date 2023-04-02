@@ -8,7 +8,7 @@ import com.example.demo.model.power.node.PowerNodeType;
 import com.example.demo.model.status.BlockType;
 import com.example.demo.model.status.StatusType;
 import com.example.demo.thread.StoppableThread;
-import com.example.demo.model.power.node.SubStation;
+import com.example.demo.model.power.node.TwoWSubStation;
 import com.example.demo.model.power.node.VoltageLevel;
 import com.example.demo.services.ElementsService;
 import javafx.application.Application;
@@ -311,13 +311,13 @@ public class Main extends Application {
                                    Matrix<PowerNode> matrix, GridPane gridPane) {
         Optional<PowerNode> oldValue = matrix.getNode(node.getX(), node.getY());
 
-        SubStation subStation = new SubStation(size, highVoltage, lowVoltage);
-        subStation.setX(node.getX());
-        subStation.setY(node.getY());
-        matrix.add(subStation);
+        TwoWSubStation twoWSubStation = new TwoWSubStation(size, highVoltage, lowVoltage);
+        twoWSubStation.setX(node.getX());
+        twoWSubStation.setY(node.getY());
+        matrix.add(twoWSubStation);
 
         Platform.runLater(() -> {
-            gridPane.add(subStation.getStackPane(), node.getY(), node.getX());
+            gridPane.add(twoWSubStation.getStackPane(), node.getY(), node.getX());
         });
     }
 

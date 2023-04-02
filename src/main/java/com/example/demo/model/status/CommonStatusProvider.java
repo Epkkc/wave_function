@@ -10,7 +10,8 @@ public class CommonStatusProvider implements StatusProvider {
 
     @Override
     public List<StatusMeta> provideStatuses(PowerNode node) {
-        return List.of(new StatusMeta(node.getNodeType().getBlockingStatus(), node.getConnectionPoints().keySet()));
+        return List.of(new StatusMeta(node.getNodeType().getBlockingStatus(), node.getConnectionPoints().keySet()),
+            new StatusMeta(node.getNodeType().getShouldStatus(), node.getConnectionPoints().keySet()));
     }
 
     @Override

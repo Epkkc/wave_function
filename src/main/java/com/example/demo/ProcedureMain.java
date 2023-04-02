@@ -2,13 +2,13 @@ package com.example.demo;
 
 import com.example.demo.model.Matrix;
 import com.example.demo.model.power.node.BaseNode;
-import com.example.demo.model.power.node.Generator;
-import com.example.demo.model.power.node.Load;
 import com.example.demo.model.power.node.PowerNode;
-import com.example.demo.model.power.node.VoltageLevel;
+import com.example.demo.model.power.node.ThreeWSubStation;
+import com.example.demo.model.power.node.VoltageLevelInfo;
 import com.example.demo.model.status.StatusSupplier;
 import com.example.demo.model.status.StatusSupplierImpl;
-import com.example.demo.services.Algorithm;
+import com.example.demo.procedure.AbstractNodeFabric;
+import com.example.demo.procedure.ProcedureAlgorithm;
 import com.example.demo.services.Configuration;
 import com.example.demo.services.ConnectionService;
 import com.example.demo.services.ConnectionServiceImpl;
@@ -18,8 +18,6 @@ import com.example.demo.services.FilterServiceImpl;
 import com.example.demo.services.StatusService;
 import com.example.demo.thread.StoppableThread;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -33,17 +31,24 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class NewMain extends Application {
+import static com.example.demo.model.power.node.VoltageLevel.LEVEL_10;
+import static com.example.demo.model.power.node.VoltageLevel.LEVEL_110;
+import static com.example.demo.model.power.node.VoltageLevel.LEVEL_220;
+import static com.example.demo.model.power.node.VoltageLevel.LEVEL_35;
+import static com.example.demo.model.power.node.VoltageLevel.LEVEL_500;
 
-    static int rows = 60;
-    static int columns = 60;
+public class ProcedureMain extends Application {
+
+    static int rows = 30;
+    static int columns = 30;
     static StoppableThread thread;
     static Configuration cfg;
     static ElementServiceImpl elementService;
@@ -76,10 +81,23 @@ public class NewMain extends Application {
 
         ConnectionService connectionService = new ConnectionServiceImpl(elementService);
 
-        Algorithm algorithm = new Algorithm(matrix, statusSupplier, filterService, decisionMaker, elementService, statusService, connectionService, cfg);
+        AbstractNodeFabric fabric = new AbstractNodeFabric(elementService);
+
+        List<VoltageLevelInfo> voltageLevels = new ArrayList<>();
+        // TODO добавлять сюда в зависимости от положения чекбокса (VoltageLevelInfo.enabled)
+        // TODO также заполнять boundingArea теми значениями, которые заполнит пользователь
+//        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_500).boundingAreaFrom(LEVEL_500.getBoundingArea()).boundingAreaTo(LEVEL_500.getBoundingArea()+4).build());
+        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_220).boundingAreaFrom(LEVEL_220.getBoundingArea()).boundingAreaTo(LEVEL_220.getBoundingArea()+3).build());
+        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_110).boundingAreaFrom(LEVEL_110.getBoundingArea()).boundingAreaTo(LEVEL_110.getBoundingArea()+2).build());
+        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_35).boundingAreaFrom(LEVEL_35.getBoundingArea()).boundingAreaTo(LEVEL_35.getBoundingArea()+2).build());
+        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_10).boundingAreaFrom(LEVEL_10.getBoundingArea()).boundingAreaTo(LEVEL_10.getBoundingArea()+1).build());
 
 
-        thread = new StoppableThread(algorithm::startAlgo);
+        ProcedureAlgorithm procedureAlgorithm = new ProcedureAlgorithm(matrix, statusSupplier, filterService, decisionMaker, elementService, statusService, connectionService, cfg, voltageLevels, fabric);
+
+
+        thread = new StoppableThread(procedureAlgorithm::start);
+        thread.setName("Didli");
         thread.setDaemon(true);
 
         stage.show();
@@ -87,13 +105,18 @@ public class NewMain extends Application {
         thread.start();
 
 
-        PowerNode generator = new Generator(elementService.getBaseSize(), VoltageLevel.LEVEL_220);
-        GridPane.setConstraints(generator.getStackPane(), 0, rows + 1);
-        gridPane.getChildren().add(generator.getStackPane());
+        // Для демонстрации
+//        PowerNode generator = new Generator(elementService.getBaseSize(), LEVEL_220);
+//        GridPane.setConstraints(generator.getStackPane(), 0, rows + 1);
+//        gridPane.getChildren().add(generator.getStackPane());
+//
+//        PowerNode load = new Load(elementService.getBaseSize(), LEVEL_110);
+//        GridPane.setConstraints(load.getStackPane(), 1, rows + 1);
+//        gridPane.getChildren().add(load.getStackPane());
 
-        PowerNode load = new Load(elementService.getBaseSize(), VoltageLevel.LEVEL_110);
-        GridPane.setConstraints(load.getStackPane(), 1, rows + 1);
-        gridPane.getChildren().add(load.getStackPane());
+//        PowerNode load = new ThreeWSubStation(elementService.getBaseSize(), LEVEL_500, LEVEL_220, LEVEL_110);
+//        GridPane.setConstraints(load.getStackPane(), 1, rows + 1);
+//        gridPane.getChildren().add(load.getStackPane());
 
     }
 
@@ -122,7 +145,7 @@ public class NewMain extends Application {
 
         Group sceneRoot = new Group();
 
-        javafx.scene.control.ScrollPane scrollPane = new ScrollPane();
+        ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefViewportHeight(maximumWindowBounds.getHeight() - 38);
         scrollPane.setPrefViewportWidth(maximumWindowBounds.getWidth() - 15);
 

@@ -20,6 +20,10 @@ public enum PowerNodeType {
         GENERATOR.blockingStatus = StatusType.BLOCK_GENERATOR;
         LOAD.blockingStatus = StatusType.BLOCK_LOAD;
 
+        SUBSTATION.shouldStatus = StatusType.SHOULD_SUBSTATION;
+        GENERATOR.shouldStatus = StatusType.SHOULD_GENERATOR;
+        LOAD.shouldStatus = StatusType.SHOULD_LOAD;
+
         double counter = 0;
         for (PowerNodeType value : values()) {
             counter += value.getGenerationRate();
@@ -28,6 +32,7 @@ public enum PowerNodeType {
     }
 
     private StatusType blockingStatus;
+    private StatusType shouldStatus;
     private final int boundingAreaKoef;
     private final double generationRate;
 

@@ -7,5 +7,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum BlockType {
     BLOCK,
-    MUST
+    SHOULD;
+
 }

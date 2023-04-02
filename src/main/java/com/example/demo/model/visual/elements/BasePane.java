@@ -1,9 +1,16 @@
 package com.example.demo.model.visual.elements;
 
+import com.example.demo.model.power.node.VoltageLevel;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Popup;
 import lombok.Data;
 
 @Data

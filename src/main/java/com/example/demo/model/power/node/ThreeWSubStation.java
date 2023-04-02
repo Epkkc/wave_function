@@ -13,16 +13,19 @@ import javafx.stage.Popup;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SubStation extends PowerNode {
+public class ThreeWSubStation extends PowerNode {
 
     private Map<VoltageLevel, Circle> circlesMap = new HashMap<>();
     private VoltageLevel level1;
     private VoltageLevel level2;
+    private VoltageLevel level3;
 
-    public SubStation(double size, VoltageLevel level1, VoltageLevel level2) {
+
+    public ThreeWSubStation(double size, VoltageLevel level1, VoltageLevel level2, VoltageLevel level3) {
         super(size, PowerNodeType.SUBSTATION);
         this.level1 = level1;
         this.level2 = level2;
+        this.level3 = level3;
         fillBasePane();
     }
 
@@ -37,6 +40,7 @@ public class SubStation extends PowerNode {
         circle1.setStroke(level1.getColor());
         circle1.setStrokeWidth(size * 8 / 300);
         circle1.setTranslateX(-offset);
+        circle1.setTranslateY(-offset);
 
         Circle circle2 = new Circle();
         circle2.setRadius(radius);
@@ -44,21 +48,32 @@ public class SubStation extends PowerNode {
         circle2.setStroke(level2.getColor());
         circle2.setStrokeWidth(size * 8 / 300);
         circle2.setTranslateX(offset);
+        circle2.setTranslateY(-offset);
 
-        connectionPoints.put(level1, new ConnectionPoint(-offset - radius, 0, level1, 0, 2));
+        Circle circle3 = new Circle();
+        circle3.setRadius(radius);
+        circle3.setFill(Color.TRANSPARENT);
+        circle3.setStroke(level3.getColor());
+        circle3.setStrokeWidth(size * 8 / 300);
+        circle3.setTranslateY(radius-offset);
 
-        connectionPoints.put(level2, new ConnectionPoint(offset + radius, 0, level2, 0, 2));
+        connectionPoints.put(level1, new ConnectionPoint(-offset - radius, -offset, level1, 0, 2));
+        connectionPoints.put(level2, new ConnectionPoint(offset + radius, -offset, level2, 0, 2));
+        connectionPoints.put(level3, new ConnectionPoint(0, radius-offset, level3, 0, 2));
 
         Bounds bounds1 = circle1.localToScreen(circle1.getLayoutBounds());
 
         addHoverListener(circle1, level1);
         addHoverListener(circle2, level2);
+        addHoverListener(circle3, level3);
 
         basePane.getStackPane().getChildren().add(circle1);
         basePane.getStackPane().getChildren().add(circle2);
+        basePane.getStackPane().getChildren().add(circle3);
 
         circlesMap.put(level1, circle1);
         circlesMap.put(level2, circle2);
+        circlesMap.put(level3, circle3);
     }
 
     private void addHoverListener(Circle circle, VoltageLevel voltageLevel) {
