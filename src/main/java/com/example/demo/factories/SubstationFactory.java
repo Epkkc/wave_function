@@ -3,6 +3,7 @@ package com.example.demo.factories;
 import com.example.demo.model.filter.FilterContext;
 import com.example.demo.model.power.node.PowerNode;
 import com.example.demo.model.power.node.PowerNodeType;
+import com.example.demo.model.power.node.ThreeWSubStation;
 import com.example.demo.model.power.node.TwoWSubStation;
 import com.example.demo.model.power.node.VoltageLevel;
 import com.example.demo.model.status.PowerNodeStatusMeta;
@@ -24,37 +25,30 @@ public class SubstationFactory extends PowerNodeFactory {
     }
 
     @Override
-    public Optional<PowerNode> createNode(FilterContext context) {
-        PowerNodeStatusMeta status = findStatus(context);
-
-        if (status.voltageLevels().size() >= 2) {
-            PowerNode node = context.node();
-
-            List<VoltageLevel> voltageLevels = RandomUtils.randomUniqueValues(List.copyOf(status.voltageLevels()), 2);
-
-            TwoWSubStation twoWSubStation = new TwoWSubStation(
+    public PowerNode createNode(int x, int y, int power, VoltageLevel... voltageLevels) {
+        PowerNode node = null;
+        if (voltageLevels.length == 2) {
+            node = new TwoWSubStation(
                 elementsService.getBaseSize(),
-                voltageLevels.get(0),
-                voltageLevels.get(1)
+                power,
+                voltageLevels[0],
+                voltageLevels[1]
             );
-            twoWSubStation.setX(node.getX());
-            twoWSubStation.setY(node.getY());
-
-            return Optional.of(twoWSubStation);
+        } else if (voltageLevels.length == 3) {
+            node = new ThreeWSubStation(
+                elementsService.getBaseSize(),
+                power,
+                voltageLevels[0],
+                voltageLevels[1],
+                voltageLevels[2]
+            );
         } else {
-            return Optional.empty();
+            throw new UnsupportedOperationException("Invalid voltage size = " + voltageLevels.length);
         }
+        node.setX(x);
+        node.setY(y);
+
+        return node;
     }
 
-    public PowerNode createNode(PowerNode node, VoltageLevel voltageLevel1, VoltageLevel voltageLevel2) {
-        TwoWSubStation twoWSubStation = new TwoWSubStation(
-            elementsService.getBaseSize(),
-            voltageLevel1,
-            voltageLevel2
-        );
-        twoWSubStation.setX(node.getX());
-        twoWSubStation.setY(node.getY());
-
-        return twoWSubStation;
-    }
 }

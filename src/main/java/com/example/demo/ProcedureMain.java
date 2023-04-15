@@ -1,22 +1,21 @@
 package com.example.demo;
 
+import com.example.demo.dto.SaveDto;
 import com.example.demo.model.Matrix;
 import com.example.demo.model.power.node.BaseNode;
+import com.example.demo.model.power.node.GenerationConfiguration;
+import com.example.demo.model.power.node.LoadConfiguration;
 import com.example.demo.model.power.node.PowerNode;
-import com.example.demo.model.power.node.ThreeWSubStation;
 import com.example.demo.model.power.node.VoltageLevelInfo;
-import com.example.demo.model.status.StatusSupplier;
-import com.example.demo.model.status.StatusSupplierImpl;
 import com.example.demo.procedure.AbstractNodeFabric;
 import com.example.demo.procedure.ProcedureAlgorithm;
 import com.example.demo.services.Configuration;
 import com.example.demo.services.ConnectionService;
 import com.example.demo.services.ConnectionServiceImpl;
-import com.example.demo.services.DecisionMaker;
 import com.example.demo.services.ElementServiceImpl;
-import com.example.demo.services.FilterServiceImpl;
 import com.example.demo.services.StatusService;
 import com.example.demo.thread.StoppableThread;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,8 +35,16 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static com.example.demo.model.power.node.VoltageLevel.LEVEL_10;
 import static com.example.demo.model.power.node.VoltageLevel.LEVEL_110;
@@ -47,13 +54,15 @@ import static com.example.demo.model.power.node.VoltageLevel.LEVEL_500;
 
 public class ProcedureMain extends Application {
 
-    static int rows = 30;
-    static int columns = 30;
+    static int rows = 20;
+    static int columns = 20;
     static StoppableThread thread;
     static Configuration cfg;
     static ElementServiceImpl elementService;
     static Matrix<PowerNode> matrix;
     static GridPane gridPane;
+//    static ObjectMapper objectMapper = new ObjectMapper();
+
 
 
     public static void main(String[] args) {
@@ -61,7 +70,7 @@ public class ProcedureMain extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException {
 
         cfg = new Configuration(rows, columns);
 
@@ -71,29 +80,36 @@ public class ProcedureMain extends Application {
 
         fillMatrix();
 
-        StatusSupplier statusSupplier = new StatusSupplierImpl();
-
-        FilterServiceImpl filterService = new FilterServiceImpl();
-
-        DecisionMaker decisionMaker = new DecisionMaker(elementService);
-
-        StatusService statusService = new StatusService(matrix, statusSupplier, true);
+        StatusService statusService = new StatusService(matrix, true);
 
         ConnectionService connectionService = new ConnectionServiceImpl(elementService);
 
         AbstractNodeFabric fabric = new AbstractNodeFabric(elementService);
 
         List<VoltageLevelInfo> voltageLevels = new ArrayList<>();
+
         // TODO добавлять сюда в зависимости от положения чекбокса (VoltageLevelInfo.enabled)
         // TODO также заполнять boundingArea теми значениями, которые заполнит пользователь
-//        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_500).boundingAreaFrom(LEVEL_500.getBoundingArea()).boundingAreaTo(LEVEL_500.getBoundingArea()+4).build());
-        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_220).boundingAreaFrom(LEVEL_220.getBoundingArea()).boundingAreaTo(LEVEL_220.getBoundingArea()+3).build());
-        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_110).boundingAreaFrom(LEVEL_110.getBoundingArea()).boundingAreaTo(LEVEL_110.getBoundingArea()+2).build());
-        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_35).boundingAreaFrom(LEVEL_35.getBoundingArea()).boundingAreaTo(LEVEL_35.getBoundingArea()+2).build());
-        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_10).boundingAreaFrom(LEVEL_10.getBoundingArea()).boundingAreaTo(LEVEL_10.getBoundingArea()+1).build());
+//        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_500).boundingAreaFrom(LEVEL_500.getBoundingArea()).boundingAreaTo(LEVEL_500.getBoundingArea()+4).transformerPowerSet(List.of(10000)).build());
+        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_220).boundingAreaFrom(LEVEL_220.getBoundingArea()).boundingAreaTo(LEVEL_220.getBoundingArea()+3).transformerPowerSet(List.of(5000)).build());
+        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_110).boundingAreaFrom(LEVEL_110.getBoundingArea()).boundingAreaTo(LEVEL_110.getBoundingArea()+2).transformerPowerSet(List.of(2500)).build());
+        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_35).boundingAreaFrom(LEVEL_35.getBoundingArea()).boundingAreaTo(LEVEL_35.getBoundingArea()+1).transformerPowerSet(List.of(1000)).build());
+        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_10).boundingAreaFrom(LEVEL_10.getBoundingArea()).boundingAreaTo(LEVEL_10.getBoundingArea()+1).transformerPowerSet(List.of(500)).build());
+
+        List<LoadConfiguration> loadConfigurations = new ArrayList<>();
+        // Трансформаторы напряжением 35/10 кВ имеют следующий ряд мощностей 1000, 1600, 2500, 4000, 6300
+        // http://kabelmag2012.narod.ru/TransfS.html
+        loadConfigurations.add(LoadConfiguration.builder().level(LEVEL_10).minLoad(40).maxLoad(200).boundingAreaFrom(2).build());
+        loadConfigurations.add(LoadConfiguration.builder().level(LEVEL_35).minLoad(300).maxLoad(500).boundingAreaFrom(3).build());
+
+//        List<GenerationConfiguration> generationConfigurations = new ArrayList<>();
+//        generationConfigurations.add(GenerationConfiguration.builder().level(LEVEL_110).minPower(50).maxPower(70).boundingAreaFrom().build());
+//        generationConfigurations.add(GenerationConfiguration.builder().level(LEVEL_220).minPower(150).maxPower(200).boundingAreaFrom().build());
+//        generationConfigurations.add(GenerationConfiguration.builder().level(LEVEL_500).minPower(500).maxPower(600).boundingAreaFrom(40).build());
 
 
-        ProcedureAlgorithm procedureAlgorithm = new ProcedureAlgorithm(matrix, statusSupplier, filterService, decisionMaker, elementService, statusService, connectionService, cfg, voltageLevels, fabric);
+
+        ProcedureAlgorithm procedureAlgorithm = new ProcedureAlgorithm(matrix, elementService, statusService, connectionService, cfg, voltageLevels, loadConfigurations, fabric);
 
 
         thread = new StoppableThread(procedureAlgorithm::start);
@@ -118,6 +134,21 @@ public class ProcedureMain extends Application {
 //        GridPane.setConstraints(load.getStackPane(), 1, rows + 1);
 //        gridPane.getChildren().add(load.getStackPane());
 
+//        SaveDto dto = SaveDto.builder()
+//            .matrix(elementService.getMatrix())
+//            .lines(elementService.getLines())
+//            .build();
+//
+//        final String PREFIX = "scheme_";
+//        String format = LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss"));\
+////        FileWriter writer = new FileWriter(PREFIX + format);
+//
+//        try (FileWriter writer = new FileWriter(PREFIX + format)) {
+//            writer.write(objectMapper.writeValueAsString(dto));
+//        } catch (Exception e) {
+//            //smth
+//        }
+
     }
 
     private static void fillMatrix() {
@@ -133,7 +164,7 @@ public class ProcedureMain extends Application {
         }
     }
 
-    private static void fillGraphElements(Stage stage, Configuration cfg) {
+    public static void fillGraphElements(Stage stage, Configuration cfg) {
         gridPane = new GridPane();
         gridPane.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         gridPane.setGridLinesVisible(false);

@@ -20,14 +20,7 @@ public abstract class PowerNodeFactory {
 
     public abstract PowerNodeType getType();
 
-    public abstract Optional<PowerNode> createNode(FilterContext context);
+    public abstract PowerNode createNode(int x, int y, int power, VoltageLevel... voltageLevels);
 
-    protected PowerNodeStatusMeta findStatus(FilterContext context) {
-        return context.possibleStatuses()
-            .stream()
-            .filter(s -> getType().equals(s.powerNodeType()))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException(String.format("Не найден статус с type=%s\ncontext=%s", getType(), context)));
-    }
 
 }

@@ -23,12 +23,11 @@ public class GeneratorFactory extends PowerNodeFactory{
     }
 
     @Override
-    public Optional<PowerNode> createNode(FilterContext context) {
-        PowerNodeStatusMeta status = findStatus(context);
-        Generator generator = new Generator(elementsService.getBaseSize(), RandomUtils.randomValue(status.voltageLevels()));
-        generator.setX(context.node().getX());
-        generator.setY(context.node().getY());
-        return Optional.of(generator);
+    public PowerNode createNode(int x, int y, int power, VoltageLevel... voltageLevels) {
+        Generator generator = new Generator(elementsService.getBaseSize(), power, voltageLevels[0]);
+        generator.setX(x);
+        generator.setY(y);
+        return generator;
     }
 
 }

@@ -60,6 +60,7 @@ public class Status extends StatusMeta implements Coordinates {
         Popup popup = new Popup();
         popup.getContent().add(stickyNotesPane);
 
+
         rectangle.hoverProperty().addListener((obs, oldVal, newValue) -> {
             if (newValue) {
                 Bounds bnds = rectangle.localToScreen(rectangle.getLayoutBounds());

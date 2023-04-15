@@ -62,8 +62,8 @@ public class ElementServiceImpl {
     }
 
     public void addPowerNodeToGrid(PowerNode node) {
+        matrix.add(node);
         Platform.runLater(() -> {
-            matrix.add(node);
             gridPane.add(node.getStackPane(), node.getY(), node.getX());
         });
     }

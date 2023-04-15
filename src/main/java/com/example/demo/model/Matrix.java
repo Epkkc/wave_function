@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.model.power.node.Coordinates;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +16,6 @@ import java.util.stream.Collectors;
 public class Matrix<T extends Coordinates> implements Iterable<T> {
 
     private final List<List<T>> matrix;
-
     private int rows;
     private int columns;
 
@@ -47,8 +47,13 @@ public class Matrix<T extends Coordinates> implements Iterable<T> {
         });
     }
 
+    public void simpleAdd(T node) {
+        matrix.get(node.getX()).add(node.getY(), node);
+    }
+
     public void fill(T node) {
         matrix.get(node.getX()).add(node.getY(), node);
+
     }
 
     public Optional<T> getNode(int x, int y) {
@@ -71,12 +76,14 @@ public class Matrix<T extends Coordinates> implements Iterable<T> {
         for (int i = 0; i < max; i++) {
             for (int j = 0; j <= Math.min(i, rows - 1); j++) {
                 if (i < columns) {
-                    nodes.add(matrix.get(j).get(i));
+                    getNode(j, i).ifPresent(nodes::add);
+//                    nodes.add(matrix.get(j).get(i));
                 }
             }
             for (int j = Math.min(i, columns) - 1; j >= 0; j--) {
                 if (i < rows) {
-                    nodes.add(matrix.get(i).get(j));
+                    getNode(i, j).ifPresent(nodes::add);
+//                    nodes.add(matrix.get(i).get(j));
                 }
             }
         }
@@ -117,6 +124,10 @@ public class Matrix<T extends Coordinates> implements Iterable<T> {
         }
 
         return result;
+    }
+
+    public void remove(int x, int y) {
+        matrix.get(x).remove(y);
     }
 
     public void addRow() {

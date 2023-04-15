@@ -6,7 +6,7 @@ module com.example.demo {
     requires static lombok;
     requires org.apache.commons.collections4;
     exports com.example.demo.model;
-    opens com.example.demo.model to javafx.fxml;
+    opens com.example.demo.model to javafx.fxml, com.fasterxml.jackson.databind;
     exports com.example.demo.services;
     opens com.example.demo.services to javafx.fxml;
     exports com.example.demo.factories;
@@ -25,4 +25,8 @@ module com.example.demo {
     exports com.example.demo.procedure;
     opens com.example.demo.procedure to javafx.fxml;
     opens com.example.demo to javafx.fxml, javafx.graphics;
+    requires com.fasterxml.jackson.annotation;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
+    exports com.example.demo.dto;
 }

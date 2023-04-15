@@ -1,5 +1,6 @@
 package com.example.demo.model.power.node;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;
@@ -21,13 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Generator extends PowerNode {
-
+    @JsonIgnore
     private List<Shape> uiElements = new ArrayList<>();
+    @JsonIgnore
     private Circle circle;
     private VoltageLevel voltageLevel;
 
-    public Generator(double size, VoltageLevel voltageLevel) {
-        super(size, PowerNodeType.GENERATOR);
+    public Generator(double size, int power, VoltageLevel voltageLevel) {
+        super(size, PowerNodeType.GENERATOR, power);
         this.voltageLevel = voltageLevel;
         fillBasePane();
     }
@@ -112,7 +114,7 @@ public class Generator extends PowerNode {
         Text text = new Text();
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFont(Font.getDefault());
-        text.setText(String.join("\n", getUuid(), voltageLevel.getDescription()));
+        text.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), Integer.toString(power)));
 
         StackPane stickyNotesPane = new StackPane();
         stickyNotesPane.setPadding(new Insets(2));

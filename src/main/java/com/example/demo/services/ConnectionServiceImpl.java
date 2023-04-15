@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.model.power.node.PowerNode;
 import com.example.demo.model.power.node.PowerNodeType;
+import com.example.demo.model.power.node.VoltageLevel;
 import javafx.application.Platform;
 import lombok.RequiredArgsConstructor;
 
@@ -38,13 +39,14 @@ public class ConnectionServiceImpl implements ConnectionService {
                 .filter(n -> PowerNodeType.SUBSTATION.equals(node.getNodeType()) || PowerNodeType.SUBSTATION.equals(n.getNodeType()))
                 .filter(n -> !connectedNodes.contains(n.getUuid()))
                 .filter(n -> !n.getUuid().equals(node.getUuid()))
-                .filter(n -> (n.getX() <= node.getX()
-                    || n.getY() <= node.getY())
+                .filter(n ->
+//                    (n.getX() <= node.getX() ||
+//                    n.getY() <= node.getY()) &&
                     // TODO Определиться с тем, насколько длинными могут быть линии
-                    && sqrt(pow(node.getX() - n.getX(), 2) + pow(node.getY() - n.getY(), 2)) <= 1.3 * voltageLevel.getBoundingArea()
+                    sqrt(pow(node.getX() - n.getX(), 2) + pow(node.getY() - n.getY(), 2)) <= 1.3 * voltageLevel.getBoundingArea()
                 )
                 .filter(n -> n.getConnectionPoints().containsKey(voltageLevel))
-                .filter(n -> n.getConnectionPoints().get(voltageLevel).getLimit() > n.getConnectionPoints().get(voltageLevel).getConnections())
+//                .filter(n -> n.getConnectionPoints().get(voltageLevel).getLimit() > n.getConnectionPoints().get(voltageLevel).getConnections())
                 .limit(connectionPoint.getLimit() - connectionPoint.getConnections())
                 .forEach(n -> {
                         connectedNodes.add(n.getUuid());
@@ -56,5 +58,14 @@ public class ConnectionServiceImpl implements ConnectionService {
                     }
                 )
         );
+    }
+
+    @Override
+    public void connectNodes(PowerNode node1, PowerNode node2, VoltageLevel voltageLevel) {
+        Platform.runLater(() -> elementService.connectTwoNodes(
+            node1, node1.getConnectionPoints().get(voltageLevel),
+            node2, node2.getConnectionPoints().get(voltageLevel),
+            voltageLevel
+        ));
     }
 }

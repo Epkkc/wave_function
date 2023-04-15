@@ -7,21 +7,19 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.List;
-import java.util.Set;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
 @ToString
-public class VoltageLevelInfo {
+public class LoadConfiguration {
 
     private VoltageLevel level;
+    private int minLoad; // kWt
+    private int maxLoad; // kWt
     private int boundingAreaFrom; //TODO Предполагается, что это поле будет настраиваемым
     private int boundingAreaTo; //TODO Предполагается, что это поле будет настраиваемым
     private boolean enabled; //TODO Предполагается, что можно будет чекбоксом включить отключить уровни напряжения
-    private List<Integer> transformerPowerSet;
 
 }

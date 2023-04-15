@@ -1,5 +1,6 @@
 package com.example.demo.model.power.node;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;
@@ -15,12 +16,13 @@ import java.util.Map;
 
 public class TwoWSubStation extends PowerNode {
 
+    @JsonIgnore
     private Map<VoltageLevel, Circle> circlesMap = new HashMap<>();
     private VoltageLevel level1;
     private VoltageLevel level2;
 
-    public TwoWSubStation(double size, VoltageLevel level1, VoltageLevel level2) {
-        super(size, PowerNodeType.SUBSTATION);
+    public TwoWSubStation(double size, int power, VoltageLevel level1, VoltageLevel level2) {
+        super(size, PowerNodeType.SUBSTATION, power);
         this.level1 = level1;
         this.level2 = level2;
         fillBasePane();
@@ -81,7 +83,7 @@ public class TwoWSubStation extends PowerNode {
                 double x = bnds.getMinX() - (stickyNotesPane.getWidth() / 2) + (circle.getRadius());
                 double y = bnds.getMinY() - stickyNotesPane.getHeight();
                 setHoverOpacity(voltageLevel);
-                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription()));
+                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), Integer.toString(power)));
                 popup.show(circle, x, y);
             } else {
                 setDefaultOpacity(voltageLevel);

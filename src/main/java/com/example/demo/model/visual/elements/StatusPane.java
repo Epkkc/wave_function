@@ -50,38 +50,6 @@ public class StatusPane {
 
     }
 
-    public void addStatus(StatusType type, boolean show, VoltageLevel... voltageLevel) {
-        Optional<Status> status1 = statusMatrix.get(s -> type.equals(s.getType()));
-
-        // Если это should статус, то нужно сначала проверить, что нет такого же блокирующего статуса
-        // Блокирующий приоритетнее should статуса
-
-        if (status1.isPresent()) {
-            status1.get().addVoltageLevel(voltageLevel);
-        } else {
-            int x = numberOfElements / limitInOneRow;
-            int y = numberOfElements - x * limitInOneRow;
-            if (y == 0) statusMatrix.addRow();
-
-            Status status = new Status(type, x, y, size, voltageLevel);
-            statusMatrix.fill(status);
-
-            if (show) {
-                Platform.runLater(() -> statusPane.add(status.getShape(), status.getY(), status.getX()));
-            } else {
-                statusPane.add(status.getShape(), status.getY(), status.getX());
-            }
-
-            numberOfElements++;
-        }
-
-//        if ()
-//        // todo удаляем уровень напряжения, если есть противоположный BlockType с таким же уровнем напряжения
-//        Optional<Status> opposite = statusMatrix.get(s -> type.getNodeType().equals(s.getType().getNodeType()) && !type.getBlockType().equals(s.getType().getBlockType()));
-//        opposite.ifPresent(opp -> opp.removeVoltageLevel(List.of(voltageLevel)));
-
-    }
-
     public Collection<Runnable> addStatusP(StatusType type, boolean show, VoltageLevel... voltageLevel) {
         Collection<VoltageLevel> levels = List.of(voltageLevel);
         Collection<Runnable> runnables = new ArrayList<>();
@@ -104,7 +72,8 @@ public class StatusPane {
                 opposite.ifPresent(opp -> opp.removeVoltageLevel(finalLevels.stream().toList()));
             } else {
                 // SHOULD Оставляю только те уровни напряжения, которых нет в блокирующем статусе
-                levels = opposite.map(opp -> CollectionUtils.subtract(List.of(voltageLevel), opp.getVoltageLevels())).orElse(List.of());
+                Collection<VoltageLevel> finalLevels1 = levels;
+                levels = opposite.map(opp -> CollectionUtils.subtract(finalLevels1, opp.getVoltageLevels())).orElse(List.of());
             }
 
         }
@@ -132,6 +101,24 @@ public class StatusPane {
         List<Status> statusesWithoutVoltageLevels = statusMatrix.getAll(s -> s.getVoltageLevels().isEmpty());
 
         for (Status status : statusesWithoutVoltageLevels) {
+            // Сдвигаем элементы после status влево
+            for (int i = status.getX(); i < (numberOfElements / limitInOneRow) + 1; i++) {
+                if (i == status.getX()) {
+                    loop(status, i, status.getY(), runnables);
+                } else {
+                    for (int j = 0; j < numberOfElements - 1; j++) {
+                        loop(status, i, 0, runnables);
+                    }
+                }
+            }
+
+//            statusMatrix.remove(status.getX(), status.getY());
+
+
+            int xcord = numberOfElements / limitInOneRow;
+            int ycord = numberOfElements - xcord * limitInOneRow - 1;
+            statusMatrix.remove(xcord, ycord);
+            numberOfElements--;
             runnables.add(() -> statusPane.getChildren().remove(status.getShape()));
         }
 
@@ -139,8 +126,34 @@ public class StatusPane {
         return runnables;
     }
 
-    public void addStatus(StatusMeta statusMeta, boolean show) {
-        addStatus(statusMeta.getType(), show, statusMeta.getVoltageLevels().stream().toArray(VoltageLevel[]::new));
+    private void loop(Status status, int i, int y, Collection<Runnable> runnables) {
+        for (int j = y; j < Math.min(limitInOneRow, numberOfElements); j++) {
+            Optional<Status> node;
+            if (j == (limitInOneRow - 1)) {
+                node = statusMatrix.getNode(i + 1, 0);
+                int finalJ = j;
+                node.ifPresent(n -> {
+                    n.setX(n.getX() - 1);
+                    n.setY(finalJ);
+                });
+            } else if ((i * numberOfElements + j) >= (numberOfElements - 1)) {
+                continue;
+            } else {
+                node = statusMatrix.getNode(i, j + 1);
+                int finalJ1 = j;
+                node.ifPresent(n -> n.setY(finalJ1));
+            }
+            node.ifPresent(n -> {
+                    statusMatrix.add(n);
+                    //todo Удалить элемент справа ПРОВЕРИТЬ ЭТО
+                    runnables.add(() -> {
+                        statusPane.getChildren().remove(n.getShape());
+                        statusPane.add(n.getShape(), n.getY(), n.getX());
+                    });
+                }
+            );
+
+        }
     }
 
 

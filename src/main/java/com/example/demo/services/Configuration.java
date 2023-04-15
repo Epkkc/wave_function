@@ -31,8 +31,8 @@ public class Configuration {
     private double hGap = 4d;
     private int rows = 10;
     private int columns = 20;
-    private double baseSize = 55;
-    private int delay = 2000;
+    private double baseSize = 45;
+    private int delay = 20000;
 
     public Configuration(int rows, int columns) {
         this.rows = rows;

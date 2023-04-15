@@ -1,5 +1,6 @@
 package com.example.demo.model.power.node;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;
@@ -15,14 +16,15 @@ import java.util.Map;
 
 public class ThreeWSubStation extends PowerNode {
 
+    @JsonIgnore
     private Map<VoltageLevel, Circle> circlesMap = new HashMap<>();
     private VoltageLevel level1;
     private VoltageLevel level2;
     private VoltageLevel level3;
 
 
-    public ThreeWSubStation(double size, VoltageLevel level1, VoltageLevel level2, VoltageLevel level3) {
-        super(size, PowerNodeType.SUBSTATION);
+    public ThreeWSubStation(double size, int power, VoltageLevel level1, VoltageLevel level2, VoltageLevel level3) {
+        super(size, PowerNodeType.SUBSTATION, power);
         this.level1 = level1;
         this.level2 = level2;
         this.level3 = level3;
@@ -59,7 +61,7 @@ public class ThreeWSubStation extends PowerNode {
 
         connectionPoints.put(level1, new ConnectionPoint(-offset - radius, -offset, level1, 0, 2));
         connectionPoints.put(level2, new ConnectionPoint(offset + radius, -offset, level2, 0, 2));
-        connectionPoints.put(level3, new ConnectionPoint(0, radius-offset, level3, 0, 2));
+        connectionPoints.put(level3, new ConnectionPoint(0, radius+offset, level3, 0, 2));
 
         Bounds bounds1 = circle1.localToScreen(circle1.getLayoutBounds());
 
@@ -96,7 +98,7 @@ public class ThreeWSubStation extends PowerNode {
                 double x = bnds.getMinX() - (stickyNotesPane.getWidth() / 2) + (circle.getRadius());
                 double y = bnds.getMinY() - stickyNotesPane.getHeight();
                 setHoverOpacity(voltageLevel);
-                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription()));
+                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), Integer.toString(power)));
                 popup.show(circle, x, y);
             } else {
                 setDefaultOpacity(voltageLevel);

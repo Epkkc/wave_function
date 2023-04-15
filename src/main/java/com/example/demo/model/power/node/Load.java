@@ -1,5 +1,6 @@
 package com.example.demo.model.power.node;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;
@@ -14,19 +15,31 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
+import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Load extends PowerNode {
+
     private VoltageLevel voltageLevel;
 
+    @JsonIgnore
     private List<Shape> shapes = new ArrayList<>();
 
-    public Load(double size, VoltageLevel voltageLevel) {
-        super(size, PowerNodeType.LOAD);
+    public Load(double size, int power, VoltageLevel voltageLevel) {
+        super(size, PowerNodeType.LOAD, power);
         this.voltageLevel = voltageLevel;
         fillBasePane1();
+    }
+
+    public Load(double size, int power, VoltageLevel voltageLevel, boolean fillBasePane) {
+        super(size, PowerNodeType.LOAD, power, fillBasePane);
+        this.voltageLevel = voltageLevel;
+        if (fillBasePane){
+            fillBasePane1();
+        }
     }
 
     protected void fillBasePane1() {
@@ -83,7 +96,7 @@ public class Load extends PowerNode {
         Text text = new Text();
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFont(Font.getDefault());
-        text.setText(String.join("\n", getUuid(), voltageLevel.getDescription()));
+        text.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), Integer.toString(power)));
 
         StackPane stickyNotesPane = new StackPane();
         stickyNotesPane.setPadding(new Insets(2));

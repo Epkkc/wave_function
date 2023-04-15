@@ -1,8 +1,10 @@
 package com.example.demo.model.power.node;
 
+import com.example.demo.model.status.Status;
 import com.example.demo.model.status.StatusMeta;
 import com.example.demo.model.status.StatusType;
 import com.example.demo.model.visual.elements.BasePane;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,14 +12,15 @@ import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,33 +28,45 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-// TODO Генератор, подстанцию, нагрузку можно сделать внутренними классами PowerNode, как в SecurityChecker-е
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public abstract class PowerNode implements GridElement {
 
     protected PowerNodeType nodeType;
     protected int x;
     protected int y;
+    protected int power;
     protected double size;
     protected Map<VoltageLevel, ConnectionPoint> connectionPoints = new HashMap<>();
     protected BasePane basePane;
     protected final double hoverOpacity = 0.5d;
     protected final double defaultOpacity = 1d;
 
-    private final String uuid = UUID.randomUUID().toString();
+    private String uuid = UUID.randomUUID().toString();
 
 
-    public PowerNode(double size, PowerNodeType nodeType) {
+    public PowerNode(double size, PowerNodeType nodeType, int power) {
         this.size = size;
         this.nodeType = nodeType;
+        this.power = power;
         basePane = createBasePane();
+    }
+
+    public PowerNode(double size, PowerNodeType nodeType, int power, boolean fillBasePane) {
+        this.size = size;
+        this.nodeType = nodeType;
+        this.power = power;
+        if (fillBasePane) {
+            basePane = createBasePane();
+        }
     }
 
     protected BasePane createBasePane() {
         BasePane basePane1 = new BasePane(size);
 
-        double infoSize = size/14;
-
+        double infoSize = size / 14;
 
         Rectangle info = new Rectangle();
         info.setWidth(infoSize);
@@ -60,33 +75,23 @@ public abstract class PowerNode implements GridElement {
         info.setStroke(Color.TRANSPARENT);
         info.setStrokeWidth(0);
         info.setOpacity(0.2);
+
         addHoverListener(info, String.join("\n", nodeType.name(), Integer.toString(x), Integer.toString(y)));
 
-        GridPane infoPane = new GridPane();
+        GridPane infoPane = new GridPane(); // При добавлении ещё одной gridPane на stackPane ломаются hoverListener-ы у статусов
         infoPane.setAlignment(Pos.TOP_RIGHT);
-        infoPane.add(info, 0,0);
+        infoPane.add(info, 0, 0);
 
-        basePane1.getStackPane().getChildren().add(infoPane);
+        basePane1.getStackPane().getChildren().addAll(info);
 
         return basePane1;
     }
 
-    public void addStatus(StatusType type, boolean show, VoltageLevel... voltageLevel) {
-        basePane.getStatusPane().addStatus(type, show, voltageLevel);
-    }
-
-    public Collection<Runnable> addStatusP(StatusType type, boolean show, VoltageLevel... voltageLevel) {
+    public Collection<Runnable> addStatus(StatusType type, boolean show, VoltageLevel... voltageLevel) {
         return basePane.getStatusPane().addStatusP(type, show, voltageLevel);
     }
 
-    public void addStatus(StatusMeta statusMeta, boolean show) {
-        basePane.getStatusPane().addStatus(statusMeta, show);
-    }
-
-    public void addStatuses(Collection<StatusMeta> statusMeta, boolean show) {
-        statusMeta.forEach(status -> basePane.getStatusPane().addStatus(status, show));
-    }
-
+    @JsonIgnore
     public List<StatusMeta> getStatusMetas() {
         return basePane.getStatusPane().getStatuses().stream().map(StatusMeta.class::cast).toList();
     }
@@ -104,6 +109,14 @@ public abstract class PowerNode implements GridElement {
     @Override
     public StackPane getStackPane() {
         return basePane.getStackPane();
+    }
+
+    public List<Status> getStatuses() {
+        return basePane.getStatusPane().getStatuses();
+    }
+
+    public List<VoltageLevel> getVoltageLevels() {
+        return connectionPoints.keySet().stream().toList();
     }
 
     // TODO Доработать этот
