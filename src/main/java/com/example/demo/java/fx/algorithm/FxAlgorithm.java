@@ -1,6 +1,7 @@
 package com.example.demo.java.fx.algorithm;
 
 import com.example.demo.base.algorithm.Algorithm;
+import com.example.demo.base.model.configuration.GenerationConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.VoltageLevelInfo;
 import com.example.demo.base.model.enums.PowerNodeType;
@@ -44,6 +45,7 @@ public class FxAlgorithm implements Algorithm {
     private final FxConfiguration configuration;
     private final List<VoltageLevelInfo> voltageLevels;
     private final List<LoadConfiguration> loadConfigurations;
+    private final List<GenerationConfiguration> generationConfigurations;
     private final FxAbstractPowerNodeFactory nodeFabric;
     private final Random random = new Random();
     private final ObjectMapper objectMapper = new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
@@ -163,7 +165,7 @@ public class FxAlgorithm implements Algorithm {
 
             for (FxPowerNode transformer : transformers) {
                 // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
-                List<FxPowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), loadCfg.getBoundingArea()).stream()
+                List<FxPowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), loadCfg.getTransformerArea()).stream()
                     .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
                     .filter(node -> node.getStatuses().stream()
                         .noneMatch(status -> StatusType.BLOCK_LOAD.equals(status.getType())
@@ -180,9 +182,11 @@ public class FxAlgorithm implements Algorithm {
                     // Расчёт мощности нагрузки
                     int randomPower = random.nextInt(loadCfg.getMaxLoad() - loadCfg.getMinLoad()) + loadCfg.getMinLoad();
                     int resPower;
-                    if ((transformer.getPower() - filledPower) > randomPower) {
+                    int diff = transformer.getPower() - filledPower;
+
+                    if (diff > randomPower) {
                         resPower = randomPower;
-                    } else if ((transformer.getPower() - filledPower) > loadCfg.getMinLoad()) {
+                    } else if (diff > loadCfg.getMinLoad()) {
                         resPower = random.nextInt(transformer.getPower() - filledPower - loadCfg.getMinLoad()) + loadCfg.getMinLoad();
                     } else {
                         break;
@@ -217,6 +221,77 @@ public class FxAlgorithm implements Algorithm {
         System.out.println("Number of nodes = " + matrix.toNodeList().stream().filter(node -> !node.getNodeType().equals(PowerNodeType.EMPTY)).count());
         System.out.println("Number of lines = " + elementsService.getLines().size());
 
+        // Расстановка генераторов
+
+        int totalLoad = elementsService.getSumLoad();
+        int totalGeneration = 0;
+
+        for (GenerationConfiguration generationConfiguration : generationConfigurations) {
+
+            VoltageLevel currentLevel = generationConfiguration.getLevel();
+
+            //TODO  Нужно получить все трансформаторы, имеющие обмотки с currentLevel и отсортировать их по
+            // количеству присоединений в возрастающем порядке
+            List<FxPowerNode> transformers = matrix.getAll(
+                    node -> PowerNodeType.SUBSTATION.equals(node.getNodeType())
+                        && node.getConnectionPoints().containsKey(currentLevel)
+                ).stream()
+                .sorted(Comparator.comparingInt(node -> node.getConnectionPoints().get(currentLevel).getConnections()))
+                .collect(Collectors.toList());
+
+            for (FxPowerNode transformer : transformers) {
+                // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
+                List<FxPowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), generationConfiguration.getTransformerArea()).stream()
+                    .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
+                    .filter(node -> node.getStatuses().stream()
+                        .noneMatch(status -> StatusType.BLOCK_GENERATOR.equals(status.getType())
+                            && status.getVoltageLevels().contains(generationConfiguration.getLevel())))
+                    .collect(Collectors.toList());
+
+                if (area.isEmpty()) break;
+
+//                do {
+                // Нода для размещения нагрузки
+                FxPowerNode resultNode = RandomUtils.randomValue(area);
+
+                // Расчёт мощности нагрузки
+                // TODO можно сделать как случайный выбор из набора мощностей
+                int randomPower = random.nextInt(generationConfiguration.getMaxPower() - generationConfiguration.getMinPower()) + generationConfiguration.getMinPower();
+                int resPower;
+                if ((totalLoad - totalGeneration) > randomPower) {
+                    resPower = randomPower;
+                } else if ((totalLoad - totalGeneration) > generationConfiguration.getMinPower()) {
+                    resPower = random.nextInt(totalLoad - totalGeneration - generationConfiguration.getMinPower()) + generationConfiguration.getMinPower();
+                } else {
+                    break;
+                }
+
+                resultNode = nodeFabric.createNode(PowerNodeType.GENERATOR, resultNode.getX(), resultNode.getY(), resPower, currentLevel);
+                fillGeneratorToGrid(resultNode, transformer, generationConfiguration);
+                totalGeneration += resPower;
+
+                do {
+                    // Задержка для удобства просмотра
+                    try {
+//                        Thread.sleep(configuration.getDelay());
+                        Thread.sleep(currentLevel.getTimeout());
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    // Обработка остановки потока
+                } while (((StoppableThread) Thread.currentThread()).isStopped());
+
+//                FxPowerNode finalResultNode = resultNode;
+//                area.removeIf(node -> node.getX() == finalResultNode.getX() && node.getY() == finalResultNode.getY());
+
+//                    area = area.stream().filter(node -> node.getStatuses().stream()
+//                            .noneMatch(status -> StatusType.BLOCK_LOAD.equals(status.getType())
+//                                && status.getVoltageLevels().contains(generationConfiguration.getLevel())))
+//                        .collect(Collectors.toList());
+//                } while (!area.isEmpty());
+            }
+        }
+
 
         SaveDto dto = SaveDto.builder()
             .rows(configuration.getRows())
@@ -235,7 +310,10 @@ public class FxAlgorithm implements Algorithm {
         } catch (Exception e) {
             System.out.println("Exception : " + e);
         }
-
+        System.out.println("Number of nodes = " + matrix.toNodeList().stream().filter(node -> !node.getNodeType().equals(PowerNodeType.EMPTY)).count());
+        System.out.println("Number of lines = " + elementsService.getLines().size());
+        System.out.println("Total load = " + elementsService.getSumLoad());
+        System.out.println("Total generation = " + elementsService.getSumPower());
         System.out.println("Finish");
     }
 
@@ -273,6 +351,14 @@ public class FxAlgorithm implements Algorithm {
         statusService.setLoadStatusToArea(load, loadCfg);
         // Соединяем сгенерированную ноду с соседями
         connectionService.connectNodes(load, transformer, loadCfg.getLevel());
+    }
+
+    private void fillGeneratorToGrid(FxPowerNode generator, FxPowerNode transformer, GenerationConfiguration generationConfiguration) {
+        elementsService.addPowerNodeToGrid(generator);
+        // Заполняем area статусом, согласно только что добавленной ноде
+        statusService.setGeneratorStatusToArea(generator, generationConfiguration);
+        // Соединяем сгенерированную ноду с соседями
+        connectionService.connectNodes(generator, transformer, generationConfiguration.getLevel());
     }
 
 }

@@ -1,35 +1,25 @@
 package com.example.demo.base.algorithm;
 
 import com.example.demo.base.factories.PowerNodeFactory;
+import com.example.demo.base.model.configuration.GenerationConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.VoltageLevelInfo;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Matrix;
-import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.BasePowerNode;
 import com.example.demo.base.model.status.BlockType;
 import com.example.demo.base.model.status.StatusType;
 import com.example.demo.base.service.BaseConfiguration;
 import com.example.demo.base.service.BaseElementService;
 import com.example.demo.base.service.StatusService;
-import com.example.demo.export.dto.PowerLineDto;
-import com.example.demo.export.dto.PowerNodeDto;
-import com.example.demo.export.dto.SaveDto;
 import com.example.demo.base.service.ConnectionService;
 import com.example.demo.export.service.ExportService;
-import com.example.demo.java.fx.model.power.FxPowerNode;
-import com.example.demo.services.FxElementService;
 import com.example.demo.utils.RandomUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.RequiredArgsConstructor;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -45,10 +35,10 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
     protected final BaseConfiguration configuration;
     protected final List<VoltageLevelInfo> voltageLevels;
     protected final List<LoadConfiguration> loadConfigurations;
+    private final List<GenerationConfiguration> generationConfigurations;
     protected final PowerNodeFactory<T> nodeFactory;
     protected final ExportService exportService;
     protected final Random random = new Random();
-    protected final ObjectMapper objectMapper = new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
 
     @Override
@@ -117,9 +107,6 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
         System.out.println("Number of lines = " + elementsService.getLines().size());
 
 
-
-
-
         // todo могут оставаться ни с чем не соединённые обмотки ТР-ов 35кВ, можно к ним прикреплять какую-нибудь нагрузку, типа предприятия
 
         for (LoadConfiguration loadCfg : loadConfigurations) {
@@ -136,7 +123,7 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
 
             for (BasePowerNode transformer : transformers) {
                 // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
-                List<BasePowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), loadCfg.getBoundingArea()).stream()
+                List<BasePowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), loadCfg.getTransformerArea()).stream()
                     .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
                     .filter(node -> node.getStatuses().stream()
                         .noneMatch(status -> StatusType.BLOCK_LOAD.equals(status.getType())
@@ -180,8 +167,64 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
         System.out.println("Number of nodes = " + matrix.toNodeList().stream().filter(node -> !node.getNodeType().equals(PowerNodeType.EMPTY)).count());
         System.out.println("Number of lines = " + elementsService.getLines().size());
 
+        // Расстановка генераторов
+
+        int totalLoad = (int) (elementsService.getSumLoad() * 1.1);
+        int totalGeneration = 0;
+
+        for (GenerationConfiguration generationConfiguration : generationConfigurations) {
+
+            VoltageLevel currentLevel = generationConfiguration.getLevel();
+
+            //TODO  Нужно получить все трансформаторы, имеющие обмотки с currentLevel и отсортировать их по
+            // количеству присоединений в возрастающем порядке
+            List<BasePowerNode> transformers = matrix.getAll(
+                    node -> PowerNodeType.SUBSTATION.equals(node.getNodeType())
+                        && node.getConnections().containsKey(currentLevel)
+                ).stream()
+                .sorted(Comparator.comparingInt(node -> node.getConnections().get(currentLevel).getConnections()))
+                .collect(Collectors.toList());
+
+            for (BasePowerNode transformer : transformers) {
+                // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
+                List<BasePowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), generationConfiguration.getTransformerArea()).stream()
+                    .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
+                    .filter(node -> node.getStatuses().stream()
+                        .noneMatch(status -> StatusType.BLOCK_GENERATOR.equals(status.getType())
+                            && status.getVoltageLevels().contains(generationConfiguration.getLevel())))
+                    .collect(Collectors.toList());
+
+                if (area.isEmpty()) break;
+
+//                do {
+                // Нода для размещения нагрузки
+                BasePowerNode resultNode = RandomUtils.randomValue(area);
+
+                // Расчёт мощности нагрузки
+                // TODO можно сделать как случайный выбор из набора мощностей
+                int randomPower = random.nextInt(generationConfiguration.getMaxPower() - generationConfiguration.getMinPower()) + generationConfiguration.getMinPower();
+                int resPower;
+                if ((totalLoad - totalGeneration) > randomPower) {
+                    resPower = randomPower;
+                } else if ((totalLoad - totalGeneration) > generationConfiguration.getMinPower()) {
+                    resPower = random.nextInt(totalLoad - totalGeneration - generationConfiguration.getMinPower()) + generationConfiguration.getMinPower();
+                } else {
+                    break;
+                }
+
+                resultNode = nodeFactory.createNode(PowerNodeType.GENERATOR, resultNode.getX(), resultNode.getY(), resPower, List.of(currentLevel));
+                fillGeneratorToGrid(resultNode, transformer, generationConfiguration);
+                totalGeneration += resPower;
+
+            }
+        }
+
         exportService.saveAsFile();
 
+        System.out.println("Number of nodes = " + matrix.toNodeList().stream().filter(node -> !node.getNodeType().equals(PowerNodeType.EMPTY)).count());
+        System.out.println("Number of lines = " + elementsService.getLines().size());
+        System.out.println("Total load = " + elementsService.getSumLoad());
+        System.out.println("Total generation = " + elementsService.getSumPower());
         System.out.println("Finish");
     }
 
@@ -200,6 +243,14 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
         statusService.setLoadStatusToArea(load, loadCfg);
         // Соединяем сгенерированную ноду с соседями
         connectionService.connectNodes(load, transformer, loadCfg.getLevel());
+    }
+
+    private void fillGeneratorToGrid(BasePowerNode generator, BasePowerNode transformer, GenerationConfiguration genCfg) {
+        elementsService.addPowerNodeToGrid(generator);
+        // Заполняем area статусом, согласно только что добавленной ноде
+        statusService.setLoadStatusToArea(generator, genCfg);
+        // Соединяем сгенерированную ноду с соседями
+        connectionService.connectNodes(generator, transformer, genCfg.getLevel());
     }
 
 }

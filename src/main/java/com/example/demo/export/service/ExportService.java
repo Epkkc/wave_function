@@ -63,7 +63,7 @@ public class ExportService {
             .nodeType(node.getNodeType())
             .x(node.getX())
             .y(node.getY())
-            .power(node.getX())
+            .power(node.getPower())
             .uuid(node.getUuid())
             .voltageLevels(node.getVoltageLevels())
             .build();

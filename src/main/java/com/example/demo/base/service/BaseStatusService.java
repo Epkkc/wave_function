@@ -1,5 +1,6 @@
 package com.example.demo.base.service;
 
+import com.example.demo.base.model.configuration.GenerationConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.VoltageLevelInfo;
 import com.example.demo.base.model.enums.PowerNodeType;
@@ -93,6 +94,34 @@ public class BaseStatusService implements StatusService{
             });
 
         System.out.println("Set load powerNode = " + powerNode);
+        List<BasePowerNode> powerNodes = matrix.toNodeList()
+            .stream()
+            .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
+            .toList();
+        System.out.println(powerNodes);
+
+        // Добавляем запрет на расстановку рядом любых объектов
+        matrix.getArea(powerNode.getX(), powerNode.getY()).forEach(node -> PowerNodeType.getValidValues().forEach(
+            pnt -> node.addStatus(pnt.getBlockingStatus(), VoltageLevel.values()))
+        );
+    }
+
+    @Override
+    public void setLoadStatusToArea(BasePowerNode powerNode, GenerationConfiguration genCfg) {
+        // Установка blocking статусов
+        matrix.getArea(powerNode.getX(), powerNode.getY(), genCfg.getBoundingArea()).stream()
+            .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
+            .forEach(node -> {
+                if (roundedArea) {
+                    // Отбрасываем все ноды, которые выходят за зону
+                    if (sqrt(pow(node.getX() - powerNode.getX(), 2) + pow(node.getY() - powerNode.getY(), 2)) > (genCfg.getBoundingArea())) {
+                        return;
+                    }
+                }
+                node.addStatus(powerNode.getNodeType().getBlockingStatus(), genCfg.getLevel());
+            });
+
+        System.out.println("Set generator powerNode = " + powerNode);
         List<BasePowerNode> powerNodes = matrix.toNodeList()
             .stream()
             .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))

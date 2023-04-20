@@ -1,5 +1,6 @@
 package com.example.demo.java.fx;
 
+import com.example.demo.base.model.configuration.GenerationConfiguration;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.java.fx.model.power.FxBaseNode;
 import com.example.demo.base.model.configuration.LoadConfiguration;
@@ -40,6 +41,7 @@ import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_10;
 import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_110;
 import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_220;
 import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_35;
+import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_500;
 
 public class FxMain extends Application {
 
@@ -102,16 +104,16 @@ public class FxMain extends Application {
         List<LoadConfiguration> loadConfigurations = new ArrayList<>();
         // Трансформаторы напряжением 35/10 кВ имеют следующий ряд мощностей 1000, 1600, 2500, 4000, 6300
         // http://kabelmag2012.narod.ru/TransfS.html
-        loadConfigurations.add(LoadConfiguration.builder().level(LEVEL_10).minLoad(40).maxLoad(200).boundingArea(2).build());
-        loadConfigurations.add(LoadConfiguration.builder().level(LEVEL_35).minLoad(300).maxLoad(500).boundingArea(3).build());
+        loadConfigurations.add(LoadConfiguration.builder().level(LEVEL_10).minLoad(10).maxLoad(20).boundingArea(3).transformerArea(2).build());
+        loadConfigurations.add(LoadConfiguration.builder().level(LEVEL_35).minLoad(40).maxLoad(70).boundingArea(4).transformerArea(3).build());
 
-//        List<GenerationConfiguration> generationConfigurations = new ArrayList<>();
-//        generationConfigurations.add(GenerationConfiguration.builder().level(LEVEL_110).minPower(50).maxPower(70).boundingAreaFrom().build());
-//        generationConfigurations.add(GenerationConfiguration.builder().level(LEVEL_220).minPower(150).maxPower(200).boundingAreaFrom().build());
-//        generationConfigurations.add(GenerationConfiguration.builder().level(LEVEL_500).minPower(500).maxPower(600).boundingAreaFrom(40).build());
+        List<GenerationConfiguration> generationConfigurations = new ArrayList<>();
+        generationConfigurations.add(GenerationConfiguration.builder().level(LEVEL_110).minPower(200).maxPower(300).boundingArea(LEVEL_110.getBoundingArea()-2).transformerArea(2).build());
+        generationConfigurations.add(GenerationConfiguration.builder().level(LEVEL_220).minPower(500).maxPower(1000).boundingArea(LEVEL_220.getBoundingArea()-2).transformerArea(3).build());
+        generationConfigurations.add(GenerationConfiguration.builder().level(LEVEL_500).minPower(1000).maxPower(3000).boundingArea(LEVEL_500.getBoundingArea()-2).transformerArea(3).build());
 
 
-        FxAlgorithm fxAlgorithm = new FxAlgorithm(matrix, elementService, statusService, connectionService, cfg, voltageLevels, loadConfigurations, fabric);
+        FxAlgorithm fxAlgorithm = new FxAlgorithm(matrix, elementService, statusService, connectionService, cfg, voltageLevels, loadConfigurations, generationConfigurations, fabric);
 
 
         thread = new StoppableThread(fxAlgorithm::start);

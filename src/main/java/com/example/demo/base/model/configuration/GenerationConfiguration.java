@@ -2,6 +2,7 @@ package com.example.demo.base.model.configuration;
 
 import com.example.demo.base.model.enums.VoltageLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -10,12 +11,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Builder
 public class GenerationConfiguration {
 
     private VoltageLevel level;
     private int minPower; // kWt
     private int maxPower; // kWt
     private int boundingArea;
+    private int transformerArea;
     private boolean enabled;
 
 }

@@ -18,6 +18,7 @@ public class LoadConfiguration {
     private int minLoad; // kWt
     private int maxLoad; // kWt
     private int boundingArea;
+    private int transformerArea;
     private boolean enabled;
 
 }

@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.base.model.configuration.GenerationConfiguration;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.java.fx.model.power.FxPowerNode;
@@ -96,6 +97,37 @@ public class FxStatusService {
             });
 
         System.out.println("Set load powerNode=" + powerNode);
+        List<FxPowerNode> powerNodes = matrix.toNodeList()
+            .stream()
+            .filter(node -> node.getBasePane().getStatusPane().getStatusMatrix().toNodeList().stream().anyMatch(node1 -> node1.getVoltageLevels().isEmpty()))
+            .toList();
+        System.out.println(powerNodes);
+
+        // Добавляем запрет на расстановку рядом любых объектов
+        matrix.getArea(powerNode.getX(), powerNode.getY()).forEach(node -> PowerNodeType.getValidValues().forEach(
+            pnt -> runnables.addAll(node.addStatus(pnt.getBlockingStatus(), true, VoltageLevel.values())))
+        );
+
+        Platform.runLater(() -> runnables.forEach(Runnable::run));
+    }
+
+    public void setGeneratorStatusToArea(FxPowerNode powerNode, GenerationConfiguration generationConfiguration) {
+        List<Runnable> runnables = new ArrayList<>();
+
+        // Установка blocking статусов
+        matrix.getArea(powerNode.getX(), powerNode.getY(), generationConfiguration.getBoundingArea()).stream()
+            .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
+            .forEach(node -> {
+                if (roundedArea) {
+                    // Отбрасываем все ноды, которые выходят за зону
+                    if (sqrt(pow(node.getX() - powerNode.getX(), 2) + pow(node.getY() - powerNode.getY(), 2)) > (generationConfiguration.getBoundingArea())) {
+                        return;
+                    }
+                }
+                runnables.addAll(node.addStatus(powerNode.getNodeType().getBlockingStatus(), true, generationConfiguration.getLevel()));
+            });
+
+        System.out.println("Set generator powerNode=" + powerNode);
         List<FxPowerNode> powerNodes = matrix.toNodeList()
             .stream()
             .filter(node -> node.getBasePane().getStatusPane().getStatusMatrix().toNodeList().stream().anyMatch(node1 -> node1.getVoltageLevels().isEmpty()))

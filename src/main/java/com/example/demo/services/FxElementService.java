@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.java.fx.model.power.FxPowerLine;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
@@ -40,6 +41,9 @@ public class FxElementService {
     private final GridPane gridPane;
     private final Matrix<FxPowerNode> matrix;
     private List<FxPowerLine> lines = new ArrayList<>();
+    private int sumLoad;
+    private int sumPower;
+
 
     public double getBaseSize() {
         return configuration.getBaseSize();
@@ -47,6 +51,12 @@ public class FxElementService {
 
     public void addPowerNodeToGrid(FxPowerNode node) {
         matrix.add(node);
+        if (PowerNodeType.LOAD.equals(node.getNodeType())) {
+            sumLoad+=node.getPower();
+        }
+        if (PowerNodeType.GENERATOR.equals(node.getNodeType())) {
+            sumPower+=node.getPower();
+        }
         Platform.runLater(() -> {
             gridPane.add(node.getStackPane(), node.getY(), node.getX());
         });
