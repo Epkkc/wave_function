@@ -47,5 +47,6 @@ module com.example.demo {
     opens com.example.demo.java.fx.service to javafx.fxml;
     exports com.example.demo.base.service;
     opens com.example.demo.base.service to javafx.fxml;
+    opens com.example.demo.java.fx.v2 to javafx.fxml, javafx.graphics;
 
 }
