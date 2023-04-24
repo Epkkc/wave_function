@@ -114,16 +114,16 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
 
             //TODO  Нужно получить все трансформаторы, имеющие обмотки с currentLevel и отсортировать их по
             // количеству присоединений в возрастающем порядке
-            List<BasePowerNode> transformers = matrix.getAll(
+            List<T> transformers = matrix.getAll(
                     node -> PowerNodeType.SUBSTATION.equals(node.getNodeType())
                         && node.getConnections().containsKey(currentLevel)
                 ).stream()
                 .sorted(Comparator.comparingInt(node -> node.getConnections().get(currentLevel).getConnections()))
                 .collect(Collectors.toList());
 
-            for (BasePowerNode transformer : transformers) {
+            for (T transformer : transformers) {
                 // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
-                List<BasePowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), loadCfg.getTransformerArea()).stream()
+                List<T> area = matrix.getArea(transformer.getX(), transformer.getY(), loadCfg.getTransformerArea()).stream()
                     .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
                     .filter(node -> node.getStatuses().stream()
                         .noneMatch(status -> StatusType.BLOCK_LOAD.equals(status.getType())
@@ -135,7 +135,7 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
                 int filledPower = 0;
                 do {
                     // Нода для размещения нагрузки
-                    BasePowerNode resultNode = RandomUtils.randomValue(area);
+                    T resultNode = RandomUtils.randomValue(area);
 
                     // Расчёт мощности нагрузки
                     int randomPower = random.nextInt(loadCfg.getMaxLoad() - loadCfg.getMinLoad()) + loadCfg.getMinLoad();
@@ -152,7 +152,7 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
                     fillLoadToGrid(resultNode, transformer, loadCfg);
 
 
-                    BasePowerNode finalResultNode = resultNode;
+                    T finalResultNode = resultNode;
                     area.removeIf(node -> node.getX() == finalResultNode.getX() && node.getY() == finalResultNode.getY());
 
                     area = area.stream().filter(node -> node.getStatuses().stream()
@@ -178,16 +178,16 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
 
             //TODO  Нужно получить все трансформаторы, имеющие обмотки с currentLevel и отсортировать их по
             // количеству присоединений в возрастающем порядке
-            List<BasePowerNode> transformers = matrix.getAll(
+            List<T> transformers = matrix.getAll(
                     node -> PowerNodeType.SUBSTATION.equals(node.getNodeType())
                         && node.getConnections().containsKey(currentLevel)
                 ).stream()
                 .sorted(Comparator.comparingInt(node -> node.getConnections().get(currentLevel).getConnections()))
                 .collect(Collectors.toList());
 
-            for (BasePowerNode transformer : transformers) {
+            for (T transformer : transformers) {
                 // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
-                List<BasePowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), generationConfiguration.getTransformerArea()).stream()
+                List<T> area = matrix.getArea(transformer.getX(), transformer.getY(), generationConfiguration.getTransformerArea()).stream()
                     .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
                     .filter(node -> node.getStatuses().stream()
                         .noneMatch(status -> StatusType.BLOCK_GENERATOR.equals(status.getType())
@@ -198,7 +198,7 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
 
 //                do {
                 // Нода для размещения нагрузки
-                BasePowerNode resultNode = RandomUtils.randomValue(area);
+                T resultNode = RandomUtils.randomValue(area);
 
                 // Расчёт мощности нагрузки
                 // TODO можно сделать как случайный выбор из набора мощностей
@@ -237,7 +237,7 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
         connectionService.connectNode(node, matrix);
     }
 
-    private void fillLoadToGrid(BasePowerNode load, BasePowerNode transformer, LoadConfiguration loadCfg) {
+    private void fillLoadToGrid(T load, T transformer, LoadConfiguration loadCfg) {
         elementsService.addPowerNodeToGrid(load);
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setLoadStatusToArea(load, loadCfg);
@@ -245,7 +245,7 @@ public class BaseAlgorithm<T extends BasePowerNode> implements Algorithm {
         connectionService.connectNodes(load, transformer, loadCfg.getLevel());
     }
 
-    private void fillGeneratorToGrid(BasePowerNode generator, BasePowerNode transformer, GenerationConfiguration genCfg) {
+    private void fillGeneratorToGrid(T generator, T transformer, GenerationConfiguration genCfg) {
         elementsService.addPowerNodeToGrid(generator);
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setLoadStatusToArea(generator, genCfg);
