@@ -1,11 +1,11 @@
-package com.example.demo.base.service;
+package com.example.demo.base.service.connection;
 
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Matrix;
+import com.example.demo.base.model.power.AbstractBasePowerNode;
 import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.power.BaseLine;
-import com.example.demo.base.model.power.AbstractBasePowerNode;
 import com.example.demo.base.service.element.BaseElementService;
 import lombok.RequiredArgsConstructor;
 
@@ -18,12 +18,12 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 @RequiredArgsConstructor
-public class BaseConnectionService implements ConnectionService {
+public class AbstractConnectionService<T extends AbstractBasePowerNode<? extends BaseConnection>> implements ConnectionService<T> {
 
     private final BaseElementService elementService;
 
     @Override
-    public void connectNode(AbstractBasePowerNode<? extends BaseConnection> node, Matrix<? extends AbstractBasePowerNode<? extends BaseConnection>> matrix) {
+    public void connectNode(T node, Matrix<T> matrix) {
         List<? extends AbstractBasePowerNode<? extends BaseConnection>> powerNodes = matrix.toOrderedNodeList();
 
         Collections.reverse(powerNodes);
@@ -66,7 +66,7 @@ public class BaseConnectionService implements ConnectionService {
     }
 
     @Override
-    public void connectNodes(AbstractBasePowerNode<? extends BaseConnection> node1, AbstractBasePowerNode<? extends BaseConnection> node2, VoltageLevel voltageLevel) {
+    public void connectNodes(T node1, T node2, VoltageLevel voltageLevel) {
         BaseLine baseLine = new BaseLine(node1, node2, voltageLevel);
         elementService.getLines().add(baseLine);
         node1.getConnections().get(voltageLevel).addConnection();

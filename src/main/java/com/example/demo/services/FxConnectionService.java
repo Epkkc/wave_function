@@ -1,6 +1,5 @@
 package com.example.demo.services;
 
-import com.example.demo.base.service.ConnectionService;
 import com.example.demo.java.fx.model.power.FxPowerNode;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;

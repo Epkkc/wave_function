@@ -13,7 +13,7 @@ import java.util.List;
 
 @Data
 @RequiredArgsConstructor
-public class AbstractElementService<T extends AbstractBasePowerNode<? extends BaseConnection>> {
+public class AbstractElementService<T extends AbstractBasePowerNode<? extends BaseConnection>> implements ElementService<T> {
 
     protected final Matrix<T> matrix;
     protected final List<BaseLine> lines = new ArrayList<>();
@@ -37,6 +37,6 @@ public class AbstractElementService<T extends AbstractBasePowerNode<? extends Ba
     }
 
     public void addNode(int value) {
-        totalNumberOfNodes++;
+        totalNumberOfNodes+=value;
     }
 }

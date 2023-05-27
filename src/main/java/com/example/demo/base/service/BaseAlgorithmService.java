@@ -11,10 +11,12 @@ import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.BasePowerNode;
+import com.example.demo.base.service.connection.BaseConnectionService;
+import com.example.demo.base.service.connection.ConnectionService;
 import com.example.demo.base.service.element.BaseElementService;
 import com.example.demo.base.service.status.BaseStatusService;
 import com.example.demo.base.service.status.StatusService;
-import com.example.demo.export.service.ExportService;
+import com.example.demo.export.service.BaseExportService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -45,11 +47,11 @@ public class BaseAlgorithmService {
 
         StatusService<BasePowerNode> statusService = new BaseStatusService(matrix, configuration, true);
 
-        ConnectionService connectionService = new BaseConnectionService(elementService);
+        ConnectionService<BasePowerNode> connectionService = new BaseConnectionService(elementService);
 
         PowerNodeFactory<BasePowerNode> factory = new BasePowerNodeFactory();
 
-        ExportService exportService = new ExportService(configuration, elementService, matrix);
+        BaseExportService exportService = new BaseExportService(configuration, elementService, matrix);
 
         List<TransformerConfiguration> transformerConfigurations = new ArrayList<>();
 

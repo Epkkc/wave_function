@@ -53,5 +53,7 @@ module com.example.demo {
     opens com.example.demo.base.service.status to javafx.fxml;
     exports com.example.demo.base.service.element;
     opens com.example.demo.base.service.element to javafx.fxml;
+    exports com.example.demo.base.service.connection;
+    opens com.example.demo.base.service.connection to javafx.fxml;
 
 }
