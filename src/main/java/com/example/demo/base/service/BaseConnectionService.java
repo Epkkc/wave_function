@@ -3,8 +3,10 @@ package com.example.demo.base.service;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Matrix;
+import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.power.BaseLine;
-import com.example.demo.base.model.power.BasePowerNode;
+import com.example.demo.base.model.power.AbstractBasePowerNode;
+import com.example.demo.base.service.element.BaseElementService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
@@ -21,8 +23,8 @@ public class BaseConnectionService implements ConnectionService {
     private final BaseElementService elementService;
 
     @Override
-    public void connectNode(BasePowerNode node, Matrix<? extends BasePowerNode> matrix) {
-        List<? extends BasePowerNode> powerNodes = matrix.toOrderedNodeList();
+    public void connectNode(AbstractBasePowerNode<? extends BaseConnection> node, Matrix<? extends AbstractBasePowerNode<? extends BaseConnection>> matrix) {
+        List<? extends AbstractBasePowerNode<? extends BaseConnection>> powerNodes = matrix.toOrderedNodeList();
 
         Collections.reverse(powerNodes);
 
@@ -64,7 +66,7 @@ public class BaseConnectionService implements ConnectionService {
     }
 
     @Override
-    public void connectNodes(BasePowerNode node1, BasePowerNode node2, VoltageLevel voltageLevel) {
+    public void connectNodes(AbstractBasePowerNode<? extends BaseConnection> node1, AbstractBasePowerNode<? extends BaseConnection> node2, VoltageLevel voltageLevel) {
         BaseLine baseLine = new BaseLine(node1, node2, voltageLevel);
         elementService.getLines().add(baseLine);
         node1.getConnections().get(voltageLevel).addConnection();

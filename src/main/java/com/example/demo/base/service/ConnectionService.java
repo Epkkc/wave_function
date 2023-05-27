@@ -1,13 +1,13 @@
 package com.example.demo.base.service;
 
 import com.example.demo.base.model.grid.Matrix;
-import com.example.demo.base.model.power.BasePowerNode;
-import com.example.demo.java.fx.model.power.FxPowerNode;
+import com.example.demo.base.model.power.AbstractBasePowerNode;
 import com.example.demo.base.model.enums.VoltageLevel;
+import com.example.demo.base.model.power.BaseConnection;
 
 public interface ConnectionService {
 
-    void connectNode(BasePowerNode node, Matrix<? extends BasePowerNode> matrix);
-    void connectNodes(BasePowerNode node1, BasePowerNode node2, VoltageLevel voltageLevel);
+    void connectNode(AbstractBasePowerNode<? extends BaseConnection> node, Matrix<? extends AbstractBasePowerNode<? extends BaseConnection>> matrix);
+    void connectNodes(AbstractBasePowerNode<? extends BaseConnection> node1, AbstractBasePowerNode<? extends BaseConnection> node2, VoltageLevel voltageLevel);
 
 }

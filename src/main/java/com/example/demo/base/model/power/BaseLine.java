@@ -4,9 +4,9 @@ import com.example.demo.base.model.enums.VoltageLevel;
 import lombok.Getter;
 
 @Getter
-public class BaseLine extends AbstractLine<BasePowerNode> {
+public class BaseLine extends AbstractLine<AbstractBasePowerNode> {
 
-    public BaseLine(BasePowerNode point1, BasePowerNode point2, VoltageLevel voltageLevel) {
+    public BaseLine(AbstractBasePowerNode point1, AbstractBasePowerNode point2, VoltageLevel voltageLevel) {
         super(point1, point2, voltageLevel, false); // todo переделать, когда появится логика определения breaker
     }
 

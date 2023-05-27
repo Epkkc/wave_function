@@ -1,43 +1,30 @@
 package com.example.demo.java.fx.model.grid;
 
 import com.example.demo.base.model.enums.VoltageLevel;
+import com.example.demo.base.model.power.BaseConnection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@Builder
 @NoArgsConstructor
-public class ConnectionPoint {
+@EqualsAndHashCode(callSuper = true)
+public class ConnectionPoint extends BaseConnection {
     /**
      * Координата x на сетке
      */
-    private double x;
+    protected double x;
     /**
      * Координата y на сетке
      */
-    private double y;
-    /**
-     * Уровень напряжения точки присоединения
-     */
-    private VoltageLevel voltageLevel;
-    /**
-     * Число присоединений
-     */
-    private int connections;
-    /**
-     * ограничение на максимальное количество присоединений
-     */
-    private int limit;
+    protected double y;
 
-    public boolean addConnection() {
-        if (connections < limit) {
-            connections++;
-            return true;
-        }
-        return false;
+    public ConnectionPoint(double x, double y, VoltageLevel voltageLevel, int connections, int limit) {
+        super(voltageLevel, connections, limit);
+        this.x = x;
+        this.y = y;
     }
 
 }

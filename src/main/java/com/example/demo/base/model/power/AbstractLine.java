@@ -2,12 +2,11 @@ package com.example.demo.base.model.power;
 
 import com.example.demo.base.model.enums.VoltageLevel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
-public abstract class AbstractLine<T extends BasePowerNode> {
+public abstract class AbstractLine<T extends AbstractBasePowerNode> {
 
     protected T point1;
     protected T point2;

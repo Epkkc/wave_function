@@ -1,8 +1,6 @@
 package com.example.demo.java.fx.model.power;
 
 import com.example.demo.base.model.grid.Coordinates;
-import com.example.demo.base.model.power.BasePowerNode;
-import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.example.demo.java.fx.model.grid.GridElement;
 import com.example.demo.base.model.enums.PowerNodeType;
@@ -161,4 +159,5 @@ public abstract class FxPowerNode implements GridElement, Coordinates {
             }
         });
     }
+
 }

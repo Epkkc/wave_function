@@ -19,7 +19,7 @@ public class BaseConnection implements Connection {
      */
     protected int connections;
     /**
-     * ограничение на максимальное количество присоединений
+     * Ограничение на максимальное количество присоединений
      */
     protected int limit;
 

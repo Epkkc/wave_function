@@ -1,4 +1,4 @@
-package com.example.demo.base.service;
+package com.example.demo.base.service.status;
 
 import com.example.demo.base.model.configuration.GenerationConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
@@ -6,24 +6,27 @@ import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Matrix;
-import com.example.demo.base.model.power.BasePowerNode;
+import com.example.demo.base.model.power.AbstractBasePowerNode;
+import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.status.StatusType;
+import com.example.demo.base.service.BaseConfiguration;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 @RequiredArgsConstructor
-public class BaseStatusService implements StatusService {
+@Getter
+public class AbstractStatusService<T extends AbstractBasePowerNode<? extends BaseConnection>> implements StatusService<T> {
 
-    private final Matrix<BasePowerNode> matrix;
-    private final BaseConfiguration baseConfiguration;
-    private final boolean roundedArea;
+    protected final Matrix<T> matrix;
+    protected final BaseConfiguration baseConfiguration;
+    protected final boolean roundedArea;
 
-    public void setTransformerStatusToArea(BasePowerNode powerNode, TransformerConfiguration... levels) {
+    public void setTransformerStatusToArea(T powerNode, TransformerConfiguration... levels) {
 
         // Установка blocking статусов
         for (TransformerConfiguration transformerConfiguration : levels) {
@@ -64,7 +67,7 @@ public class BaseStatusService implements StatusService {
                 });
 
             // TODO удалить
-            List<BasePowerNode> powerNodes = matrix.toNodeList()
+            List<T> powerNodes = matrix.toNodeList()
                 .stream()
                 .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
                 .toList();
@@ -79,7 +82,7 @@ public class BaseStatusService implements StatusService {
     }
 
 
-    public void setLoadStatusToArea(BasePowerNode powerNode, LoadConfiguration loadCfg) {
+    public void setLoadStatusToArea(T powerNode, LoadConfiguration loadCfg) {
 
         // Установка blocking статусов
         matrix.getArea(powerNode.getX(), powerNode.getY(), loadCfg.getBoundingArea()).stream()
@@ -95,7 +98,7 @@ public class BaseStatusService implements StatusService {
             });
 
         System.out.println("Set load powerNode = " + powerNode);
-        List<BasePowerNode> powerNodes = matrix.toNodeList()
+        List<T> powerNodes = matrix.toNodeList()
             .stream()
             .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
             .toList();
@@ -108,7 +111,7 @@ public class BaseStatusService implements StatusService {
     }
 
     @Override
-    public void setLoadStatusToArea(BasePowerNode powerNode, GenerationConfiguration genCfg) {
+    public void setLoadStatusToArea(T powerNode, GenerationConfiguration genCfg) {
         // Установка blocking статусов
         matrix.getArea(powerNode.getX(), powerNode.getY(), genCfg.getBoundingArea()).stream()
             .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
@@ -123,7 +126,7 @@ public class BaseStatusService implements StatusService {
             });
 
         System.out.println("Set generator powerNode = " + powerNode);
-        List<BasePowerNode> powerNodes = matrix.toNodeList()
+        List<T> powerNodes = matrix.toNodeList()
             .stream()
             .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
             .toList();
@@ -165,6 +168,5 @@ public class BaseStatusService implements StatusService {
             node.addStatus(statusType, voltageLevel);
         });
     }
-
 
 }

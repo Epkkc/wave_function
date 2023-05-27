@@ -1,9 +1,10 @@
-package com.example.demo.base.service;
+package com.example.demo.base.service.element;
 
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
+import com.example.demo.base.model.power.AbstractBasePowerNode;
+import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.power.BaseLine;
-import com.example.demo.base.model.power.BasePowerNode;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -12,16 +13,16 @@ import java.util.List;
 
 @Data
 @RequiredArgsConstructor
-public class BaseElementService {
+public class AbstractElementService<T extends AbstractBasePowerNode<? extends BaseConnection>> {
 
-    private final Matrix<BasePowerNode> matrix;
-    private final List<BaseLine> lines = new ArrayList<>();
-    private int sumLoad;
-    private int sumPower;
-    private int totalNumberOfNodes;
-    private int totalNumberOfEdges;
+    protected final Matrix<T> matrix;
+    protected final List<BaseLine> lines = new ArrayList<>();
+    protected int sumLoad;
+    protected int sumPower;
+    protected int totalNumberOfNodes;
+    protected int totalNumberOfEdges;
 
-    public void addPowerNodeToGrid(BasePowerNode node) {
+    public void addPowerNodeToGrid(T node) {
         matrix.add(node);
         if (PowerNodeType.LOAD.equals(node.getNodeType())) {
             sumLoad+=node.getPower();
@@ -38,5 +39,4 @@ public class BaseElementService {
     public void addNode(int value) {
         totalNumberOfNodes++;
     }
-
 }

@@ -11,6 +11,9 @@ import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.BasePowerNode;
+import com.example.demo.base.service.element.BaseElementService;
+import com.example.demo.base.service.status.BaseStatusService;
+import com.example.demo.base.service.status.StatusService;
 import com.example.demo.export.service.ExportService;
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +43,7 @@ public class BaseAlgorithmService {
 
         BaseElementService elementService = new BaseElementService(matrix);
 
-        StatusService statusService = new BaseStatusService(matrix, configuration, true);
+        StatusService<BasePowerNode> statusService = new BaseStatusService(matrix, configuration, true);
 
         ConnectionService connectionService = new BaseConnectionService(elementService);
 
@@ -136,7 +139,7 @@ public class BaseAlgorithmService {
         configuration.setLoadConfigurations(loadConfigurations);
         configuration.setGenerationConfigurations(generationConfigurations);
 
-        Algorithm algorithm = new BaseAlgorithm<>(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations,
+        Algorithm algorithm = new BaseAlgorithm(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations,
             generationConfigurations,
             factory, exportService);
         GenerationResult result = algorithm.start();

@@ -2,9 +2,10 @@ package com.example.demo.export.service;
 
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.AbstractLine;
-import com.example.demo.base.model.power.BasePowerNode;
+import com.example.demo.base.model.power.AbstractBasePowerNode;
+import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.service.BaseConfiguration;
-import com.example.demo.base.service.BaseElementService;
+import com.example.demo.base.service.element.BaseElementService;
 import com.example.demo.export.dto.PowerLineDto;
 import com.example.demo.export.dto.PowerNodeDto;
 import com.example.demo.export.dto.SaveDto;
@@ -26,7 +27,7 @@ public class ExportService {
 
     protected final BaseConfiguration configuration;
     protected final BaseElementService elementService;
-    protected final Matrix<BasePowerNode> matrix;
+    protected final Matrix<? extends AbstractBasePowerNode<? extends BaseConnection>> matrix;
 
     public String saveAsFile() {
         SaveDto dto = SaveDto.builder()
@@ -59,7 +60,7 @@ public class ExportService {
             .build();
     }
 
-    private PowerNodeDto mapNodeToDto(BasePowerNode node) {
+    private PowerNodeDto mapNodeToDto(AbstractBasePowerNode<? extends BaseConnection> node) {
         return PowerNodeDto.builder()
             .nodeType(node.getNodeType())
             .x(node.getX())
