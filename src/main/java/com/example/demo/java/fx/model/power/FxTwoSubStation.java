@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FxTwoSubStation extends FxPowerNode {
+public class FxTwoSubStation extends FxAbstractPowerNode {
 
     @JsonIgnore
     private Map<VoltageLevel, Circle> circlesMap = new HashMap<>();

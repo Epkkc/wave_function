@@ -9,7 +9,7 @@ import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Matrix;
-import com.example.demo.base.model.power.AbstractBasePowerNode;
+import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.status.BaseStatus;
@@ -30,7 +30,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public abstract class AbstractBaseAlgorithm<PNODE extends AbstractBasePowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>, CFG extends BaseConfiguration> implements Algorithm {
+public abstract class AbstractBaseAlgorithm<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>, CFG extends BaseConfiguration> implements Algorithm {
 
     protected final Matrix<PNODE> matrix;
     protected final AbstractElementService<PNODE, LINE> elementService;

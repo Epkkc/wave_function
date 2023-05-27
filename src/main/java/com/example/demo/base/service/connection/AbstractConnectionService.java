@@ -3,12 +3,10 @@ package com.example.demo.base.service.connection;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Matrix;
-import com.example.demo.base.model.power.AbstractBasePowerNode;
+import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.BaseConnection;
-import com.example.demo.base.model.power.BaseLine;
 import com.example.demo.base.model.status.BaseStatus;
-import com.example.demo.base.service.element.BaseElementService;
 import com.example.demo.base.service.element.ElementService;
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +19,7 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 @RequiredArgsConstructor
-public abstract class AbstractConnectionService<PNODE extends AbstractBasePowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ConnectionService<PNODE> {
+public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ConnectionService<PNODE> {
 
     private final ElementService<PNODE, LINE> elementService;
 

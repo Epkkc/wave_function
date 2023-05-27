@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public abstract class AbstractLine<PNODE extends AbstractBasePowerNode<? extends BaseStatus, ? extends BaseConnection>> {
+public abstract class AbstractLine<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>> {
 
     protected PNODE point1;
     protected PNODE point2;

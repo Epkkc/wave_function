@@ -1,6 +1,7 @@
 package com.example.demo.java.fx.model.power;
 
 import com.example.demo.base.model.grid.Coordinates;
+import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.example.demo.java.fx.model.grid.GridElement;
 import com.example.demo.base.model.enums.PowerNodeType;
@@ -24,37 +25,33 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @Data
-@EqualsAndHashCode
-public abstract class FxPowerNode implements GridElement, Coordinates {
+@EqualsAndHashCode(callSuper = true)
+public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, ConnectionPoint> implements GridElement, Coordinates {
 
-    protected PowerNodeType nodeType;
-    protected int x;
-    protected int y;
-    protected int power;
-    protected String uuid = UUID.randomUUID().toString();
-    protected List<VoltageLevel> voltageLevels;
 
     protected double size;
-    protected Map<VoltageLevel, ConnectionPoint> connectionPoints = new HashMap<>();
     protected BasePane basePane;
     protected final double hoverOpacity = 0.5d;
     protected final double defaultOpacity = 1d;
-    protected List<FxStatus> statuses;
 
 
-    public FxPowerNode(PowerNodeType nodeType, int x, int y, int power, List<VoltageLevel> voltageLevels, double size) {
-        this.nodeType = nodeType;
-        this.x = x;
-        this.y = y;
-        this.power = power;
+    public FxAbstractPowerNode(PowerNodeType nodeType, int x, int y, int power, List<VoltageLevel> voltageLevels, double size) {
+        super(nodeType, x, y, power, voltageLevels);
         this.size = size;
         basePane = createBasePane();
+    }
+
+    @Override
+    protected void initConnections() {
+        // Пусто, так как сами ноды проставляют себе connections
+    }
+
+    @Override
+    protected FxStatus getStatus(StatusType statusType, VoltageLevel... voltageLevels) {
+        return new FxStatus(statusType, basePane.getStatusPane().getSize(), voltageLevels); // В данный момент status без координат в матрице статусов, мб стоит выпилить вообще координаты из статусов
     }
 
     protected BasePane createBasePane() {
@@ -81,8 +78,10 @@ public abstract class FxPowerNode implements GridElement, Coordinates {
         return basePane1;
     }
 
-    public Collection<Runnable> addStatus(StatusType type, boolean show, VoltageLevel... voltageLevel) {
-        return basePane.getStatusPane().addStatusP(type, show, voltageLevel);
+    public void addStatus(StatusType type, VoltageLevel... voltageLevel) {
+        super.addStatus(type, voltageLevel);
+        basePane.getStatusPane().refreshStatuses(statuses); // todo
+//        basePane.getStatusPane().addStatusP(type, voltageLevel); // todo удалить
     }
 
     public void setHoverOpacity(VoltageLevel voltageLevel) {
@@ -105,7 +104,7 @@ public abstract class FxPowerNode implements GridElement, Coordinates {
     }
 
     public List<VoltageLevel> getVoltageLevels() {
-        return connectionPoints.keySet().stream().toList();
+        return connections.keySet().stream().toList();
     }
 
     // TODO Доработать этот

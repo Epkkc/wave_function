@@ -21,7 +21,7 @@ public class BasePane {
         Rectangle rectangle = createRectangle(size);
 
         stackPane.getChildren().add(rectangle);
-        stackPane.getChildren().add(statusPane.getStatusPane());
+        stackPane.getChildren().add(statusPane.getHbox());
     }
 
     private Rectangle createRectangle(double size) {

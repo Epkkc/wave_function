@@ -15,7 +15,7 @@ import com.example.demo.export.dto.PowerNodeDto;
 import com.example.demo.export.dto.SaveDto;
 import com.example.demo.java.fx.factories.FxAbstractPowerNodeFactory;
 import com.example.demo.java.fx.model.power.FxPowerLine;
-import com.example.demo.java.fx.model.power.FxPowerNode;
+import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.java.fx.service.FxConfiguration;
 import com.example.demo.services.FxConnectionService;
 import com.example.demo.services.FxElementService;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FxAlgorithm implements Algorithm {
 
-    private final Matrix<FxPowerNode> matrix;
+    private final Matrix<FxAbstractPowerNode> matrix;
     private final FxElementService elementsService;
     private final FxStatusService statusService;
     private final FxConnectionService connectionService;
@@ -54,7 +54,7 @@ public class FxAlgorithm implements Algorithm {
     @Override
     public GenerationResult start() {
 
-        List<FxPowerNode> nodes = matrix.toNodeList();
+        List<FxAbstractPowerNode> nodes = matrix.toNodeList();
 
         for (int i = 0; i < voltageLevels.size() - 1; i++) {
             TransformerConfiguration currentVoltage = voltageLevels.get(i);
@@ -74,14 +74,14 @@ public class FxAlgorithm implements Algorithm {
 
             do {
 
-                FxPowerNode powerNode = RandomUtils.randomValue(nodes);
+                FxAbstractPowerNode powerNode = RandomUtils.randomValue(nodes);
 
                 // TODO нужно чтобы была хотя бы одна ПС с нижним классом напряжения на 1 ступень ниже
                 boolean three = false;
                 if (currentVoltage.getLevel().isThreeWindings()) {
                     three = random.nextInt(2) == 0;
                 }
-                FxPowerNode resultNode = null;
+                FxAbstractPowerNode resultNode = null;
 
 //                three = false;
 
@@ -157,16 +157,16 @@ public class FxAlgorithm implements Algorithm {
 
             //TODO  Нужно получить все трансформаторы, имеющие обмотки с currentLevel и отсортировать их по
             // количеству присоединений в возрастающем порядке
-            List<FxPowerNode> transformers = matrix.getAll(
+            List<FxAbstractPowerNode> transformers = matrix.getAll(
                     node -> PowerNodeType.SUBSTATION.equals(node.getNodeType())
                         && node.getConnectionPoints().containsKey(currentLevel)
                 ).stream()
                 .sorted(Comparator.comparingInt(node -> node.getConnectionPoints().get(currentLevel).getConnections()))
                 .collect(Collectors.toList());
 
-            for (FxPowerNode transformer : transformers) {
+            for (FxAbstractPowerNode transformer : transformers) {
                 // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
-                List<FxPowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), loadCfg.getTransformerArea()).stream()
+                List<FxAbstractPowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), loadCfg.getTransformerArea()).stream()
                     .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
                     .filter(node -> node.getStatuses().stream()
                         .noneMatch(status -> StatusType.BLOCK_LOAD.equals(status.getType())
@@ -178,7 +178,7 @@ public class FxAlgorithm implements Algorithm {
                 int filledPower = 0;
                 do {
                     // Нода для размещения нагрузки
-                    FxPowerNode resultNode = RandomUtils.randomValue(area);
+                    FxAbstractPowerNode resultNode = RandomUtils.randomValue(area);
 
                     // Расчёт мощности нагрузки
                     int randomPower = random.nextInt(loadCfg.getMaxLoad() - loadCfg.getMinLoad()) + loadCfg.getMinLoad();
@@ -207,7 +207,7 @@ public class FxAlgorithm implements Algorithm {
                         // Обработка остановки потока
                     } while (((StoppableThread) Thread.currentThread()).isStopped());
 
-                    FxPowerNode finalResultNode = resultNode;
+                    FxAbstractPowerNode finalResultNode = resultNode;
                     area.removeIf(node -> node.getX() == finalResultNode.getX() && node.getY() == finalResultNode.getY());
 
                     area = area.stream().filter(node -> node.getStatuses().stream()
@@ -233,16 +233,16 @@ public class FxAlgorithm implements Algorithm {
 
             //TODO  Нужно получить все трансформаторы, имеющие обмотки с currentLevel и отсортировать их по
             // количеству присоединений в возрастающем порядке
-            List<FxPowerNode> transformers = matrix.getAll(
+            List<FxAbstractPowerNode> transformers = matrix.getAll(
                     node -> PowerNodeType.SUBSTATION.equals(node.getNodeType())
                         && node.getConnectionPoints().containsKey(currentLevel)
                 ).stream()
                 .sorted(Comparator.comparingInt(node -> node.getConnectionPoints().get(currentLevel).getConnections()))
                 .collect(Collectors.toList());
 
-            for (FxPowerNode transformer : transformers) {
+            for (FxAbstractPowerNode transformer : transformers) {
                 // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
-                List<FxPowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), generationConfiguration.getTransformerArea()).stream()
+                List<FxAbstractPowerNode> area = matrix.getArea(transformer.getX(), transformer.getY(), generationConfiguration.getTransformerArea()).stream()
                     .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
                     .filter(node -> node.getStatuses().stream()
                         .noneMatch(status -> StatusType.BLOCK_GENERATOR.equals(status.getType())
@@ -253,7 +253,7 @@ public class FxAlgorithm implements Algorithm {
 
 //                do {
                 // Нода для размещения нагрузки
-                FxPowerNode resultNode = RandomUtils.randomValue(area);
+                FxAbstractPowerNode resultNode = RandomUtils.randomValue(area);
 
                 // Расчёт мощности нагрузки
                 // TODO можно сделать как случайный выбор из набора мощностей
@@ -329,7 +329,7 @@ public class FxAlgorithm implements Algorithm {
             .build();
     }
 
-    private PowerNodeDto mapNodeToDto(FxPowerNode node) {
+    private PowerNodeDto mapNodeToDto(FxAbstractPowerNode node) {
         return PowerNodeDto.builder()
             .nodeType(node.getNodeType())
             .x(node.getX())
@@ -340,7 +340,7 @@ public class FxAlgorithm implements Algorithm {
             .build();
     }
 
-    private void fillTransformerToGrid(FxPowerNode node, TransformerConfiguration... levels) {
+    private void fillTransformerToGrid(FxAbstractPowerNode node, TransformerConfiguration... levels) {
         elementsService.addPowerNodeToGrid(node);
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setTransformerStatusToArea(node, levels);
@@ -348,7 +348,7 @@ public class FxAlgorithm implements Algorithm {
         connectionService.connectNode(node);
     }
 
-    private void fillLoadToGrid(FxPowerNode load, FxPowerNode transformer, LoadConfiguration loadCfg) {
+    private void fillLoadToGrid(FxAbstractPowerNode load, FxAbstractPowerNode transformer, LoadConfiguration loadCfg) {
         elementsService.addPowerNodeToGrid(load);
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setLoadStatusToArea(load, loadCfg);
@@ -356,7 +356,7 @@ public class FxAlgorithm implements Algorithm {
         connectionService.connectNodes(load, transformer, loadCfg.getLevel());
     }
 
-    private void fillGeneratorToGrid(FxPowerNode generator, FxPowerNode transformer, GenerationConfiguration generationConfiguration) {
+    private void fillGeneratorToGrid(FxAbstractPowerNode generator, FxAbstractPowerNode transformer, GenerationConfiguration generationConfiguration) {
         elementsService.addPowerNodeToGrid(generator);
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setGeneratorStatusToArea(generator, generationConfiguration);

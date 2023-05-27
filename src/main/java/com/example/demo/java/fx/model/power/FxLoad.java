@@ -18,7 +18,7 @@ import javafx.stage.Popup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FxLoad extends FxPowerNode {
+public class FxLoad extends FxAbstractPowerNode {
 
     private VoltageLevel voltageLevel;
 

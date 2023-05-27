@@ -3,7 +3,7 @@ package com.example.demo.services;
 import com.example.demo.base.model.configuration.GenerationConfiguration;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.configuration.LoadConfiguration;
-import com.example.demo.java.fx.model.power.FxPowerNode;
+import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
@@ -20,11 +20,10 @@ import static java.lang.Math.sqrt;
 @RequiredArgsConstructor
 public class FxStatusService {
 
-    private final Matrix<FxPowerNode> matrix;
+    private final Matrix<FxAbstractPowerNode> matrix;
     private final boolean roundedArea;
 
-    public void setTransformerStatusToArea(FxPowerNode powerNode, TransformerConfiguration... levels) {
-        List<Runnable> runnables = new ArrayList<>();
+    public void setTransformerStatusToArea(FxAbstractPowerNode powerNode, TransformerConfiguration... levels) {
 
         // Установка blocking статусов
         for (TransformerConfiguration level : levels) {
@@ -37,7 +36,7 @@ public class FxStatusService {
                             return;
                         }
                     }
-                    runnables.addAll(node.addStatus(powerNode.getNodeType().getBlockingStatus(), true, level.getLevel()));
+                    node.addStatus(powerNode.getNodeType().getBlockingStatus(), level.getLevel());
                 });
 
             AtomicInteger counter1 = new AtomicInteger();
@@ -64,12 +63,12 @@ public class FxStatusService {
                         }
                     }
                     counter2.getAndIncrement();
-                    runnables.addAll(node.addStatus(powerNode.getNodeType().getShouldStatus(), true, level.getLevel()));
+                    node.addStatus(powerNode.getNodeType().getShouldStatus(), level.getLevel());
                 });
 
 
             // TODO удалить
-            List<FxPowerNode> powerNodes = matrix.toNodeList()
+            List<FxAbstractPowerNode> powerNodes = matrix.toNodeList()
                 .stream()
                 .filter(node -> node.getBasePane().getStatusPane().getStatusMatrix().toNodeList().stream().anyMatch(node1 -> node1.getVoltageLevels().isEmpty()))
                 .toList();
@@ -80,16 +79,14 @@ public class FxStatusService {
 
         // Добавляем запрет на расстановку рядом любых объектов
         matrix.getArea(powerNode.getX(), powerNode.getY()).forEach(node -> PowerNodeType.getValidValues().forEach(
-            pnt -> runnables.addAll(node.addStatus(pnt.getBlockingStatus(), true, VoltageLevel.values())))
+            pnt -> node.addStatus(pnt.getBlockingStatus(), VoltageLevel.values()))
         );
 
-        Platform.runLater(() -> runnables.forEach(Runnable::run));
 
     }
 
 
-    public void setLoadStatusToArea(FxPowerNode powerNode, LoadConfiguration loadCfg) {
-        List<Runnable> runnables = new ArrayList<>();
+    public void setLoadStatusToArea(FxAbstractPowerNode powerNode, LoadConfiguration loadCfg) {
 
         // Установка blocking статусов
         matrix.getArea(powerNode.getX(), powerNode.getY(), loadCfg.getBoundingArea()).stream()
@@ -101,11 +98,11 @@ public class FxStatusService {
                         return;
                     }
                 }
-                runnables.addAll(node.addStatus(powerNode.getNodeType().getBlockingStatus(), true, loadCfg.getLevel()));
+                node.addStatus(powerNode.getNodeType().getBlockingStatus(), loadCfg.getLevel());
             });
 
         System.out.println("Set load powerNode=" + powerNode);
-        List<FxPowerNode> powerNodes = matrix.toNodeList()
+        List<FxAbstractPowerNode> powerNodes = matrix.toNodeList()
             .stream()
             .filter(node -> node.getBasePane().getStatusPane().getStatusMatrix().toNodeList().stream().anyMatch(node1 -> node1.getVoltageLevels().isEmpty()))
             .toList();
@@ -113,14 +110,12 @@ public class FxStatusService {
 
         // Добавляем запрет на расстановку рядом любых объектов
         matrix.getArea(powerNode.getX(), powerNode.getY()).forEach(node -> PowerNodeType.getValidValues().forEach(
-            pnt -> runnables.addAll(node.addStatus(pnt.getBlockingStatus(), true, VoltageLevel.values())))
+            pnt -> node.addStatus(pnt.getBlockingStatus(), VoltageLevel.values()))
         );
 
-        Platform.runLater(() -> runnables.forEach(Runnable::run));
     }
 
-    public void setGeneratorStatusToArea(FxPowerNode powerNode, GenerationConfiguration generationConfiguration) {
-        List<Runnable> runnables = new ArrayList<>();
+    public void setGeneratorStatusToArea(FxAbstractPowerNode powerNode, GenerationConfiguration generationConfiguration) {
 
         // Установка blocking статусов
         matrix.getArea(powerNode.getX(), powerNode.getY(), generationConfiguration.getBoundingArea()).stream()
@@ -132,11 +127,11 @@ public class FxStatusService {
                         return;
                     }
                 }
-                runnables.addAll(node.addStatus(powerNode.getNodeType().getBlockingStatus(), true, generationConfiguration.getLevel()));
+                node.addStatus(powerNode.getNodeType().getBlockingStatus(), generationConfiguration.getLevel());
             });
 
         System.out.println("Set generator powerNode=" + powerNode);
-        List<FxPowerNode> powerNodes = matrix.toNodeList()
+        List<FxAbstractPowerNode> powerNodes = matrix.toNodeList()
             .stream()
             .filter(node -> node.getBasePane().getStatusPane().getStatusMatrix().toNodeList().stream().anyMatch(node1 -> node1.getVoltageLevels().isEmpty()))
             .toList();
@@ -144,10 +139,9 @@ public class FxStatusService {
 
         // Добавляем запрет на расстановку рядом любых объектов
         matrix.getArea(powerNode.getX(), powerNode.getY()).forEach(node -> PowerNodeType.getValidValues().forEach(
-            pnt -> runnables.addAll(node.addStatus(pnt.getBlockingStatus(), true, VoltageLevel.values())))
+            pnt -> node.addStatus(pnt.getBlockingStatus(), VoltageLevel.values()))
         );
 
-        Platform.runLater(() -> runnables.forEach(Runnable::run));
     }
 
 }

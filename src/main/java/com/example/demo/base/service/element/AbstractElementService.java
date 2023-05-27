@@ -2,7 +2,7 @@ package com.example.demo.base.service.element;
 
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
-import com.example.demo.base.model.power.AbstractBasePowerNode;
+import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.status.BaseStatus;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @Data
 @RequiredArgsConstructor
-public abstract class AbstractElementService<PNODE extends AbstractBasePowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ElementService<PNODE, LINE> {
+public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ElementService<PNODE, LINE> {
 
     protected final Matrix<PNODE> matrix;
     protected final List<LINE> lines = new ArrayList<>();

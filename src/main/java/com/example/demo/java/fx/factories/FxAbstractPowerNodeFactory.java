@@ -1,7 +1,6 @@
 package com.example.demo.java.fx.factories;
 
-import com.example.demo.base.factories.PowerNodeFactory;
-import com.example.demo.java.fx.model.power.FxPowerNode;
+import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.services.FxElementService;
@@ -21,11 +20,11 @@ public class FxAbstractPowerNodeFactory {
         factoriesMap.put(PowerNodeType.LOAD, new FxLoadFactory(elementsService));
     }
 
-    public FxPowerNode createNode(PowerNodeType type, int x, int y, int power, VoltageLevel... voltageLevels) {
+    public FxAbstractPowerNode createNode(PowerNodeType type, int x, int y, int power, VoltageLevel... voltageLevels) {
         return factoriesMap.get(type).createNode(x, y, power, voltageLevels);
     }
 
-    public FxPowerNode createNode(PowerNodeType type, int x, int y, int power, Collection<VoltageLevel> voltageLevels) {
+    public FxAbstractPowerNode createNode(PowerNodeType type, int x, int y, int power, Collection<VoltageLevel> voltageLevels) {
         return factoriesMap.get(type).createNode(x, y, power, voltageLevels.toArray(VoltageLevel[]::new));
     }
 

@@ -6,7 +6,7 @@ import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Matrix;
-import com.example.demo.base.model.power.AbstractBasePowerNode;
+import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.model.status.StatusType;
@@ -21,7 +21,7 @@ import static java.lang.Math.sqrt;
 
 @RequiredArgsConstructor
 @Getter
-public abstract class AbstractStatusService<PNODE extends AbstractBasePowerNode<? extends BaseStatus, ? extends BaseConnection>> implements StatusService<PNODE> {
+public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>> implements StatusService<PNODE> {
 
     protected final Matrix<PNODE> matrix;
     protected final BaseConfiguration baseConfiguration;

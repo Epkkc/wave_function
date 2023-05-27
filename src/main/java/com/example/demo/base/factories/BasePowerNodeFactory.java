@@ -2,7 +2,6 @@ package com.example.demo.base.factories;
 
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
-import com.example.demo.base.model.power.AbstractBasePowerNode;
 import com.example.demo.base.model.power.BasePowerNode;
 
 import java.util.Collection;

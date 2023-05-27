@@ -1,6 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.java.fx.model.power.FxPowerNode;
+import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import javafx.application.Platform;
@@ -19,8 +19,8 @@ public class FxConnectionService {
 
     private final FxElementService elementService;
 
-    public void connectNode(FxPowerNode node) {
-        List<FxPowerNode> powerNodes = elementService.getMatrix().toOrderedNodeList();
+    public void connectNode(FxAbstractPowerNode node) {
+        List<FxAbstractPowerNode> powerNodes = elementService.getMatrix().toOrderedNodeList();
 
         Collections.reverse(powerNodes);
 
@@ -57,7 +57,7 @@ public class FxConnectionService {
         );
     }
 
-    public void connectNodes(FxPowerNode node1, FxPowerNode node2, VoltageLevel voltageLevel) {
+    public void connectNodes(FxAbstractPowerNode node1, FxAbstractPowerNode node2, VoltageLevel voltageLevel) {
         Platform.runLater(() -> elementService.connectTwoNodes(
             node1, node1.getConnectionPoints().get(voltageLevel),
             node2, node2.getConnectionPoints().get(voltageLevel),
@@ -65,7 +65,7 @@ public class FxConnectionService {
         ));
     }
 
-    public void connectNodes(FxPowerNode node1, FxPowerNode node2, VoltageLevel voltageLevel, boolean breaker) {
+    public void connectNodes(FxAbstractPowerNode node1, FxAbstractPowerNode node2, VoltageLevel voltageLevel, boolean breaker) {
         Platform.runLater(() -> elementService.connectTwoNodes(
             node1, node1.getConnectionPoints().get(voltageLevel),
             node2, node2.getConnectionPoints().get(voltageLevel),

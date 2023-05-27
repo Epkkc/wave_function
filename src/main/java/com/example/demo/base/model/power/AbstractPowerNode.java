@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-public abstract class AbstractBasePowerNode<STATUS extends BaseStatus, CONNECTION extends BaseConnection> implements Coordinates {
+public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION extends BaseConnection> implements Coordinates {
 
     protected PowerNodeType nodeType;
     protected int x;
@@ -31,7 +31,7 @@ public abstract class AbstractBasePowerNode<STATUS extends BaseStatus, CONNECTIO
     protected List<STATUS> statuses;
     protected Map<VoltageLevel, CONNECTION> connections;
 
-    public AbstractBasePowerNode(PowerNodeType nodeType, int x, int y, int power, Collection<VoltageLevel> voltageLevels) {
+    public AbstractPowerNode(PowerNodeType nodeType, int x, int y, int power, Collection<VoltageLevel> voltageLevels) {
         this.nodeType = nodeType;
         this.x = x;
         this.y = y;
@@ -42,7 +42,7 @@ public abstract class AbstractBasePowerNode<STATUS extends BaseStatus, CONNECTIO
         initConnections();
     }
 
-    abstract void initConnections();
+    protected abstract void initConnections();
 
     public void addStatus(StatusType statusType, VoltageLevel... voltageLevels) {
         Collection<VoltageLevel> levels = List.of(voltageLevels);
@@ -74,5 +74,5 @@ public abstract class AbstractBasePowerNode<STATUS extends BaseStatus, CONNECTIO
         statuses.removeIf(status -> status.getVoltageLevels().isEmpty());
     }
 
-    abstract STATUS getStatus(StatusType statusType, VoltageLevel... voltageLevels);
+    protected abstract STATUS getStatus(StatusType statusType, VoltageLevel... voltageLevels);
 }

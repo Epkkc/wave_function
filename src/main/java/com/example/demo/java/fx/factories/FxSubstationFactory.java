@@ -1,6 +1,6 @@
 package com.example.demo.java.fx.factories;
 
-import com.example.demo.java.fx.model.power.FxPowerNode;
+import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.java.fx.model.power.FxThreeSubStation;
 import com.example.demo.java.fx.model.power.FxTwoSubStation;
@@ -19,8 +19,8 @@ public class FxSubstationFactory extends FxPowerNodeFactory {
     }
 
     @Override
-    public FxPowerNode createNode(int x, int y, int power, VoltageLevel... voltageLevels) {
-        FxPowerNode node;
+    public FxAbstractPowerNode createNode(int x, int y, int power, VoltageLevel... voltageLevels) {
+        FxAbstractPowerNode node;
         if (voltageLevels.length == 2) {
             node = new FxTwoSubStation(
                 x,

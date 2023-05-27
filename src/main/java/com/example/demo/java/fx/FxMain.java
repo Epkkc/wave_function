@@ -7,7 +7,7 @@ import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.java.fx.algorithm.FxAlgorithm;
 import com.example.demo.java.fx.factories.FxAbstractPowerNodeFactory;
 import com.example.demo.java.fx.model.power.FxBaseNode;
-import com.example.demo.java.fx.model.power.FxPowerNode;
+import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.java.fx.service.FxConfiguration;
 import com.example.demo.services.FxConnectionService;
 import com.example.demo.services.FxElementService;
@@ -27,8 +27,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -51,7 +49,7 @@ public class FxMain extends Application {
     static StoppableThread thread;
     static FxConfiguration cfg;
     static FxElementService elementService;
-    static Matrix<FxPowerNode> matrix;
+    static Matrix<FxAbstractPowerNode> matrix;
     static GridPane gridPane;
 
     static int numberOfNodes = 50;
@@ -162,7 +160,7 @@ public class FxMain extends Application {
     private static void fillMatrix() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                FxPowerNode powerNode = new FxBaseNode(i, j, elementService.getBaseSize());
+                FxAbstractPowerNode powerNode = new FxBaseNode(i, j, elementService.getBaseSize());
                 matrix.fill(powerNode);
                 GridPane.setConstraints(powerNode.getStackPane(), j, i);
                 gridPane.getChildren().add(powerNode.getStackPane());

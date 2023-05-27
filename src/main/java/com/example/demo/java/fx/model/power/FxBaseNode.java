@@ -5,7 +5,7 @@ import com.example.demo.base.model.enums.VoltageLevel;
 
 import java.util.List;
 
-public class FxBaseNode extends FxPowerNode {
+public class FxBaseNode extends FxAbstractPowerNode {
 
     public FxBaseNode(int x, int y, double size) {
         super(PowerNodeType.EMPTY, x, y, 0, List.of(), size);

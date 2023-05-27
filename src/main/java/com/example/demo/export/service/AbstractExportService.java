@@ -1,12 +1,11 @@
 package com.example.demo.export.service;
 
 import com.example.demo.base.model.grid.Matrix;
-import com.example.demo.base.model.power.AbstractBasePowerNode;
+import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.service.BaseConfiguration;
-import com.example.demo.base.service.element.BaseElementService;
 import com.example.demo.base.service.element.ElementService;
 import com.example.demo.export.dto.PowerLineDto;
 import com.example.demo.export.dto.PowerNodeDto;
@@ -23,7 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class AbstractExportService<PNODE extends AbstractBasePowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ExportService<PNODE> {
+public class AbstractExportService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ExportService<PNODE> {
 
     protected final ObjectMapper objectMapper = new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 

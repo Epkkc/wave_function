@@ -4,7 +4,7 @@ import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.java.fx.model.power.FxPowerLine;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
-import com.example.demo.java.fx.model.power.FxPowerNode;
+import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.java.fx.service.FxConfiguration;
 import javafx.application.Platform;
@@ -46,7 +46,7 @@ public class FxElementService {
     private final ScrollPane scrollPane;
     private final Group root;
     private final GridPane gridPane;
-    private final Matrix<FxPowerNode> matrix;
+    private final Matrix<FxAbstractPowerNode> matrix;
     private List<FxPowerLine> lines = new ArrayList<>();
     private int sumLoad;
     private int sumPower;
@@ -56,7 +56,7 @@ public class FxElementService {
         return configuration.getBaseSize();
     }
 
-    public void addPowerNodeToGrid(FxPowerNode node) {
+    public void addPowerNodeToGrid(FxAbstractPowerNode node) {
         matrix.add(node);
         if (PowerNodeType.LOAD.equals(node.getNodeType())) {
             sumLoad+=node.getPower();
@@ -69,7 +69,7 @@ public class FxElementService {
         });
     }
 
-    public void connectTwoNodes(FxPowerNode node1, ConnectionPoint point1, FxPowerNode node2, ConnectionPoint point2, VoltageLevel voltageLevel) {
+    public void connectTwoNodes(FxAbstractPowerNode node1, ConnectionPoint point1, FxAbstractPowerNode node2, ConnectionPoint point2, VoltageLevel voltageLevel) {
         if (point1 != null && point2 != null) {
             Shape line = createLine(node1, point1, node2, point2, voltageLevel);
 
@@ -84,7 +84,7 @@ public class FxElementService {
         }
     }
 
-    public void connectTwoNodes(FxPowerNode node1, ConnectionPoint point1, FxPowerNode node2, ConnectionPoint point2, VoltageLevel voltageLevel, boolean breaker) {
+    public void connectTwoNodes(FxAbstractPowerNode node1, ConnectionPoint point1, FxAbstractPowerNode node2, ConnectionPoint point2, VoltageLevel voltageLevel, boolean breaker) {
         if (point1 != null && point2 != null) {
             if (!breaker) {
                 connectTwoNodes(node1, point1, node2, point2, voltageLevel);
@@ -142,7 +142,7 @@ public class FxElementService {
         });
     }
 
-    private Shape createLine(FxPowerNode node1, ConnectionPoint point1, FxPowerNode node2, ConnectionPoint point2, VoltageLevel voltageLevel) {
+    private Shape createLine(FxAbstractPowerNode node1, ConnectionPoint point1, FxAbstractPowerNode node2, ConnectionPoint point2, VoltageLevel voltageLevel) {
         Bounds boundsP1 = node1.getStackPane().getBoundsInParent();
         Bounds boundsP2 = node2.getStackPane().getBoundsInParent();
 
@@ -158,7 +158,7 @@ public class FxElementService {
         return line;
     }
 
-    private Shape createPath(FxPowerNode node1, ConnectionPoint point1, FxPowerNode node2, ConnectionPoint point2, VoltageLevel voltageLevel) {
+    private Shape createPath(FxAbstractPowerNode node1, ConnectionPoint point1, FxAbstractPowerNode node2, ConnectionPoint point2, VoltageLevel voltageLevel) {
         Path path = new Path();
         path.setStroke(voltageLevel.getColor());
         path.setStrokeWidth(configuration.getBaseSize() * 8 / 300);

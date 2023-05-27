@@ -29,13 +29,13 @@ public class FxStatus extends BaseStatus implements Coordinates {
     private final StringJoiner tooltipMessage;
 
 
-    public FxStatus(StatusType type, int x, int y, double size, VoltageLevel... voltageLevels) {
-        super(type, voltageLevels);
-        this.x = x;
-        this.y = y;
-        this.shape = getStatusForm(size, type);
+    public FxStatus(StatusType statusType, double size, VoltageLevel... voltageLevels) {
+        super(statusType, voltageLevels);
+//        this.x = x;
+//        this.y = y;
+        this.shape = getStatusForm(size, statusType);
         addVoltageLevel(voltageLevels);
-        this.tooltipMessage = new StringJoiner(", ", type.getTooltipPrefix() + "\n", "");
+        this.tooltipMessage = new StringJoiner(", ", statusType.getTooltipPrefix() + "\n", "");
     }
 
     private Shape getStatusForm(double size, StatusType type) {

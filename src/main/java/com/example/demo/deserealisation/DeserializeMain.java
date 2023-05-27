@@ -8,7 +8,7 @@ import com.example.demo.export.dto.PowerNodeDto;
 import com.example.demo.export.dto.SaveDto;
 import com.example.demo.java.fx.factories.FxAbstractPowerNodeFactory;
 import com.example.demo.java.fx.model.power.FxBaseNode;
-import com.example.demo.java.fx.model.power.FxPowerNode;
+import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.java.fx.service.FxConfiguration;
 import com.example.demo.services.FxConnectionService;
 import com.example.demo.services.FxElementService;
@@ -32,7 +32,7 @@ public class DeserializeMain extends Application {
 
     static SaveDto saveDto;
     static FxConfiguration cfg;
-    static Matrix<FxPowerNode> matrix;
+    static Matrix<FxAbstractPowerNode> matrix;
     static GridPane gridPane;
     static FxElementService elementService;
     static DeserializationService deserializationService = new DeserializationService();
@@ -67,7 +67,7 @@ public class DeserializeMain extends Application {
                 continue;
             }
 
-            FxPowerNode node = fabric.createNode(nodeDto.getNodeType(), nodeDto.getX(), nodeDto.getY(), nodeDto.getPower(), nodeDto.getVoltageLevels());
+            FxAbstractPowerNode node = fabric.createNode(nodeDto.getNodeType(), nodeDto.getX(), nodeDto.getY(), nodeDto.getPower(), nodeDto.getVoltageLevels());
             node.setUuid(nodeDto.getUuid());
 
             elementService.addPowerNodeToGrid(node);
@@ -76,8 +76,8 @@ public class DeserializeMain extends Application {
         // Нанесение линий электропередачи на карту
         // TODO не работает
         for (PowerLineDto line : saveDto.getLines()) {
-            Optional<FxPowerNode> point1 = matrix.getNode(line.getPoint1().getX(), line.getPoint1().getY());
-            Optional<FxPowerNode> point2 = matrix.getNode(line.getPoint2().getX(), line.getPoint2().getY());
+            Optional<FxAbstractPowerNode> point1 = matrix.getNode(line.getPoint1().getX(), line.getPoint1().getY());
+            Optional<FxAbstractPowerNode> point2 = matrix.getNode(line.getPoint2().getX(), line.getPoint2().getY());
             connectionService.connectNodes(point1.get(), point2.get(), line.getVoltageLevel(), line.getBreaker() != null && line.getBreaker());
         }
 
@@ -86,7 +86,7 @@ public class DeserializeMain extends Application {
     private static void fillMatrix(int rows, int columns, FxElementService elementService) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                FxPowerNode powerNode = new FxBaseNode(i, j, elementService.getBaseSize());
+                FxAbstractPowerNode powerNode = new FxBaseNode(i, j, elementService.getBaseSize());
                 matrix.fill(powerNode);
                 GridPane.setConstraints(powerNode.getStackPane(), j, i);
                 gridPane.getChildren().add(powerNode.getStackPane());

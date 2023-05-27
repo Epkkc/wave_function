@@ -7,19 +7,19 @@ import com.example.demo.base.model.status.StatusType;
 
 import java.util.Collection;
 
-public class BasePowerNode extends AbstractBasePowerNode<BaseStatus, BaseConnection> {
+public class BasePowerNode extends AbstractPowerNode<BaseStatus, BaseConnection> {
 
     public BasePowerNode(PowerNodeType nodeType, int x, int y, int power, Collection<VoltageLevel> voltageLevels) {
         super(nodeType, x, y, power, voltageLevels);
     }
 
     @Override
-    void initConnections() {
+    protected void initConnections() {
         voltageLevels.forEach(level -> connections.put(level, new BaseConnection(level, 0, 2)));
     }
 
     @Override
-    BaseStatus getStatus(StatusType statusType, VoltageLevel... voltageLevels) {
+    protected BaseStatus getStatus(StatusType statusType, VoltageLevel... voltageLevels) {
         return new BaseStatus(statusType, voltageLevels);
     }
 

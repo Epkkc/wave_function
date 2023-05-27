@@ -1,6 +1,6 @@
 package com.example.demo.java.fx.factories;
 
-import com.example.demo.java.fx.model.power.FxPowerNode;
+import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.services.FxElementService;
@@ -15,7 +15,7 @@ public abstract class FxPowerNodeFactory {
 
     public abstract PowerNodeType getType();
 
-    public abstract FxPowerNode createNode(int x, int y, int power, VoltageLevel... voltageLevels);
+    public abstract FxAbstractPowerNode createNode(int x, int y, int power, VoltageLevel... voltageLevels);
 
 
 }

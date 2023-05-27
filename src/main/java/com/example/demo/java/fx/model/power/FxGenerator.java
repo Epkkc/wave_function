@@ -24,7 +24,7 @@ import javafx.stage.Popup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FxGenerator extends FxPowerNode {
+public class FxGenerator extends FxAbstractPowerNode {
     @JsonIgnore
     private List<Shape> uiElements = new ArrayList<>();
     @JsonIgnore
@@ -66,7 +66,7 @@ public class FxGenerator extends FxPowerNode {
 
         addHoverListeners();
 
-        connectionPoints.put(voltageLevel, new ConnectionPoint(0, - circleRadius, voltageLevel, 0, 1));
+        connections.put(voltageLevel, new ConnectionPoint(0, - circleRadius, voltageLevel, 0, 1));
     }
 
     public Path drawSemiRing(double centerX, double centerY, double radius, double innerRadius, Paint paint, boolean sweepFlag) {
