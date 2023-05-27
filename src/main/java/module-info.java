@@ -26,6 +26,7 @@ module com.example.demo {
     exports com.example.demo.java.fx.model.visual;
     exports com.example.demo.java.fx.algorithm;
     exports com.example.demo.java.fx.service;
+    exports com.example.demo.params.window;
 
 
     opens com.example.demo.services to javafx.fxml;
@@ -47,5 +48,6 @@ module com.example.demo {
     opens com.example.demo.java.fx.service to javafx.fxml;
     exports com.example.demo.base.service;
     opens com.example.demo.base.service to javafx.fxml;
+    opens com.example.demo.base.status to javafx.fxml, javafx.graphics;
 
 }

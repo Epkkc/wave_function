@@ -2,8 +2,9 @@ package com.example.demo.java.fx.algorithm;
 
 import com.example.demo.base.algorithm.Algorithm;
 import com.example.demo.base.model.configuration.GenerationConfiguration;
+import com.example.demo.base.model.configuration.GenerationResult;
 import com.example.demo.base.model.configuration.LoadConfiguration;
-import com.example.demo.base.model.configuration.VoltageLevelInfo;
+import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Matrix;
@@ -43,7 +44,7 @@ public class FxAlgorithm implements Algorithm {
     private final FxStatusService statusService;
     private final FxConnectionService connectionService;
     private final FxConfiguration configuration;
-    private final List<VoltageLevelInfo> voltageLevels;
+    private final List<TransformerConfiguration> voltageLevels;
     private final List<LoadConfiguration> loadConfigurations;
     private final List<GenerationConfiguration> generationConfigurations;
     private final FxAbstractPowerNodeFactory nodeFabric;
@@ -51,12 +52,12 @@ public class FxAlgorithm implements Algorithm {
     private final ObjectMapper objectMapper = new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
     @Override
-    public void start() {
+    public GenerationResult start() {
 
         List<FxPowerNode> nodes = matrix.toNodeList();
 
         for (int i = 0; i < voltageLevels.size() - 1; i++) {
-            VoltageLevelInfo currentVoltage = voltageLevels.get(i);
+            TransformerConfiguration currentVoltage = voltageLevels.get(i);
 
             System.out.println(currentVoltage);
 
@@ -315,6 +316,8 @@ public class FxAlgorithm implements Algorithm {
         System.out.println("Total load = " + elementsService.getSumLoad());
         System.out.println("Total generation = " + elementsService.getSumPower());
         System.out.println("Finish");
+
+        return null; // todo заглушка
     }
 
     private PowerLineDto mapLineToDto(FxPowerLine line) {
@@ -337,7 +340,7 @@ public class FxAlgorithm implements Algorithm {
             .build();
     }
 
-    private void fillTransformerToGrid(FxPowerNode node, VoltageLevelInfo... levels) {
+    private void fillTransformerToGrid(FxPowerNode node, TransformerConfiguration... levels) {
         elementsService.addPowerNodeToGrid(node);
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setTransformerStatusToArea(node, levels);

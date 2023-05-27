@@ -28,7 +28,7 @@ public class ExportService {
     protected final BaseElementService elementService;
     protected final Matrix<BasePowerNode> matrix;
 
-    public void saveAsFile() {
+    public String saveAsFile() {
         SaveDto dto = SaveDto.builder()
             .rows(configuration.getRows())
             .columns(configuration.getColumns())
@@ -38,14 +38,15 @@ public class ExportService {
 
         final String PREFIX = "scheme_";
         String date = LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("dd_MM_yyyy__hh_mm_ss"));
-
-        File file = new File("C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\" + PREFIX + date);
+        String fileName = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\" + PREFIX + date;
+        File file = new File(fileName);
         System.out.println("File name: " + PREFIX + date);
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(objectMapper.writeValueAsString(dto));
         } catch (Exception e) {
             System.out.println("Exception : " + e);
         }
+        return fileName;
     }
 
     // TODO Вынести в MapStruct маппер

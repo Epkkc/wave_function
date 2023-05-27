@@ -6,7 +6,7 @@ import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.java.fx.model.power.FxPowerNode;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
-import com.example.demo.base.model.configuration.VoltageLevelInfo;
+import com.example.demo.base.model.configuration.TransformerConfiguration;
 import javafx.application.Platform;
 import lombok.RequiredArgsConstructor;
 
@@ -23,11 +23,11 @@ public class FxStatusService {
     private final Matrix<FxPowerNode> matrix;
     private final boolean roundedArea;
 
-    public void setTransformerStatusToArea(FxPowerNode powerNode, VoltageLevelInfo... levels) {
+    public void setTransformerStatusToArea(FxPowerNode powerNode, TransformerConfiguration... levels) {
         List<Runnable> runnables = new ArrayList<>();
 
         // Установка blocking статусов
-        for (VoltageLevelInfo level : levels) {
+        for (TransformerConfiguration level : levels) {
             matrix.getArea(powerNode.getX(), powerNode.getY(), level.getBoundingAreaFrom()).stream()
                 .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
                 .forEach(node -> {
@@ -48,8 +48,16 @@ public class FxStatusService {
                 .forEach(node -> {
                     if (roundedArea) {
                         // Отбрасываем все ноды, которые выходят за зону
-                        if (sqrt(pow(node.getX() - powerNode.getX(), 2) + pow(node.getY() - powerNode.getY(), 2)) <= (level.getBoundingAreaFrom()) ||
-                            sqrt(pow(node.getX() - powerNode.getX(), 2) + pow(node.getY() - powerNode.getY(), 2)) > (level.getBoundingAreaTo())
+                        if (sqrt(pow(node.getX() - powerNode.getX(), 2) + pow(node.getY() - powerNode.getY(), 2)) <= level.getBoundingAreaFrom() ||
+                            sqrt(pow(node.getX() - powerNode.getX(), 2) + pow(node.getY() - powerNode.getY(), 2)) > level.getBoundingAreaTo()
+                        ) {
+                            counter1.getAndIncrement();
+                            return;
+                        }
+                    } else {
+                        if (
+                            (Math.abs(node.getX() - powerNode.getX()) <= level.getBoundingAreaFrom() || Math.abs(node.getX() - powerNode.getX()) > level.getBoundingAreaTo()) &&
+                            (Math.abs(node.getY() - powerNode.getY()) <= level.getBoundingAreaFrom() || Math.abs(node.getY() - powerNode.getY()) > level.getBoundingAreaTo())
                         ) {
                             counter1.getAndIncrement();
                             return;

@@ -18,6 +18,8 @@ public class BaseElementService {
     private final List<BaseLine> lines = new ArrayList<>();
     private int sumLoad;
     private int sumPower;
+    private int totalNumberOfNodes;
+    private int totalNumberOfEdges;
 
     public void addPowerNodeToGrid(BasePowerNode node) {
         matrix.add(node);
@@ -27,6 +29,14 @@ public class BaseElementService {
         if (PowerNodeType.GENERATOR.equals(node.getNodeType())) {
             sumPower +=node.getPower();
         }
+    }
+
+    public void addEdge(int value) {
+        totalNumberOfEdges+=value;
+    }
+
+    public void addNode(int value) {
+        totalNumberOfNodes++;
     }
 
 }

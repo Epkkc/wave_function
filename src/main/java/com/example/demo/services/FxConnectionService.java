@@ -65,4 +65,12 @@ public class FxConnectionService {
             voltageLevel
         ));
     }
+
+    public void connectNodes(FxPowerNode node1, FxPowerNode node2, VoltageLevel voltageLevel, boolean breaker) {
+        Platform.runLater(() -> elementService.connectTwoNodes(
+            node1, node1.getConnectionPoints().get(voltageLevel),
+            node2, node2.getConnectionPoints().get(voltageLevel),
+            voltageLevel, breaker
+        ));
+    }
 }

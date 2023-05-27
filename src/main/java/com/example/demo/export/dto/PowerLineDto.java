@@ -18,5 +18,6 @@ public class PowerLineDto {
     private PowerNodeDto point2;
     private VoltageLevel voltageLevel;
     private String uuid;
+    private Boolean breaker;
 
 }

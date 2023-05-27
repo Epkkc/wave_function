@@ -1,7 +1,9 @@
 package com.example.demo.base.algorithm;
 
+import com.example.demo.base.model.configuration.GenerationResult;
+
 public interface Algorithm {
 
-    void start();
+    GenerationResult start();
 
 }

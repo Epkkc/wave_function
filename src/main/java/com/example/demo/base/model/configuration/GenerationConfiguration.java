@@ -7,11 +7,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+
 @Data
 @AllArgsConstructor
 @EqualsAndHashCode
-@ToString
 @Builder
+@ToString
 public class GenerationConfiguration {
 
     private VoltageLevel level;

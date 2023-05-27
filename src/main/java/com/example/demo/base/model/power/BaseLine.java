@@ -7,7 +7,7 @@ import lombok.Getter;
 public class BaseLine extends AbstractLine<BasePowerNode> {
 
     public BaseLine(BasePowerNode point1, BasePowerNode point2, VoltageLevel voltageLevel) {
-        super(point1, point2, voltageLevel);
+        super(point1, point2, voltageLevel, false); // todo переделать, когда появится логика определения breaker
     }
 
 }

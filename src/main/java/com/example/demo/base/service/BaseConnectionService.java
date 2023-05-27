@@ -46,6 +46,8 @@ public class BaseConnectionService implements ConnectionService {
                     .forEach(n -> {
                             connectedNodes.add(n.getUuid());
 
+                            elementService.addEdge(1);
+
                             BaseLine baseLine = new BaseLine(n, node, voltageLevel);
                             elementService.getLines().add(baseLine);
                             n.getConnections().get(voltageLevel).addConnection();
@@ -67,5 +69,7 @@ public class BaseConnectionService implements ConnectionService {
         elementService.getLines().add(baseLine);
         node1.getConnections().get(voltageLevel).addConnection();
         node2.getConnections().get(voltageLevel).addConnection();
+
+        elementService.addEdge(1);
     }
 }

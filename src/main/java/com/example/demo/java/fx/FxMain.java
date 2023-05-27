@@ -1,15 +1,14 @@
 package com.example.demo.java.fx;
 
 import com.example.demo.base.model.configuration.GenerationConfiguration;
-import com.example.demo.base.model.grid.Matrix;
-import com.example.demo.java.fx.model.power.FxBaseNode;
 import com.example.demo.base.model.configuration.LoadConfiguration;
-import com.example.demo.java.fx.model.power.FxPowerNode;
-import com.example.demo.base.model.configuration.VoltageLevelInfo;
-import com.example.demo.java.fx.factories.FxAbstractPowerNodeFactory;
+import com.example.demo.base.model.configuration.TransformerConfiguration;
+import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.java.fx.algorithm.FxAlgorithm;
+import com.example.demo.java.fx.factories.FxAbstractPowerNodeFactory;
+import com.example.demo.java.fx.model.power.FxBaseNode;
+import com.example.demo.java.fx.model.power.FxPowerNode;
 import com.example.demo.java.fx.service.FxConfiguration;
-import com.example.demo.base.service.ConnectionService;
 import com.example.demo.services.FxConnectionService;
 import com.example.demo.services.FxElementService;
 import com.example.demo.services.FxStatusService;
@@ -28,6 +27,8 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -53,6 +54,9 @@ public class FxMain extends Application {
     static Matrix<FxPowerNode> matrix;
     static GridPane gridPane;
 
+    static int numberOfNodes = 50;
+    static int numberOfEdges = 100;
+
 
     public static void main(String[] args) {
         launch();
@@ -61,7 +65,7 @@ public class FxMain extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        cfg = new FxConfiguration(rows, columns, 10_000, 2d, 4d, 4d, 45);
+        cfg = new FxConfiguration(rows, columns, 10_000, numberOfNodes, numberOfEdges, 2d, 4d, 4d, 45);
 
         matrix = new Matrix<>(rows, columns);
 
@@ -75,31 +79,31 @@ public class FxMain extends Application {
 
         FxAbstractPowerNodeFactory fabric = new FxAbstractPowerNodeFactory(elementService);
 
-        List<VoltageLevelInfo> voltageLevels = new ArrayList<>();
+        List<TransformerConfiguration> voltageLevels = new ArrayList<>();
 
         // TODO добавлять сюда в зависимости от положения чекбокса (VoltageLevelInfo.enabled)
         // TODO также заполнять boundingArea теми значениями, которые заполнит пользователь
 //        voltageLevels.add(VoltageLevelInfo.builder().level(LEVEL_500).boundingAreaFrom(LEVEL_500.getBoundingArea()).boundingAreaTo(LEVEL_500.getBoundingArea()+4).transformerPowerSet(List.of(10000)).build());
-        voltageLevels.add(VoltageLevelInfo.builder()
-            .level(LEVEL_220)
-            .boundingAreaFrom(LEVEL_220.getBoundingArea())
-            .boundingAreaTo(LEVEL_220.getBoundingArea() + 3)
-            .transformerPowerSet(List.of(5000))
-            .build());
-        voltageLevels.add(VoltageLevelInfo.builder()
+//        voltageLevels.add(TransformerConfiguration.builder()
+//            .level(LEVEL_220)
+//            .boundingAreaFrom(LEVEL_220.getBoundingArea())
+//            .boundingAreaTo(LEVEL_220.getBoundingArea() + 3)
+//            .transformerPowerSet(List.of(5000))
+//            .build());
+        voltageLevels.add(TransformerConfiguration.builder()
             .level(LEVEL_110)
             .boundingAreaFrom(LEVEL_110.getBoundingArea())
             .boundingAreaTo(LEVEL_110.getBoundingArea() + 2)
             .transformerPowerSet(List.of(2500))
             .build());
-        voltageLevels.add(VoltageLevelInfo.builder()
+        voltageLevels.add(TransformerConfiguration.builder()
             .level(LEVEL_35)
             .boundingAreaFrom(LEVEL_35.getBoundingArea())
             .boundingAreaTo(LEVEL_35.getBoundingArea() + 1)
             .transformerPowerSet(List.of(1000))
             .build());
         voltageLevels.add(
-            VoltageLevelInfo.builder().level(LEVEL_10).boundingAreaFrom(LEVEL_10.getBoundingArea()).boundingAreaTo(LEVEL_10.getBoundingArea() + 1).transformerPowerSet(List.of(500)).build());
+            TransformerConfiguration.builder().level(LEVEL_10).boundingAreaFrom(LEVEL_10.getBoundingArea()).boundingAreaTo(LEVEL_10.getBoundingArea() + 1).transformerPowerSet(List.of(500)).build());
 
         List<LoadConfiguration> loadConfigurations = new ArrayList<>();
         // Трансформаторы напряжением 35/10 кВ имеют следующий ряд мощностей 1000, 1600, 2500, 4000, 6300
@@ -174,7 +178,7 @@ public class FxMain extends Application {
         gridPane.setVgap(cfg.getVGap());
         gridPane.setHgap(cfg.getHGap());
 
-        Rectangle maximumWindowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        java.awt.Rectangle maximumWindowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 
         Group sceneRoot = new Group();
 

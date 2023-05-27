@@ -38,7 +38,7 @@ public class DeserializeMain extends Application {
     static DeserializationService deserializationService = new DeserializationService();
 
     static String path = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\";
-    static String fileName = "scheme_17_04_2023__11_38_56";
+    static String fileName = "scheme_20_05_2023__04_52_38";
 
     public static void main(String[] args) {
         saveDto = deserializationService.extractSaveDto(path + fileName);
@@ -49,7 +49,7 @@ public class DeserializeMain extends Application {
     public void start(Stage stage) throws Exception {
         int rows = saveDto.getRows();
         int columns = saveDto.getColumns();
-        cfg = new FxConfiguration(rows, columns, 10_000, 2d, 4d, 4d, 45);
+        cfg = new FxConfiguration(rows, columns, 10_000, -1, -1, 2d, 4d, 4d, 50); // todo здесь -1 это заглушки
         matrix = new Matrix<>(rows, columns);
 
         fillGraphElements(stage, cfg);
@@ -78,9 +78,8 @@ public class DeserializeMain extends Application {
         for (PowerLineDto line : saveDto.getLines()) {
             Optional<FxPowerNode> point1 = matrix.getNode(line.getPoint1().getX(), line.getPoint1().getY());
             Optional<FxPowerNode> point2 = matrix.getNode(line.getPoint2().getX(), line.getPoint2().getY());
-            connectionService.connectNodes(point1.get(), point2.get(), line.getVoltageLevel());
+            connectionService.connectNodes(point1.get(), point2.get(), line.getVoltageLevel(), line.getBreaker() != null && line.getBreaker());
         }
-
 
     }
 
