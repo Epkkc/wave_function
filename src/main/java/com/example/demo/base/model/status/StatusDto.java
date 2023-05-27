@@ -1,4 +1,4 @@
-package com.example.demo.base.status;
+package com.example.demo.base.model.status;
 
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.status.StatusType;

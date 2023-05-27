@@ -8,6 +8,7 @@ import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.AbstractBasePowerNode;
 import com.example.demo.base.model.power.BaseConnection;
+import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.model.status.StatusType;
 import com.example.demo.base.service.BaseConfiguration;
 import lombok.Getter;
@@ -20,13 +21,13 @@ import static java.lang.Math.sqrt;
 
 @RequiredArgsConstructor
 @Getter
-public class AbstractStatusService<T extends AbstractBasePowerNode<? extends BaseConnection>> implements StatusService<T> {
+public abstract class AbstractStatusService<PNODE extends AbstractBasePowerNode<? extends BaseStatus, ? extends BaseConnection>> implements StatusService<PNODE> {
 
-    protected final Matrix<T> matrix;
+    protected final Matrix<PNODE> matrix;
     protected final BaseConfiguration baseConfiguration;
     protected final boolean roundedArea;
 
-    public void setTransformerStatusToArea(T powerNode, TransformerConfiguration... levels) {
+    public void setTransformerStatusToArea(PNODE powerNode, TransformerConfiguration... levels) {
 
         // Установка blocking статусов
         for (TransformerConfiguration transformerConfiguration : levels) {
@@ -67,7 +68,7 @@ public class AbstractStatusService<T extends AbstractBasePowerNode<? extends Bas
                 });
 
             // TODO удалить
-            List<T> powerNodes = matrix.toNodeList()
+            List<PNODE> powerNodes = matrix.toNodeList()
                 .stream()
                 .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
                 .toList();
@@ -82,7 +83,7 @@ public class AbstractStatusService<T extends AbstractBasePowerNode<? extends Bas
     }
 
 
-    public void setLoadStatusToArea(T powerNode, LoadConfiguration loadCfg) {
+    public void setLoadStatusToArea(PNODE powerNode, LoadConfiguration loadCfg) {
 
         // Установка blocking статусов
         matrix.getArea(powerNode.getX(), powerNode.getY(), loadCfg.getBoundingArea()).stream()
@@ -98,7 +99,7 @@ public class AbstractStatusService<T extends AbstractBasePowerNode<? extends Bas
             });
 
         System.out.println("Set load powerNode = " + powerNode);
-        List<T> powerNodes = matrix.toNodeList()
+        List<PNODE> powerNodes = matrix.toNodeList()
             .stream()
             .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
             .toList();
@@ -111,7 +112,7 @@ public class AbstractStatusService<T extends AbstractBasePowerNode<? extends Bas
     }
 
     @Override
-    public void setLoadStatusToArea(T powerNode, GenerationConfiguration genCfg) {
+    public void setLoadStatusToArea(PNODE powerNode, GenerationConfiguration genCfg) {
         // Установка blocking статусов
         matrix.getArea(powerNode.getX(), powerNode.getY(), genCfg.getBoundingArea()).stream()
             .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
@@ -126,7 +127,7 @@ public class AbstractStatusService<T extends AbstractBasePowerNode<? extends Bas
             });
 
         System.out.println("Set generator powerNode = " + powerNode);
-        List<T> powerNodes = matrix.toNodeList()
+        List<PNODE> powerNodes = matrix.toNodeList()
             .stream()
             .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
             .toList();

@@ -10,7 +10,9 @@ import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.AbstractBasePowerNode;
+import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.BaseConnection;
+import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.model.status.BlockType;
 import com.example.demo.base.model.status.StatusType;
 import com.example.demo.base.service.BaseConfiguration;
@@ -28,25 +30,25 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<? extends BaseConnection>, Cfg extends BaseConfiguration> implements Algorithm {
+public abstract class AbstractBaseAlgorithm<PNODE extends AbstractBasePowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>, CFG extends BaseConfiguration> implements Algorithm {
 
-    protected final Matrix<PNode> matrix;
-    protected final AbstractElementService<PNode> elementService;
-    protected final StatusService<PNode> statusService;
-    protected final ConnectionService<PNode> connectionService;
-    protected final Cfg configuration;
+    protected final Matrix<PNODE> matrix;
+    protected final AbstractElementService<PNODE, LINE> elementService;
+    protected final StatusService<PNODE> statusService;
+    protected final ConnectionService<PNODE> connectionService;
+    protected final CFG configuration;
     protected final List<TransformerConfiguration> transformerConfigurations;
     protected final List<LoadConfiguration> loadConfigurations;
     private final List<GenerationConfiguration> generationConfigurations;
-    protected final PowerNodeFactory<PNode> nodeFactory;
-    protected final ExportService<PNode> exportService;
+    protected final PowerNodeFactory<PNODE> nodeFactory;
+    protected final ExportService<PNODE> exportService;
     protected final Random random = new Random();
 
 
     @Override
     public GenerationResult start() {
 
-        List<PNode> nodes = matrix.toNodeList();
+        List<PNODE> nodes = matrix.toNodeList();
         boolean first = true;
         for (int i = 0; i < transformerConfigurations.size() - 1; i++) {
             TransformerConfiguration currentConfiguration = transformerConfigurations.get(i);
@@ -71,7 +73,7 @@ public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<
             int count = 0;
             do {
 
-                PNode powerNode = RandomUtils.randomValue(nodes);
+                PNODE powerNode = RandomUtils.randomValue(nodes);
 
                 boolean three = false;
 
@@ -79,7 +81,7 @@ public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<
                     three = random.nextInt(2) == 0;
                 }
 
-                PNode resultNode;
+                PNODE resultNode;
 
                 if (three) {
                     resultNode = nodeFactory.createNode(PowerNodeType.SUBSTATION, powerNode.getX(), powerNode.getY(),
@@ -124,16 +126,16 @@ public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<
 
             //TODO  Нужно получить все трансформаторы, имеющие обмотки с currentLevel и отсортировать их по
             // количеству присоединений в возрастающем порядке
-            List<PNode> transformers = matrix.getAll(
+            List<PNODE> transformers = matrix.getAll(
                     node -> PowerNodeType.SUBSTATION.equals(node.getNodeType())
                         && node.getConnections().containsKey(currentLevel)
                 ).stream()
                 .sorted(Comparator.comparingInt(node -> node.getConnections().get(currentLevel).getConnections()))
                 .toList();
 
-            for (PNode transformer : transformers) {
+            for (PNODE transformer : transformers) {
                 // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
-                List<PNode> area = matrix.getArea(transformer.getX(), transformer.getY(), loadCfg.getTransformerArea()).stream()
+                List<PNODE> area = matrix.getArea(transformer.getX(), transformer.getY(), loadCfg.getTransformerArea()).stream()
                     .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
                     .filter(node -> node.getStatuses().stream()
                         .noneMatch(status -> StatusType.BLOCK_LOAD.equals(status.getType())
@@ -145,7 +147,7 @@ public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<
                 int filledPower = 0;
                 do {
                     // Нода для размещения нагрузки
-                    PNode resultNode = RandomUtils.randomValue(area);
+                    PNODE resultNode = RandomUtils.randomValue(area);
 
                     // Расчёт мощности нагрузки
                     int randomPower = random.nextInt(loadCfg.getMaxLoad() - loadCfg.getMinLoad()) + loadCfg.getMinLoad();
@@ -162,7 +164,7 @@ public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<
                     fillLoadToGrid(resultNode, transformer, loadCfg);
 
 
-                    PNode finalResultNode = resultNode;
+                    PNODE finalResultNode = resultNode;
                     area.removeIf(node -> node.getX() == finalResultNode.getX() && node.getY() == finalResultNode.getY());
 
                     area = area.stream().filter(node -> node.getStatuses().stream()
@@ -188,16 +190,16 @@ public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<
 
             //TODO  Нужно получить все трансформаторы, имеющие обмотки с currentLevel и отсортировать их по
             // количеству присоединений в возрастающем порядке
-            List<PNode> transformers = matrix.getAll(
+            List<PNODE> transformers = matrix.getAll(
                     node -> PowerNodeType.SUBSTATION.equals(node.getNodeType())
                         && node.getConnections().containsKey(currentLevel)
                 ).stream()
                 .sorted(Comparator.comparingInt(node -> node.getConnections().get(currentLevel).getConnections()))
                 .collect(Collectors.toList());
 
-            for (PNode transformer : transformers) {
+            for (PNODE transformer : transformers) {
                 // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
-                List<PNode> area = matrix.getArea(transformer.getX(), transformer.getY(), generationConfiguration.getTransformerArea()).stream()
+                List<PNODE> area = matrix.getArea(transformer.getX(), transformer.getY(), generationConfiguration.getTransformerArea()).stream()
                     .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
                     .filter(node -> node.getStatuses().stream()
                         .noneMatch(status -> StatusType.BLOCK_GENERATOR.equals(status.getType())
@@ -208,7 +210,7 @@ public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<
 
 //                do {
                 // Нода для размещения нагрузки
-                PNode resultNode = RandomUtils.randomValue(area);
+                PNODE resultNode = RandomUtils.randomValue(area);
 
                 // Расчёт мощности нагрузки
                 // TODO можно сделать как случайный выбор из набора мощностей
@@ -243,7 +245,7 @@ public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<
             if (PowerNodeType.EMPTY.equals(type)) {
                 continue;
             }
-            List<PNode> collect = matrix.toNodeList().stream().filter(node -> type.equals(node.getNodeType())).toList(); // переделать на мапу Map<VoltageLevel,Long>, где long - это количество элементов в данной группе
+            List<PNODE> collect = matrix.toNodeList().stream().filter(node -> type.equals(node.getNodeType())).toList(); // переделать на мапу Map<VoltageLevel,Long>, где long - это количество элементов в данной группе
             for (VoltageLevel voltageLevel : VoltageLevel.values()) {
                 long count = collect.stream()
                     .filter(node -> node.getVoltageLevels().stream().map(VoltageLevel::getVoltageLevel).reduce(Math::max).map(value -> voltageLevel.getVoltageLevel() == value).orElse(false))
@@ -256,7 +258,7 @@ public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<
     }
 
 
-    private void fillTransformerToGrid(PNode node, TransformerConfiguration... levels) {
+    private void fillTransformerToGrid(PNODE node, TransformerConfiguration... levels) {
         elementService.addNode(1);
         elementService.addPowerNodeToGrid(node);
         // Заполняем area статусом, согласно только что добавленной ноде
@@ -265,7 +267,7 @@ public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<
         connectionService.connectNode(node, matrix);
     }
 
-    private void fillLoadToGrid(PNode load, PNode transformer, LoadConfiguration loadCfg) {
+    private void fillLoadToGrid(PNODE load, PNODE transformer, LoadConfiguration loadCfg) {
         elementService.addNode(1);
         elementService.addPowerNodeToGrid(load);
         // Заполняем area статусом, согласно только что добавленной ноде
@@ -274,7 +276,7 @@ public abstract class AbstractBaseAlgorithm<PNode extends AbstractBasePowerNode<
         connectionService.connectNodes(load, transformer, loadCfg.getLevel());
     }
 
-    private void fillGeneratorToGrid(PNode generator, PNode transformer, GenerationConfiguration genCfg) {
+    private void fillGeneratorToGrid(PNODE generator, PNODE transformer, GenerationConfiguration genCfg) {
         elementService.addNode(1);
         elementService.addPowerNodeToGrid(generator);
         // Заполняем area статусом, согласно только что добавленной ноде

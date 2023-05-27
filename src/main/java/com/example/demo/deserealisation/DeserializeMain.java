@@ -38,7 +38,7 @@ public class DeserializeMain extends Application {
     static DeserializationService deserializationService = new DeserializationService();
 
     static String path = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\";
-    static String fileName = "scheme_27_05_2023__12_25_52";
+    static String fileName = "scheme_27_05_2023__01_17_56";
 
     public static void main(String[] args) {
         saveDto = deserializationService.extractSaveDto(path + fileName);

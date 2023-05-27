@@ -19,9 +19,14 @@ import java.util.Set;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
-public class BaseConnectionService extends AbstractConnectionService<BasePowerNode> {
+public class BaseConnectionService extends AbstractConnectionService<BasePowerNode, BaseLine> {
 
     public BaseConnectionService(BaseElementService elementService) {
         super(elementService);
+    }
+
+    @Override
+    BaseLine getLine(BasePowerNode node1, BasePowerNode node2, VoltageLevel voltageLevel, boolean breaker) {
+        return new BaseLine(node1, node2, voltageLevel, breaker);
     }
 }

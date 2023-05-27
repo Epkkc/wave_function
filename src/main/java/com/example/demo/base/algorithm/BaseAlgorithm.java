@@ -5,6 +5,7 @@ import com.example.demo.base.model.configuration.GenerationConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.grid.Matrix;
+import com.example.demo.base.model.power.BaseLine;
 import com.example.demo.base.model.power.BasePowerNode;
 import com.example.demo.base.service.BaseConfiguration;
 import com.example.demo.base.service.element.BaseElementService;
@@ -14,7 +15,7 @@ import com.example.demo.export.service.BaseExportService;
 
 import java.util.List;
 
-public class BaseAlgorithm extends AbstractBaseAlgorithm<BasePowerNode, BaseConfiguration>{
+public class BaseAlgorithm extends AbstractBaseAlgorithm<BasePowerNode, BaseLine, BaseConfiguration>{
     public BaseAlgorithm(Matrix<BasePowerNode> matrix, BaseElementService elementService,
                          StatusService<BasePowerNode> statusService, ConnectionService<BasePowerNode> connectionService,
                          BaseConfiguration configuration,

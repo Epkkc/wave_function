@@ -4,9 +4,12 @@ import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.AbstractBasePowerNode;
+import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.power.BaseLine;
+import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.service.element.BaseElementService;
+import com.example.demo.base.service.element.ElementService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
@@ -18,13 +21,13 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 @RequiredArgsConstructor
-public class AbstractConnectionService<T extends AbstractBasePowerNode<? extends BaseConnection>> implements ConnectionService<T> {
+public abstract class AbstractConnectionService<PNODE extends AbstractBasePowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ConnectionService<PNODE> {
 
-    private final BaseElementService elementService;
+    private final ElementService<PNODE, LINE> elementService;
 
     @Override
-    public void connectNode(T node, Matrix<T> matrix) {
-        List<? extends AbstractBasePowerNode<? extends BaseConnection>> powerNodes = matrix.toOrderedNodeList();
+    public void connectNode(PNODE node, Matrix<PNODE> matrix) {
+        List<PNODE> powerNodes = matrix.toOrderedNodeList();
 
         Collections.reverse(powerNodes);
 
@@ -50,7 +53,8 @@ public class AbstractConnectionService<T extends AbstractBasePowerNode<? extends
 
                             elementService.addEdge(1);
 
-                            BaseLine baseLine = new BaseLine(n, node, voltageLevel);
+                            LINE baseLine = getLine(n, node, voltageLevel, false);  //todo добавить логику breaker-а
+//                            BaseLine baseLine = new BaseLine(n, node, voltageLevel);
                             elementService.getLines().add(baseLine);
                             n.getConnections().get(voltageLevel).addConnection();
                             node.getConnections().get(voltageLevel).addConnection();
@@ -66,12 +70,14 @@ public class AbstractConnectionService<T extends AbstractBasePowerNode<? extends
     }
 
     @Override
-    public void connectNodes(T node1, T node2, VoltageLevel voltageLevel) {
-        BaseLine baseLine = new BaseLine(node1, node2, voltageLevel);
+    public void connectNodes(PNODE node1, PNODE node2, VoltageLevel voltageLevel) {
+        LINE baseLine = getLine(node1, node2, voltageLevel, false); //todo добавить логику breaker-а
         elementService.getLines().add(baseLine);
         node1.getConnections().get(voltageLevel).addConnection();
         node2.getConnections().get(voltageLevel).addConnection();
 
         elementService.addEdge(1);
     }
+
+    abstract LINE getLine(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker);
 }

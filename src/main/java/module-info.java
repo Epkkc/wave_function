@@ -37,7 +37,6 @@ module com.example.demo {
     opens com.example.demo.base.model.configuration to javafx.fxml;
     opens com.example.demo.base.model.power to javafx.fxml;
     opens com.example.demo.base.model.enums to javafx.fxml;
-    opens com.example.demo.base.model.status to javafx.fxml;
     opens com.example.demo.base.model.grid to com.fasterxml.jackson.databind, javafx.fxml;
     opens com.example.demo.java.fx.model.power to com.fasterxml.jackson.databind, javafx.fxml;
     opens com.example.demo.java.fx.model.status to javafx.fxml;
@@ -48,12 +47,12 @@ module com.example.demo {
     opens com.example.demo.java.fx.service to javafx.fxml;
     exports com.example.demo.base.service;
     opens com.example.demo.base.service to javafx.fxml;
-    opens com.example.demo.base.status to javafx.fxml, javafx.graphics;
     exports com.example.demo.base.service.status;
     opens com.example.demo.base.service.status to javafx.fxml;
     exports com.example.demo.base.service.element;
     opens com.example.demo.base.service.element to javafx.fxml;
     exports com.example.demo.base.service.connection;
     opens com.example.demo.base.service.connection to javafx.fxml;
+    opens com.example.demo.base.model.status to javafx.fxml, javafx.graphics;
 
 }

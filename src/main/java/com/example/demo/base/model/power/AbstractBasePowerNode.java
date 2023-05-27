@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-public abstract class AbstractBasePowerNode<CONNECTION extends BaseConnection> implements Coordinates {
+public abstract class AbstractBasePowerNode<STATUS extends BaseStatus, CONNECTION extends BaseConnection> implements Coordinates {
 
     protected PowerNodeType nodeType;
     protected int x;
@@ -28,7 +28,7 @@ public abstract class AbstractBasePowerNode<CONNECTION extends BaseConnection> i
     protected int power;
     protected String uuid = UUID.randomUUID().toString();
     protected List<VoltageLevel> voltageLevels;
-    protected List<BaseStatus> statuses;
+    protected List<STATUS> statuses;
     protected Map<VoltageLevel, CONNECTION> connections;
 
     public AbstractBasePowerNode(PowerNodeType nodeType, int x, int y, int power, Collection<VoltageLevel> voltageLevels) {
@@ -46,8 +46,8 @@ public abstract class AbstractBasePowerNode<CONNECTION extends BaseConnection> i
 
     public void addStatus(StatusType statusType, VoltageLevel... voltageLevels) {
         Collection<VoltageLevel> levels = List.of(voltageLevels);
-        Optional<BaseStatus> existed = statuses.stream().filter(status -> status.getType().equals(statusType)).findFirst();
-        Optional<BaseStatus> opposite = statuses.stream()
+        Optional<STATUS> existed = statuses.stream().filter(status -> status.getType().equals(statusType)).findFirst();
+        Optional<STATUS> opposite = statuses.stream()
             .filter(status -> status.getType().getNodeType().equals(statusType.getNodeType()) && !status.getType().getBlockType().equals(statusType.getBlockType()))
             .findFirst();
 
@@ -67,10 +67,12 @@ public abstract class AbstractBasePowerNode<CONNECTION extends BaseConnection> i
         Collection<VoltageLevel> finalLevels2 = levels;
         existed.ifPresentOrElse(
             ex -> ex.addVoltageLevel(finalLevels2.stream().toList()),
-            () ->statuses.add(new BaseStatus(statusType, voltageLevels))
+            () ->statuses.add(getStatus(statusType, voltageLevels))
         );
 
         // Удаляем статусы, в которых нет ни одного voltageLevel-а
         statuses.removeIf(status -> status.getVoltageLevels().isEmpty());
     }
+
+    abstract STATUS getStatus(StatusType statusType, VoltageLevel... voltageLevels);
 }

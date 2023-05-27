@@ -4,8 +4,10 @@ import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.AbstractBasePowerNode;
 import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.BaseConnection;
+import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.service.BaseConfiguration;
 import com.example.demo.base.service.element.BaseElementService;
+import com.example.demo.base.service.element.ElementService;
 import com.example.demo.export.dto.PowerLineDto;
 import com.example.demo.export.dto.PowerNodeDto;
 import com.example.demo.export.dto.SaveDto;
@@ -21,13 +23,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class AbstractExportService<T extends AbstractBasePowerNode<? extends BaseConnection>> implements ExportService<T> {
+public class AbstractExportService<PNODE extends AbstractBasePowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ExportService<PNODE> {
 
     protected final ObjectMapper objectMapper = new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 
     protected final BaseConfiguration configuration;
-    protected final BaseElementService elementService;
-    protected final Matrix<T> matrix;
+    protected final ElementService<PNODE, LINE> elementService;
+    protected final Matrix<PNODE> matrix;
 
     public String saveAsFile() {
         SaveDto dto = SaveDto.builder()
@@ -51,7 +53,7 @@ public class AbstractExportService<T extends AbstractBasePowerNode<? extends Bas
     }
 
     // TODO Вынести в MapStruct маппер
-    private PowerLineDto mapLineToDto(AbstractLine line) {
+    private PowerLineDto mapLineToDto(LINE line) {
         return PowerLineDto.builder()
             .point1(mapNodeToDto(line.getPoint1()))
             .point2(mapNodeToDto(line.getPoint2()))
@@ -60,7 +62,7 @@ public class AbstractExportService<T extends AbstractBasePowerNode<? extends Bas
             .build();
     }
 
-    private PowerNodeDto mapNodeToDto(AbstractBasePowerNode<? extends BaseConnection> node) {
+    private PowerNodeDto mapNodeToDto(PNODE node) {
         return PowerNodeDto.builder()
             .nodeType(node.getNodeType())
             .x(node.getX())
