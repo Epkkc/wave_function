@@ -1,6 +1,6 @@
 package com.example.demo.base.service.status;
 
-import com.example.demo.base.model.configuration.GenerationConfiguration;
+import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.power.AbstractPowerNode;
@@ -11,6 +11,6 @@ public interface StatusService<PNODE extends AbstractPowerNode<? extends BaseSta
 
     void setTransformerStatusToArea(PNODE powerNode, TransformerConfiguration... levels);
     void setLoadStatusToArea(PNODE powerNode, LoadConfiguration loadCfg);
-    void setGeneratorStatusToArea(PNODE powerNode, GenerationConfiguration genCfg);
+    void setGeneratorStatusToArea(PNODE powerNode, GeneratorConfiguration genCfg);
 
 }

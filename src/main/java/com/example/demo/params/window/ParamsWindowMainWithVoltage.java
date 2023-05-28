@@ -1,10 +1,9 @@
 package com.example.demo.params.window;
 
 import com.example.demo.base.model.enums.VoltageLevel;
+import com.example.demo.java.fx.FxMain;
 import com.example.demo.params.window.elements.ExtendedControl;
 import com.example.demo.params.window.elements.Switch;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -16,17 +15,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputControl;
-import javafx.scene.effect.Effect;
-import javafx.scene.effect.Shadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
@@ -35,12 +26,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -90,17 +78,19 @@ public class ParamsWindowMainWithVoltage extends Application {
         }
 
         Label label = addLabel( row + 1, totalColumns);
-
+        FxMain fxMain = new FxMain();
         // todo через toggle checkbox-а можно спокойно сделать блокировку настроек генератора и нагрузки
         //  при disable настройки трансформатора соответствующего напряжения
         Button button = addSubmitButton(transformerInputs, label, row, totalColumns);
         button.setOnAction(actionEvent -> {
-            CheckBox enabledCheckBox1 = transformerInputs.get(35).getEnabledCheckBox();
-            enabledCheckBox1.selectedProperty().set(false);
-            CheckBox enabledCheckBox2 = generatorInputs.get(35).getEnabledCheckBox();
-            enabledCheckBox2.selectedProperty().set(false);
-            CheckBox enabledCheckBox3 = loadInputs.get(35).getEnabledCheckBox();
-            enabledCheckBox3.selectedProperty().set(false);
+//            CheckBox enabledCheckBox1 = transformerInputs.get(35).getEnabledCheckBox();
+//            enabledCheckBox1.selectedProperty().set(false);
+//            CheckBox enabledCheckBox2 = generatorInputs.get(35).getEnabledCheckBox();
+//            enabledCheckBox2.selectedProperty().set(false);
+//            CheckBox enabledCheckBox3 = loadInputs.get(35).getEnabledCheckBox();
+//            enabledCheckBox3.selectedProperty().set(false);
+
+            fxMain.start(stage);
         });
 
         stage.show();

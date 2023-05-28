@@ -5,11 +5,13 @@ import com.example.demo.base.model.status.StatusType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Set;
+
 @RequiredArgsConstructor
 @Getter
 public class StatusDto {
 
     private final StatusType statusType;
-    private final VoltageLevel voltageLevel;
+    private final Set<VoltageLevel> voltageLevel;
 
 }

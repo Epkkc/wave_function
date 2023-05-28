@@ -30,6 +30,7 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
     protected List<VoltageLevel> voltageLevels;
     protected List<STATUS> statuses;
     protected Map<VoltageLevel, CONNECTION> connections;
+    protected int chainLinkNumber;
 
     public AbstractPowerNode(PowerNodeType nodeType, int x, int y, int power, Collection<VoltageLevel> voltageLevels) {
         this.nodeType = nodeType;
@@ -67,7 +68,7 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
         Collection<VoltageLevel> finalLevels2 = levels;
         existed.ifPresentOrElse(
             ex -> ex.addVoltageLevel(finalLevels2.stream().toList()),
-            () ->statuses.add(getStatus(statusType, voltageLevels))
+            () -> statuses.add(getStatus(statusType, voltageLevels))
         );
 
         // Удаляем статусы, в которых нет ни одного voltageLevel-а

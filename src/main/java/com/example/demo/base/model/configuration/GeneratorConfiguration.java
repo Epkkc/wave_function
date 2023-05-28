@@ -13,7 +13,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Builder
 @ToString
-public class GenerationConfiguration {
+public class GeneratorConfiguration {
 
     private VoltageLevel level;
     private int minPower; // kWt
@@ -21,5 +21,6 @@ public class GenerationConfiguration {
     private int boundingArea;
     private int transformerArea;
     private boolean enabled;
+    private double maxLineLength; // Максимальная длина линии, которой будет соединён генератор с трансформатором
 
 }

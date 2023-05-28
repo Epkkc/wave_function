@@ -1,6 +1,6 @@
 package com.example.demo.base;
 
-import com.example.demo.base.model.configuration.GenerationResult;
+import com.example.demo.base.model.configuration.GeneralResult;
 import com.example.demo.base.service.BaseAlgorithmService;
 
 public class BaseMain {
@@ -15,7 +15,7 @@ public class BaseMain {
 
         BaseAlgorithmService baseAlgorithmService = new BaseAlgorithmService(rows, columns, delays, numberOfNodes, numberOfEdges);
 
-        GenerationResult result = baseAlgorithmService.startAlgo();
+        GeneralResult result = baseAlgorithmService.startAlgo();
         System.out.println(result);
     }
 

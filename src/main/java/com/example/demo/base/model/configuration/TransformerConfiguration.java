@@ -24,4 +24,6 @@ public class TransformerConfiguration {
     private boolean enabled; //TODO Предполагается, что можно будет чекбоксом включить отключить уровни напряжения
     private List<Integer> transformerPowerSet;
     private int numberOfNodes;
+    private double maxLineLength; // Максимальная длина линии, которой будет соединён трансформатор с трансформатором
+
 }

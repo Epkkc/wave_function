@@ -1,7 +1,7 @@
 package com.example.demo.base.algorithm;
 
 import com.example.demo.base.factories.PowerNodeFactory;
-import com.example.demo.base.model.configuration.GenerationConfiguration;
+import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.grid.Matrix;
@@ -21,10 +21,9 @@ public class BaseAlgorithm extends AbstractAlgorithm<BasePowerNode, BaseLine, Ba
                          BaseConfiguration configuration,
                          List<TransformerConfiguration> transformerConfigurations,
                          List<LoadConfiguration> loadConfigurations,
-                         List<GenerationConfiguration> generationConfigurations,
-                         PowerNodeFactory<BasePowerNode> nodeFactory, BaseExportService exportService) {
-        super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generationConfigurations, nodeFactory, exportService);
+                         List<GeneratorConfiguration> generatorConfigurations,
+                         PowerNodeFactory<BasePowerNode> nodeFactory, BaseExportService exportService, boolean randomFirst) {
+        super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations, nodeFactory, exportService, randomFirst);
     }
-
 
 }

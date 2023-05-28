@@ -1,6 +1,6 @@
 package com.example.demo.base.service;
 
-import com.example.demo.base.model.configuration.GenerationConfiguration;
+import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import lombok.Data;
@@ -18,5 +18,5 @@ public class BaseConfiguration {
     protected final int numberOfEdges;
     protected List<TransformerConfiguration> transformerConfigurations;
     protected List<LoadConfiguration> loadConfigurations;
-    protected List<GenerationConfiguration> generationConfigurations;
+    protected List<GeneratorConfiguration> generatorConfigurations;
 }

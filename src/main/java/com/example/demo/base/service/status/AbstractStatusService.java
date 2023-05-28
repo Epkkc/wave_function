@@ -1,6 +1,6 @@
 package com.example.demo.base.service.status;
 
-import com.example.demo.base.model.configuration.GenerationConfiguration;
+import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
@@ -28,125 +28,48 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
     protected final boolean roundedArea;
 
     @Override
-    public void setTransformerStatusToArea(PNODE powerNode, TransformerConfiguration... levels) {
+    public void setTransformerStatusToArea(PNODE powerNode, TransformerConfiguration... configurations) {
 
-        // Установка blocking статусов
-        for (TransformerConfiguration transformerConfiguration : levels) {
-            matrix.getArea(powerNode.getX(), powerNode.getY(), transformerConfiguration.getBoundingAreaFrom()).stream()
-                .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
-                .forEach(node -> {
-                    if (roundedArea) {
-                        // Отбрасываем все ноды, которые выходят за зону
-                        if (sqrt(pow(node.getX() - powerNode.getX(), 2) + pow(node.getY() - powerNode.getY(), 2)) > (transformerConfiguration.getBoundingAreaFrom())) {
-                            return;
-                        }
-                    }
-                    node.addStatus(powerNode.getNodeType().getBlockingStatus(), transformerConfiguration.getLevel());
-                });
-
-            // Установка transformer should статусов
-            matrix.getArea(powerNode.getX(), powerNode.getY(), transformerConfiguration.getBoundingAreaTo()).stream()
-                .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
-                .forEach(node -> {
-                    if (roundedArea) {
-                        // Отбрасываем все ноды, которые выходят за зону
-                        if (sqrt(pow(node.getX() - powerNode.getX(), 2) + pow(node.getY() - powerNode.getY(), 2)) <= (transformerConfiguration.getBoundingAreaFrom()) ||
-                            sqrt(pow(node.getX() - powerNode.getX(), 2) + pow(node.getY() - powerNode.getY(), 2)) > (transformerConfiguration.getBoundingAreaTo())
-                        ) {
-                            return;
-                        }
-                    }
-                    node.addStatus(powerNode.getNodeType().getShouldStatus(), transformerConfiguration.getLevel());
-                });
-
-            // Установка SHOUD_LOAD статусов при наличии
-//            baseConfiguration.getLoadConfigurations()
-//                .stream()
-//                .filter(loadConfiguration -> transformerConfiguration.getLevel().equals(loadConfiguration.getLevel()))
-//                .findFirst()
-//                .ifPresent(loadConfiguration -> {
-//
-//                });
-
-            // TODO удалить
-            List<PNODE> powerNodes = matrix.toNodeList()
-                .stream()
-                .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
-                .toList();
-            System.out.println(powerNodes);
+        for (TransformerConfiguration configuration : configurations) {
+            // Установка blocking статусов
+            addStatusAreaTo(powerNode.getX(), powerNode.getY(), configuration.getBoundingAreaFrom(), powerNode.getNodeType().getBlockingStatus(), configuration.getLevel(), true);
+            // Установка should статусов
+            addRingStatusArea(powerNode.getX(), powerNode.getY(), configuration.getBoundingAreaFrom(), configuration.getBoundingAreaTo(), powerNode.getNodeType().getShouldStatus(), configuration.getLevel(), true);
+            // Установка should load статусов
+            baseConfiguration.getLoadConfigurations().stream().filter(cfg -> configuration.getLevel().equals(cfg.getLevel())).findFirst().ifPresent(loadConfiguration -> {
+                addRingStatusArea(powerNode.getX(), powerNode.getY(), loadConfiguration.getBoundingAreaFrom(), loadConfiguration.getBoundingAreaTo(), StatusType.SHOULD_LOAD, loadConfiguration.getLevel(), true);
+            });
         }
 
-        // Добавляем запрет на расстановку рядом любых объектов
-        matrix.getArea(powerNode.getX(), powerNode.getY()).forEach(node -> PowerNodeType.getValidValues().forEach(
-            pnt -> node.addStatus(pnt.getBlockingStatus(), VoltageLevel.values()))
-        );
-
+        addBaseBlockingStatus(powerNode.getX(), powerNode.getY());
     }
 
     @Override
-    public void setLoadStatusToArea(PNODE powerNode, LoadConfiguration loadCfg) {
+    public void setLoadStatusToArea(PNODE powerNode, LoadConfiguration configuration) {
 
         // Установка blocking статусов
-        matrix.getArea(powerNode.getX(), powerNode.getY(), loadCfg.getBoundingArea()).stream()
-            .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
-            .forEach(node -> {
-                if (roundedArea) {
-                    // Отбрасываем все ноды, которые выходят за зону
-                    if (sqrt(pow(node.getX() - powerNode.getX(), 2) + pow(node.getY() - powerNode.getY(), 2)) > (loadCfg.getBoundingArea())) {
-                        return;
-                    }
-                }
-                node.addStatus(powerNode.getNodeType().getBlockingStatus(), loadCfg.getLevel());
-            });
+        addStatusAreaTo(powerNode.getX(), powerNode.getY(), configuration.getBoundingAreaFrom(), powerNode.getNodeType().getBlockingStatus(), configuration.getLevel(), true);
+        // Установка should статусов
+        addRingStatusArea(powerNode.getX(), powerNode.getY(), configuration.getBoundingAreaFrom(), configuration.getBoundingAreaTo(), powerNode.getNodeType().getShouldStatus(), configuration.getLevel(), true);
 
-        System.out.println("Set load powerNode = " + powerNode);
-        List<PNODE> powerNodes = matrix.toNodeList()
-            .stream()
-            .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
-            .toList();
-        System.out.println(powerNodes);
-
-        // Добавляем запрет на расстановку рядом любых объектов
-        matrix.getArea(powerNode.getX(), powerNode.getY()).forEach(node -> PowerNodeType.getValidValues().forEach(
-            pnt -> node.addStatus(pnt.getBlockingStatus(), VoltageLevel.values()))
-        );
+        addBaseBlockingStatus(powerNode.getX(), powerNode.getY());
     }
 
     @Override
-    public void setGeneratorStatusToArea(PNODE powerNode, GenerationConfiguration genCfg) {
+    public void setGeneratorStatusToArea(PNODE powerNode, GeneratorConfiguration configuration) {
         // Установка blocking статусов
-        matrix.getArea(powerNode.getX(), powerNode.getY(), genCfg.getBoundingArea()).stream()
-            .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
-            .forEach(node -> {
-                if (roundedArea) {
-                    // Отбрасываем все ноды, которые выходят за зону
-                    if (sqrt(pow(node.getX() - powerNode.getX(), 2) + pow(node.getY() - powerNode.getY(), 2)) > (genCfg.getBoundingArea())) {
-                        return;
-                    }
-                }
-                node.addStatus(powerNode.getNodeType().getBlockingStatus(), genCfg.getLevel());
-            });
+        addStatusAreaTo(powerNode.getX(), powerNode.getY(), configuration.getBoundingArea(), powerNode.getNodeType().getBlockingStatus(), configuration.getLevel(), true);
 
-        System.out.println("Set generator powerNode = " + powerNode);
-        List<PNODE> powerNodes = matrix.toNodeList()
-            .stream()
-            .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
-            .toList();
-        System.out.println(powerNodes);
-
-        // Добавляем запрет на расстановку рядом любых объектов
-        matrix.getArea(powerNode.getX(), powerNode.getY()).forEach(node -> PowerNodeType.getValidValues().forEach(
-            pnt -> node.addStatus(pnt.getBlockingStatus(), VoltageLevel.values()))
-        );
+        addBaseBlockingStatus(powerNode.getX(), powerNode.getY());
     }
 
 
     // todo доработать этот метод, используя StatusDto
-    private void addRingStatusArea(int x, int y, int boundingAreaFrom, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel) {
+    private void addRingStatusArea(int x, int y, int boundingAreaFrom, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded) {
         matrix.getArea(x, y, boundingAreaTo).stream()
             .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
             .forEach(node -> {
-                if (roundedArea) {
+                if (rounded) {
                     // Отбрасываем все ноды, которые выходят за зону
                     if (sqrt(pow(node.getX() - x, 2) + pow(node.getY() - y, 2)) <= (boundingAreaFrom) ||
                         sqrt(pow(node.getX() - x, 2) + pow(node.getY() - y, 2)) > (boundingAreaTo)
@@ -165,10 +88,34 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
     }
 
     // todo доработать этот метод, используя StatusDto
-    private void addStatusAreaTo(int x, int y, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel) {
-        matrix.getArea(x, y, boundingAreaTo).stream().forEach(node -> {
-            node.addStatus(statusType, voltageLevel);
-        });
+    private void addStatusAreaTo(int x, int y, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded) {
+        matrix.getArea(x, y, boundingAreaTo).stream()
+            .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
+            .forEach(node -> {
+                if (rounded) {
+                    // Отбрасываем все ноды, которые выходят за зону
+                    if (sqrt(pow(node.getX() - x, 2) + pow(node.getY() - y, 2)) > (boundingAreaTo)) {
+                        return;
+                    }
+                }
+                node.addStatus(statusType, voltageLevel);
+            });
+    }
+
+    private void addBaseBlockingStatus(int x, int y) {
+        // Добавляем запрет на расстановку рядом любых объектов
+        matrix.getArea(x, y).forEach(node -> PowerNodeType.getValidValues().forEach(
+            pnt -> node.addStatus(pnt.getBlockingStatus(), VoltageLevel.values()))
+        );
+    }
+
+
+    private void findStatusesWithEmptyVoltages() {
+        List<PNODE> powerNodes = matrix.toNodeList()
+            .stream()
+            .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
+            .toList();
+        System.out.println(powerNodes);
     }
 
 }

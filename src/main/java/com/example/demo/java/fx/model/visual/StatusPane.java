@@ -41,13 +41,12 @@ public class StatusPane {
     public void refreshStatuses(List<FxStatus> statuses) {
         // Очищаем потомков hbox
         Platform.runLater(() -> {
-                hbox.getChildren().removeAll(hbox.getChildren());
-                if (statuses != null && !statuses.isEmpty()) {
-                    // Заполняем новыми статусами
-                    hbox.getChildren().addAll(statuses.stream().map(FxStatus::getShape).toList());
-                }
+            hbox.getChildren().removeAll(hbox.getChildren());
+            if (statuses != null && !statuses.isEmpty()) {
+                // Заполняем новыми статусами
+                hbox.getChildren().addAll(statuses.stream().map(FxStatus::getShape).toList());
             }
-        );
+        });
     }
 
 }

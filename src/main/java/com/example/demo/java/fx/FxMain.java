@@ -1,6 +1,6 @@
 package com.example.demo.java.fx;
 
-import com.example.demo.base.model.configuration.GenerationResult;
+import com.example.demo.base.model.configuration.GeneralResult;
 import com.example.demo.java.fx.service.FxAlgorithmService;
 import com.example.demo.thread.StoppableThread;
 import javafx.application.Application;
@@ -8,7 +8,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -31,7 +30,7 @@ public class FxMain extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         FxAlgorithmService algorithmService = new FxAlgorithmService(rows, columns, 2000, numberOfNodes, numberOfEdges);
 
@@ -46,7 +45,7 @@ public class FxMain extends Application {
         Scene scene = new Scene(sceneRoot, Color.WHITE); // 969faf
         scene.setFill(Color.WHITE);
 
-        FutureTask<GenerationResult> future = new FutureTask<>(() -> algorithmService.startAlgo(sceneRoot));
+        FutureTask<GeneralResult> future = new FutureTask<>(() -> algorithmService.startAlgo(sceneRoot));
 
         StoppableThread thread = new StoppableThread(future);
         thread.setName("Didli");
@@ -65,12 +64,12 @@ public class FxMain extends Application {
             }
         });
 
-        primaryStage.setTitle("Wavefunction Collapse Algorithm");
-        primaryStage.getIcons().add(new Image("C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\com\\example\\demo\\icon.png"));
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
 
-        primaryStage.show();
+//        primaryStage.setTitle("Wavefunction Collapse Algorithm");
+//        primaryStage.getIcons().add(new Image("C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\com\\example\\demo\\icon.png"));
+//        primaryStage.show();
 
         thread.start();
 

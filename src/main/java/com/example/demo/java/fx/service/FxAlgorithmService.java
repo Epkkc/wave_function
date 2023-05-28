@@ -1,8 +1,8 @@
 package com.example.demo.java.fx.service;
 
 import com.example.demo.base.algorithm.Algorithm;
-import com.example.demo.base.model.configuration.GenerationConfiguration;
-import com.example.demo.base.model.configuration.GenerationResult;
+import com.example.demo.base.model.configuration.GeneratorConfiguration;
+import com.example.demo.base.model.configuration.GeneralResult;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.grid.Matrix;
@@ -45,7 +45,7 @@ public class FxAlgorithmService {
     private final int numberOfEdges;
 
 
-    public GenerationResult startAlgo(Group sceneParent) {
+    public GeneralResult startAlgo(Group sceneParent) {
         FxConfiguration configuration = new FxConfiguration(rows, columns, 10_000, numberOfNodes, numberOfEdges, 2d, 4d, 4d, 45);
 
         Matrix<FxAbstractPowerNode> matrix = new Matrix<>(rows, columns);
@@ -111,34 +111,34 @@ public class FxAlgorithmService {
             .level(LEVEL_10)
             .minLoad(10)
             .maxLoad(20)
-            .boundingArea(3)
-            .transformerArea(2)
+            .boundingAreaFrom(2)
+            .boundingAreaTo(3)
             .enabled(true)
             .build());
         loadConfigurations.add(LoadConfiguration.builder()
             .level(LEVEL_35)
             .minLoad(40)
             .maxLoad(70)
-            .boundingArea(4)
-            .transformerArea(3)
+            .boundingAreaFrom(3)
+            .boundingAreaTo(5)
             .enabled(true)
 
             .build());
 
-        List<GenerationConfiguration> generationConfigurations = new ArrayList<>();
-        generationConfigurations.add(GenerationConfiguration.builder()
+        List<GeneratorConfiguration> generatorConfigurations = new ArrayList<>();
+        generatorConfigurations.add(GeneratorConfiguration.builder()
             .level(LEVEL_110)
             .minPower(200)
             .maxPower(300)
             .boundingArea(LEVEL_110.getBoundingArea() - 2)
             .transformerArea(2)
             .build());
-        generationConfigurations.add(GenerationConfiguration.builder()
+        generatorConfigurations.add(GeneratorConfiguration.builder()
             .level(LEVEL_220)
             .minPower(500)
             .maxPower(1000)
             .boundingArea(LEVEL_220.getBoundingArea() - 2).transformerArea(3).build());
-        generationConfigurations.add(GenerationConfiguration.builder()
+        generatorConfigurations.add(GeneratorConfiguration.builder()
             .level(LEVEL_500)
             .minPower(1000)
             .maxPower(3000)
@@ -146,12 +146,16 @@ public class FxAlgorithmService {
             .transformerArea(3)
             .build());
 
-        Algorithm algorithm = new FxAlgorithm(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generationConfigurations,
-            fabric, exportService);
+        configuration.setTransformerConfigurations(transformerConfigurations);
+        configuration.setLoadConfigurations(loadConfigurations);
+        configuration.setGeneratorConfigurations(generatorConfigurations);
 
-        GenerationResult generationResult = algorithm.start();
+        Algorithm algorithm = new FxAlgorithm(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations,
+            fabric, exportService, true);
 
-        return generationResult;
+        GeneralResult generalResult = algorithm.start();
+
+        return generalResult;
     }
 
 

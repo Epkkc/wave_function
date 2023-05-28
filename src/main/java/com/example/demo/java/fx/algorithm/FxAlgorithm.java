@@ -2,7 +2,7 @@ package com.example.demo.java.fx.algorithm;
 
 import com.example.demo.base.algorithm.AbstractAlgorithm;
 import com.example.demo.base.factories.PowerNodeFactory;
-import com.example.demo.base.model.configuration.GenerationConfiguration;
+import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.grid.Matrix;
@@ -21,9 +21,9 @@ public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerL
 
     public FxAlgorithm(Matrix<FxAbstractPowerNode> matrix, AbstractElementService<FxAbstractPowerNode, FxPowerLine> elementService, StatusService<FxAbstractPowerNode> statusService,
                        ConnectionService<FxAbstractPowerNode> connectionService, FxConfiguration configuration, List<TransformerConfiguration> transformerConfigurations,
-                       List<LoadConfiguration> loadConfigurations, List<GenerationConfiguration> generationConfigurations, PowerNodeFactory<FxAbstractPowerNode> nodeFactory,
-                       ExportService<FxAbstractPowerNode, FxPowerLine> exportService) {
-        super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generationConfigurations, nodeFactory, exportService);
+                       List<LoadConfiguration> loadConfigurations, List<GeneratorConfiguration> generatorConfigurations, PowerNodeFactory<FxAbstractPowerNode> nodeFactory,
+                       ExportService<FxAbstractPowerNode, FxPowerLine> exportService, boolean randomFirst) {
+        super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations, nodeFactory, exportService, randomFirst);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerL
     }
 
     @Override
-    protected void afterGeneratorSet(GenerationConfiguration configuration) {
+    protected void afterGeneratorSet(GeneratorConfiguration configuration) {
         sleep(configuration.getLevel().getTimeout());
     }
 

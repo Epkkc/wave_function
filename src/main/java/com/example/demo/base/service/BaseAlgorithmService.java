@@ -4,8 +4,8 @@ import com.example.demo.base.algorithm.Algorithm;
 import com.example.demo.base.algorithm.BaseAlgorithm;
 import com.example.demo.base.factories.BasePowerNodeFactory;
 import com.example.demo.base.factories.PowerNodeFactory;
-import com.example.demo.base.model.configuration.GenerationConfiguration;
-import com.example.demo.base.model.configuration.GenerationResult;
+import com.example.demo.base.model.configuration.GeneratorConfiguration;
+import com.example.demo.base.model.configuration.GeneralResult;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
@@ -37,7 +37,7 @@ public class BaseAlgorithmService {
     private final int numberOfNodes;
     private final int numberOfEdges;
 
-    public GenerationResult startAlgo() {
+    public GeneralResult startAlgo() {
         BaseConfiguration configuration = new BaseConfiguration(rows, columns, delays, numberOfNodes, numberOfEdges);
 
         Matrix<BasePowerNode> matrix = new Matrix<>(rows, columns);
@@ -105,32 +105,32 @@ public class BaseAlgorithmService {
             .level(LEVEL_10)
             .minLoad(10)
             .maxLoad(20)
-            .boundingArea(3)
-            .transformerArea(2)
+            .boundingAreaFrom(2)
+            .boundingAreaTo(3)
             .build());
         loadConfigurations.add(LoadConfiguration.builder()
             .level(LEVEL_35)
             .minLoad(40)
             .maxLoad(70)
-            .boundingArea(4)
-            .transformerArea(3)
+            .boundingAreaFrom(3)
+            .boundingAreaTo(5)
             .build());
 
-        List<GenerationConfiguration> generationConfigurations = new ArrayList<>();
-        generationConfigurations.add(GenerationConfiguration.builder()
+        List<GeneratorConfiguration> generatorConfigurations = new ArrayList<>();
+        generatorConfigurations.add(GeneratorConfiguration.builder()
             .level(LEVEL_110)
             .minPower(200)
             .maxPower(300)
             .boundingArea(LEVEL_110.getBoundingArea() - 2)
             .transformerArea(2)
             .build());
-        generationConfigurations.add(GenerationConfiguration.builder()
+        generatorConfigurations.add(GeneratorConfiguration.builder()
             .level(LEVEL_220)
             .minPower(500)
             .maxPower(1000)
             .boundingArea(LEVEL_220.getBoundingArea() - 2)
             .transformerArea(3).build());
-        generationConfigurations.add(GenerationConfiguration.builder()
+        generatorConfigurations.add(GeneratorConfiguration.builder()
             .level(LEVEL_500)
             .minPower(1000)
             .maxPower(3000)
@@ -139,12 +139,12 @@ public class BaseAlgorithmService {
 
         configuration.setTransformerConfigurations(transformerConfigurations);
         configuration.setLoadConfigurations(loadConfigurations);
-        configuration.setGenerationConfigurations(generationConfigurations);
+        configuration.setGeneratorConfigurations(generatorConfigurations);
 
         Algorithm algorithm = new BaseAlgorithm(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations,
-            generationConfigurations,
-            factory, exportService);
-        GenerationResult result = algorithm.start();
+            generatorConfigurations,
+            factory, exportService, true);
+        GeneralResult result = algorithm.start();
 
         return result;
     }

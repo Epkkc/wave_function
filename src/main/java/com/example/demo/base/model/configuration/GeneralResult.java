@@ -13,7 +13,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @Builder
-public class GenerationResult {
+public class GeneralResult {
     private int numberOfNodes;
     private int numberOfEdges;
     private String fileName;

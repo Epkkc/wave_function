@@ -79,8 +79,7 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
 
     public void addStatus(StatusType type, VoltageLevel... voltageLevel) {
         super.addStatus(type, voltageLevel);
-        basePane.getStatusPane().refreshStatuses(statuses); // todo
-//        basePane.getStatusPane().addStatusP(type, voltageLevel); // todo удалить
+        basePane.getStatusPane().refreshStatuses(statuses);
     }
 
     public void setHoverOpacity(VoltageLevel voltageLevel) {
