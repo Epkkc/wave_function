@@ -8,7 +8,7 @@ import com.example.demo.base.model.status.BaseStatus;
 
 public interface ConnectionService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>> {
 
-    void connectNode(PNODE node, Matrix<PNODE> matrix);
-    void connectNodes(PNODE node1, PNODE node2, VoltageLevel voltageLevel);
+    void connectNode(PNODE node);
+    void connectNodes(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker);
 
 }

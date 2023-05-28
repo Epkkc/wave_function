@@ -30,7 +30,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public abstract class AbstractBaseAlgorithm<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>, CFG extends BaseConfiguration> implements Algorithm {
+public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>, CFG extends BaseConfiguration> implements Algorithm {
 
     protected final Matrix<PNODE> matrix;
     protected final AbstractElementService<PNODE, LINE> elementService;
@@ -41,7 +41,7 @@ public abstract class AbstractBaseAlgorithm<PNODE extends AbstractPowerNode<? ex
     protected final List<LoadConfiguration> loadConfigurations;
     private final List<GenerationConfiguration> generationConfigurations;
     protected final PowerNodeFactory<PNODE> nodeFactory;
-    protected final ExportService<PNODE> exportService;
+    protected final ExportService<PNODE, LINE> exportService;
     protected final Random random = new Random();
 
 
@@ -103,6 +103,25 @@ public abstract class AbstractBaseAlgorithm<PNODE extends AbstractPowerNode<? ex
 
                 count++;
                 first = false;
+
+                afterTransformerSet(currentConfiguration);
+
+//                System.out.println("After Transformer");
+//                boolean var = matrix.getAll(
+//                    node -> node.getStatuses().stream()
+//                        .anyMatch(status -> status.getType().getBlockType().equals(BlockType.SHOULD)
+//                            && status.getVoltageLevels().contains(currentConfiguration.getLevel())
+//                            && status.getType().getNodeType().equals(PowerNodeType.SUBSTATION))
+//                ).isEmpty();
+//                boolean b = matrix.toNodeList().stream().anyMatch(node -> node.getStatuses().stream().anyMatch(status -> status.getType().getBlockType().equals(BlockType.SHOULD)
+//                    && status.getVoltageLevels().contains(currentConfiguration.getLevel())
+//                    && status.getType().getNodeType().equals(PowerNodeType.SUBSTATION)));
+//                List<PNODE> pnodes = matrix.toNodeList().stream().filter(node -> node.getStatuses().stream().anyMatch(status -> status.getType().getBlockType().equals(BlockType.SHOULD)
+//                    && status.getVoltageLevels().contains(currentConfiguration.getLevel())
+//                    && status.getType().getNodeType().equals(PowerNodeType.SUBSTATION))).toList();
+//                System.out.println(var);
+//                System.out.println(b);
+
             } while (!(nodes = matrix.getAll(
                 node -> node.getStatuses().stream()
                     .anyMatch(status -> status.getType().getBlockType().equals(BlockType.SHOULD)
@@ -118,6 +137,7 @@ public abstract class AbstractBaseAlgorithm<PNODE extends AbstractPowerNode<? ex
         System.out.println("Number of nodes = " + matrix.toNodeList().stream().filter(node -> !node.getNodeType().equals(PowerNodeType.EMPTY)).count());
         System.out.println("Number of lines = " + elementService.getLines().size());
 
+        afterAllTransformersSet();
 
         // todo могут оставаться ни с чем не соединённые обмотки ТР-ов 35кВ, можно к ним прикреплять какую-нибудь нагрузку, типа предприятия
 
@@ -171,6 +191,9 @@ public abstract class AbstractBaseAlgorithm<PNODE extends AbstractPowerNode<? ex
                             .noneMatch(status -> StatusType.BLOCK_LOAD.equals(status.getType())
                                 && status.getVoltageLevels().contains(loadCfg.getLevel())))
                         .collect(Collectors.toList());
+
+
+                    afterLoadSet(loadCfg);
                 } while (!area.isEmpty());
             }
         }
@@ -178,6 +201,8 @@ public abstract class AbstractBaseAlgorithm<PNODE extends AbstractPowerNode<? ex
         System.out.println("After loads");
         System.out.println("Number of nodes = " + matrix.toNodeList().stream().filter(node -> !node.getNodeType().equals(PowerNodeType.EMPTY)).count());
         System.out.println("Number of lines = " + elementService.getLines().size());
+
+        afterAllLoadSet();
 
         // Расстановка генераторов
 
@@ -195,7 +220,7 @@ public abstract class AbstractBaseAlgorithm<PNODE extends AbstractPowerNode<? ex
                         && node.getConnections().containsKey(currentLevel)
                 ).stream()
                 .sorted(Comparator.comparingInt(node -> node.getConnections().get(currentLevel).getConnections()))
-                .collect(Collectors.toList());
+                .toList();
 
             for (PNODE transformer : transformers) {
                 // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
@@ -208,7 +233,6 @@ public abstract class AbstractBaseAlgorithm<PNODE extends AbstractPowerNode<? ex
 
                 if (area.isEmpty()) break;
 
-//                do {
                 // Нода для размещения нагрузки
                 PNODE resultNode = RandomUtils.randomValue(area);
 
@@ -228,6 +252,7 @@ public abstract class AbstractBaseAlgorithm<PNODE extends AbstractPowerNode<? ex
                 fillGeneratorToGrid(resultNode, transformer, generationConfiguration);
                 totalGeneration += resPower;
 
+                afterGeneratorSet(generationConfiguration);
             }
         }
 
@@ -257,32 +282,35 @@ public abstract class AbstractBaseAlgorithm<PNODE extends AbstractPowerNode<? ex
         return new GenerationResult(elementService.getTotalNumberOfNodes(), elementService.getTotalNumberOfEdges(), generatedFileName, nodeTypeResults);
     }
 
-
     private void fillTransformerToGrid(PNODE node, TransformerConfiguration... levels) {
-        elementService.addNode(1);
         elementService.addPowerNodeToGrid(node);
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setTransformerStatusToArea(node, levels);
         // Соединяем сгенерированную ноду с соседями
-        connectionService.connectNode(node, matrix);
+        connectionService.connectNode(node);
     }
 
     private void fillLoadToGrid(PNODE load, PNODE transformer, LoadConfiguration loadCfg) {
-        elementService.addNode(1);
         elementService.addPowerNodeToGrid(load);
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setLoadStatusToArea(load, loadCfg);
         // Соединяем сгенерированную ноду с соседями
-        connectionService.connectNodes(load, transformer, loadCfg.getLevel());
+        connectionService.connectNodes(load, transformer, loadCfg.getLevel(), false);
     }
 
     private void fillGeneratorToGrid(PNODE generator, PNODE transformer, GenerationConfiguration genCfg) {
-        elementService.addNode(1);
         elementService.addPowerNodeToGrid(generator);
         // Заполняем area статусом, согласно только что добавленной ноде
-        statusService.setLoadStatusToArea(generator, genCfg);
+        statusService.setGeneratorStatusToArea(generator, genCfg);
         // Соединяем сгенерированную ноду с соседями
-        connectionService.connectNodes(generator, transformer, genCfg.getLevel());
+        connectionService.connectNodes(generator, transformer, genCfg.getLevel(), false);
     }
+
+    protected void afterTransformerSet(TransformerConfiguration configuration){}
+    protected void afterAllTransformersSet(){}
+    protected void afterLoadSet(LoadConfiguration configuration){}
+    protected void afterAllLoadSet(){}
+    protected void afterGeneratorSet(GenerationConfiguration configuration){}
+    protected void afterAllGeneratorSet(){}
 
 }

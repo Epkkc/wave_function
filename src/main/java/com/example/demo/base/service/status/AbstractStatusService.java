@@ -27,6 +27,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
     protected final BaseConfiguration baseConfiguration;
     protected final boolean roundedArea;
 
+    @Override
     public void setTransformerStatusToArea(PNODE powerNode, TransformerConfiguration... levels) {
 
         // Установка blocking статусов
@@ -59,13 +60,13 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                 });
 
             // Установка SHOUD_LOAD статусов при наличии
-            baseConfiguration.getLoadConfigurations()
-                .stream()
-                .filter(loadConfiguration -> transformerConfiguration.getLevel().equals(loadConfiguration.getLevel()))
-                .findFirst()
-                .ifPresent(loadConfiguration -> {
-
-                });
+//            baseConfiguration.getLoadConfigurations()
+//                .stream()
+//                .filter(loadConfiguration -> transformerConfiguration.getLevel().equals(loadConfiguration.getLevel()))
+//                .findFirst()
+//                .ifPresent(loadConfiguration -> {
+//
+//                });
 
             // TODO удалить
             List<PNODE> powerNodes = matrix.toNodeList()
@@ -82,7 +83,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
 
     }
 
-
+    @Override
     public void setLoadStatusToArea(PNODE powerNode, LoadConfiguration loadCfg) {
 
         // Установка blocking статусов
@@ -112,7 +113,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
     }
 
     @Override
-    public void setLoadStatusToArea(PNODE powerNode, GenerationConfiguration genCfg) {
+    public void setGeneratorStatusToArea(PNODE powerNode, GenerationConfiguration genCfg) {
         // Установка blocking статусов
         matrix.getArea(powerNode.getX(), powerNode.getY(), genCfg.getBoundingArea()).stream()
             .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))

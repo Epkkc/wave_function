@@ -3,7 +3,6 @@ package com.example.demo.java.fx.model.power;
 import com.example.demo.base.model.grid.Coordinates;
 import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
-import com.example.demo.java.fx.model.grid.GridElement;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.java.fx.model.status.FxStatus;
@@ -29,7 +28,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, ConnectionPoint> implements GridElement, Coordinates {
+public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, ConnectionPoint> implements Coordinates {
 
 
     protected double size;
@@ -94,13 +93,8 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
 
     protected abstract void setOpacity(VoltageLevel voltageLevel, double value);
 
-    @Override
     public StackPane getStackPane() {
         return basePane.getStackPane();
-    }
-
-    public List<FxStatus> getStatuses() {
-        return basePane.getStatusPane().getStatuses();
     }
 
     public List<VoltageLevel> getVoltageLevels() {

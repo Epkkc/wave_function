@@ -7,6 +7,7 @@ import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.status.BaseStatus;
+import com.example.demo.base.service.element.AbstractElementService;
 import com.example.demo.base.service.element.ElementService;
 import lombok.RequiredArgsConstructor;
 
@@ -19,17 +20,17 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 @RequiredArgsConstructor
-public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ConnectionService<PNODE> {
+public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>, ELEMENTSERVICE extends AbstractElementService<PNODE, LINE>> implements ConnectionService<PNODE> {
 
-    private final ElementService<PNODE, LINE> elementService;
+    protected final ElementService<PNODE, LINE> elementService;
 
     @Override
-    public void connectNode(PNODE node, Matrix<PNODE> matrix) {
-        List<PNODE> powerNodes = matrix.toOrderedNodeList();
+    public void connectNode(PNODE node) {
+        List<PNODE> powerNodes = elementService.getMatrix().toOrderedNodeList();
 
         Collections.reverse(powerNodes);
 
-        // Убираем саму ноду node, чтобы не соединять её саму с собой
+        // Убираем саму node, чтобы не соединять её саму с собой
         powerNodes.remove(0);
 
         // Этот сэт для того, чтобы трансформаторы не были соединены друг с другом обоими обмотками
@@ -47,35 +48,26 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
 //                    .filter(n -> n.getConnectionPoints().get(voltageLevel).getLimit() > n.getConnectionPoints().get(voltageLevel).getConnections()) // TODO при добавлении лимитов
 //                    .limit(connectionPoint.getLimit() - connectionPoint.getConnections()) // TODO при добавлении лимитов
                     .forEach(n -> {
-                            connectedNodes.add(n.getUuid());
+                        connectedNodes.add(n.getUuid());
 
-                            elementService.addEdge(1);
+                        //todo добавить логику определения breaker-а
 
-                            LINE baseLine = getLine(n, node, voltageLevel, false);  //todo добавить логику breaker-а
-//                            BaseLine baseLine = new BaseLine(n, node, voltageLevel);
-                            elementService.getLines().add(baseLine);
-                            n.getConnections().get(voltageLevel).addConnection();
-                            node.getConnections().get(voltageLevel).addConnection();
-
-//                            Platform.runLater(() -> elementService.connectTwoNodes(
-//                                n, n.getConnectionPoints().get(voltageLevel),
-//                                node, node.getConnectionPoints().get(voltageLevel),
-//                                voltageLevel
-//                            ));
-                        }
-                    )
+                        connectNodes(n, node, voltageLevel, false);
+                    })
         );
     }
 
     @Override
-    public void connectNodes(PNODE node1, PNODE node2, VoltageLevel voltageLevel) {
-        LINE baseLine = getLine(node1, node2, voltageLevel, false); //todo добавить логику breaker-а
+    public void connectNodes(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker) {
+        LINE baseLine = getLine(node1, node2, voltageLevel, breaker); //todo добавить логику breaker-а
+
+        elementService.addEdge(1);
         elementService.getLines().add(baseLine);
         node1.getConnections().get(voltageLevel).addConnection();
         node2.getConnections().get(voltageLevel).addConnection();
 
-        elementService.addEdge(1);
     }
 
-    abstract LINE getLine(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker);
+    protected abstract LINE getLine(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker);
+
 }

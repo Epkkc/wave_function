@@ -6,12 +6,12 @@ import com.example.demo.deserealisation.service.DeserializationService;
 import com.example.demo.export.dto.PowerLineDto;
 import com.example.demo.export.dto.PowerNodeDto;
 import com.example.demo.export.dto.SaveDto;
-import com.example.demo.java.fx.factories.FxAbstractPowerNodeFactory;
+import com.example.demo.java.fx.factories.FxPowerNodeAbstractFactory;
 import com.example.demo.java.fx.model.power.FxBaseNode;
 import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.java.fx.service.FxConfiguration;
-import com.example.demo.services.FxConnectionService;
-import com.example.demo.services.FxElementService;
+import com.example.demo.java.fx.service.FxConnectionService;
+import com.example.demo.java.fx.service.FxElementService;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -31,7 +31,7 @@ import java.util.Optional;
 public class DeserializeMain extends Application {
 
     static SaveDto saveDto;
-    static FxConfiguration cfg;
+    static FxConfiguration configuration;
     static Matrix<FxAbstractPowerNode> matrix;
     static GridPane gridPane;
     static FxElementService elementService;
@@ -49,14 +49,14 @@ public class DeserializeMain extends Application {
     public void start(Stage stage) throws Exception {
         int rows = saveDto.getRows();
         int columns = saveDto.getColumns();
-        cfg = new FxConfiguration(rows, columns, 10_000, -1, -1, 2d, 4d, 4d, 50); // todo здесь -1 это заглушки
+        configuration = new FxConfiguration(rows, columns, 10_000, -1, -1, 2d, 4d, 4d, 50); // todo здесь -1 это заглушки
         matrix = new Matrix<>(rows, columns);
 
-        fillGraphElements(stage, cfg);
+        fillGraphElements(stage, configuration);
         fillMatrix(rows, columns, elementService);
 
-        FxConnectionService connectionService = new FxConnectionService(elementService);
-        FxAbstractPowerNodeFactory fabric = new FxAbstractPowerNodeFactory(elementService);
+        FxConnectionService connectionService = new FxConnectionService(elementService, configuration);
+        FxPowerNodeAbstractFactory fabric = new FxPowerNodeAbstractFactory(elementService);
 
         stage.show();
 
@@ -126,7 +126,7 @@ public class DeserializeMain extends Application {
         stage.setScene(scene);
         stage.setMaximized(true);
 
-        elementService = new FxElementService(cfg, stage, scene, scrollPane, root, gridPane, matrix);
+        elementService = new FxElementService(matrix, cfg, scrollPane, root, gridPane);
     }
 
 }

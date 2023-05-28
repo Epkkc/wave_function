@@ -33,7 +33,7 @@ public class BaseAlgorithmService {
 
     private final int rows;
     private final int columns;
-    private final int delays;
+    private final int delays; // todo удалить delay отсюда и из алгоритма, сделать для него соответствующие хуки
     private final int numberOfNodes;
     private final int numberOfEdges;
 

@@ -73,7 +73,7 @@ public class FxLoad extends FxAbstractPowerNode {
 
         addHoverListener();
 
-        connectionPoints.put(voltageLevel, new ConnectionPoint(0, -length, voltageLevel, 0, 1));
+        connections.put(voltageLevel, new ConnectionPoint(0, -length, voltageLevel, 0, 1));
     }
 
     @Override

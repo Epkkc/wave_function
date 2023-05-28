@@ -22,7 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class AbstractExportService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ExportService<PNODE> {
+public class AbstractExportService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ExportService<PNODE, LINE> {
 
     protected final ObjectMapper objectMapper = new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 

@@ -10,8 +10,7 @@ import com.example.demo.base.model.status.BaseStatus;
 public interface StatusService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>> {
 
     void setTransformerStatusToArea(PNODE powerNode, TransformerConfiguration... levels);
-
     void setLoadStatusToArea(PNODE powerNode, LoadConfiguration loadCfg);
-    void setLoadStatusToArea(PNODE powerNode, GenerationConfiguration genCfg);
+    void setGeneratorStatusToArea(PNODE powerNode, GenerationConfiguration genCfg);
 
 }

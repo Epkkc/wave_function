@@ -15,7 +15,7 @@ import com.example.demo.export.service.BaseExportService;
 
 import java.util.List;
 
-public class BaseAlgorithm extends AbstractBaseAlgorithm<BasePowerNode, BaseLine, BaseConfiguration>{
+public class BaseAlgorithm extends AbstractAlgorithm<BasePowerNode, BaseLine, BaseConfiguration> {
     public BaseAlgorithm(Matrix<BasePowerNode> matrix, BaseElementService elementService,
                          StatusService<BasePowerNode> statusService, ConnectionService<BasePowerNode> connectionService,
                          BaseConfiguration configuration,

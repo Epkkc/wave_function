@@ -25,6 +25,7 @@ public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? e
 
     public void addPowerNodeToGrid(PNODE node) {
         matrix.add(node);
+        addNode(1);
         if (PowerNodeType.LOAD.equals(node.getNodeType())) {
             sumLoad+=node.getPower();
         }

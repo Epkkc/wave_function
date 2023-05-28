@@ -1,5 +1,6 @@
 package com.example.demo.base.service.element;
 
+import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.BaseConnection;
@@ -12,4 +13,5 @@ public interface ElementService<PNODE extends AbstractPowerNode<? extends BaseSt
     void addEdge(int value);
     void addNode(int value);
     List<LINE> getLines();
+    Matrix<PNODE> getMatrix();
 }

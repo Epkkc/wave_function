@@ -5,7 +5,7 @@ import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.java.fx.model.power.FxThreeSubStation;
 import com.example.demo.java.fx.model.power.FxTwoSubStation;
 import com.example.demo.base.model.enums.VoltageLevel;
-import com.example.demo.services.FxElementService;
+import com.example.demo.java.fx.service.FxElementService;
 
 public class FxSubstationFactory extends FxPowerNodeFactory {
 

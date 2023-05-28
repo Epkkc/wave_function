@@ -10,7 +10,6 @@ module com.example.demo {
     requires com.fasterxml.jackson.databind;
 
 
-    exports com.example.demo.services;
     exports com.example.demo.java.fx.factories;
     exports com.example.demo.utils;
     exports com.example.demo.thread;
@@ -27,9 +26,10 @@ module com.example.demo {
     exports com.example.demo.java.fx.algorithm;
     exports com.example.demo.java.fx.service;
     exports com.example.demo.params.window;
+    exports com.example.demo.export.service;
+    exports com.example.demo.base.factories;
 
 
-    opens com.example.demo.services to javafx.fxml;
     opens com.example.demo.java.fx.factories to javafx.fxml;
     opens com.example.demo.thread to javafx.fxml;
     opens com.example.demo to javafx.fxml, javafx.graphics;

@@ -21,18 +21,14 @@ import java.util.StringJoiner;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class FxStatus extends BaseStatus implements Coordinates {
+public class FxStatus extends BaseStatus {
 
-    private int x;
-    private int y;
     private Shape shape;
     private final StringJoiner tooltipMessage;
 
 
     public FxStatus(StatusType statusType, double size, VoltageLevel... voltageLevels) {
         super(statusType, voltageLevels);
-//        this.x = x;
-//        this.y = y;
         this.shape = getStatusForm(size, statusType);
         addVoltageLevel(voltageLevels);
         this.tooltipMessage = new StringJoiner(", ", statusType.getTooltipPrefix() + "\n", "");
@@ -47,7 +43,6 @@ public class FxStatus extends BaseStatus implements Coordinates {
         rectangle.setStroke(Color.TRANSPARENT);
         rectangle.setStrokeWidth(0);
 
-
         Text text = new Text();
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFont(Font.getDefault());
@@ -59,7 +54,6 @@ public class FxStatus extends BaseStatus implements Coordinates {
 
         Popup popup = new Popup();
         popup.getContent().add(stickyNotesPane);
-
 
         rectangle.hoverProperty().addListener((obs, oldVal, newValue) -> {
             if (newValue) {
