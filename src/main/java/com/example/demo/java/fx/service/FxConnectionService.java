@@ -30,7 +30,7 @@ public class FxConnectionService extends AbstractConnectionService<FxAbstractPow
     protected final FxElementService elementService;
 
     public FxConnectionService(FxElementService elementService, FxConfiguration configuration) {
-        super(elementService);
+        super(elementService, configuration);
         this.elementService = elementService;
         this.configuration = configuration;
     }

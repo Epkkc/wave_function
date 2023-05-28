@@ -64,25 +64,29 @@ public class FxAlgorithmService {
 
         List<TransformerConfiguration> transformerConfigurations = new ArrayList<>();
 
-//        transformerConfigurations.add(TransformerConfiguration.builder()
-//            .level(LEVEL_500).boundingAreaFrom(LEVEL_500.getBoundingArea())
-//            .boundingAreaTo(LEVEL_500.getBoundingArea()+4)
-//            .transformerPowerSet(List.of(10000))
-//            .enabled(true)
-//            .numberOfNodes(2)
-//            .build());
-//        transformerConfigurations.add(TransformerConfiguration.builder()
-//            .level(LEVEL_220)
-//            .boundingAreaFrom(LEVEL_220.getBoundingArea())
-//            .boundingAreaTo(LEVEL_220.getBoundingArea() + 3)
-//            .transformerPowerSet(List.of(5000))
-//            .enabled(true)
-//            .numberOfNodes(2)
-//            .build());
+        transformerConfigurations.add(TransformerConfiguration.builder()
+            .level(LEVEL_500)
+            .boundingAreaFrom(LEVEL_500.getBoundingArea())
+            .boundingAreaTo(LEVEL_500.getBoundingArea() + 4)
+            .maxLineLength(LEVEL_500.getBoundingArea() + 4)
+            .transformerPowerSet(List.of(10000))
+            .enabled(false)
+            .numberOfNodes(2)
+            .build());
+        transformerConfigurations.add(TransformerConfiguration.builder()
+            .level(LEVEL_220)
+            .boundingAreaFrom(LEVEL_220.getBoundingArea())
+            .boundingAreaTo(LEVEL_220.getBoundingArea() + 3)
+            .maxLineLength(LEVEL_220.getBoundingArea() + 3)
+            .transformerPowerSet(List.of(5000))
+            .enabled(false)
+            .numberOfNodes(3)
+            .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
             .level(LEVEL_110)
             .boundingAreaFrom(LEVEL_110.getBoundingArea())
             .boundingAreaTo(LEVEL_110.getBoundingArea() + 2)
+            .maxLineLength(LEVEL_110.getBoundingArea() + 2)
             .transformerPowerSet(List.of(2500))
             .enabled(true)
             .numberOfNodes(1000)
@@ -91,6 +95,7 @@ public class FxAlgorithmService {
             .level(LEVEL_35)
             .boundingAreaFrom(LEVEL_35.getBoundingArea())
             .boundingAreaTo(LEVEL_35.getBoundingArea() + 1)
+            .maxLineLength(LEVEL_35.getBoundingArea() + 1)
             .transformerPowerSet(List.of(1000))
             .enabled(true)
             .numberOfNodes(1000)
@@ -99,6 +104,7 @@ public class FxAlgorithmService {
             .level(LEVEL_10)
             .boundingAreaFrom(LEVEL_10.getBoundingArea())
             .boundingAreaTo(LEVEL_10.getBoundingArea() + 1)
+            .maxLineLength(LEVEL_10.getBoundingArea() + 1)
             .transformerPowerSet(List.of(500))
             .enabled(true)
             .numberOfNodes(1000)
@@ -113,6 +119,7 @@ public class FxAlgorithmService {
             .maxLoad(20)
             .boundingAreaFrom(2)
             .boundingAreaTo(3)
+            .maxLineLength(3)
             .enabled(true)
             .build());
         loadConfigurations.add(LoadConfiguration.builder()
@@ -121,8 +128,8 @@ public class FxAlgorithmService {
             .maxLoad(70)
             .boundingAreaFrom(3)
             .boundingAreaTo(5)
+            .maxLineLength(5)
             .enabled(true)
-
             .build());
 
         List<GeneratorConfiguration> generatorConfigurations = new ArrayList<>();

@@ -3,12 +3,13 @@ package com.example.demo.base.service.connection;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.power.BaseLine;
 import com.example.demo.base.model.power.BasePowerNode;
+import com.example.demo.base.service.BaseConfiguration;
 import com.example.demo.base.service.element.BaseElementService;
 
 public class BaseConnectionService extends AbstractConnectionService<BasePowerNode, BaseLine, BaseElementService> {
 
-    public BaseConnectionService(BaseElementService elementService) {
-        super(elementService);
+    public BaseConnectionService(BaseElementService elementService, BaseConfiguration baseConfiguration) {
+        super(elementService, baseConfiguration);
     }
 
     @Override

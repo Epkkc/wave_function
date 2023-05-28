@@ -122,7 +122,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setLoadStatusToArea(load, loadCfg);
         // Соединяем сгенерированную ноду с соседями
-        connectionService.connectNodes(load, transformer, loadCfg.getLevel(), false);
+        connectionService.connectNode(load);
     }
 
     private void fillGeneratorToGrid(PNODE generator, PNODE transformer, GeneratorConfiguration genCfg) {
@@ -269,7 +269,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         }
     }
 
-    private void fillLoadsRef() {
+    private void fillLoadsRefactoring() {
         for (LoadConfiguration loadCfg : loadConfigurations) {
             VoltageLevel currentLevel = loadCfg.getLevel();
 
@@ -290,6 +290,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                 // Расчёт мощности нагрузки
                 int randomPower = random.nextInt(loadCfg.getMaxLoad() - loadCfg.getMinLoad()) + loadCfg.getMinLoad();
                 int resPower = randomPower;
+
                 // todo сделать определение мощности нагрузки
 //                int resPower;
 //                if ((transformer.getPower() - filledPower) > randomPower) {
