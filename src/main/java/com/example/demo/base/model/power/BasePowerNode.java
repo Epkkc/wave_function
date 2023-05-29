@@ -3,7 +3,7 @@ package com.example.demo.base.model.power;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.status.BaseStatus;
-import com.example.demo.base.model.status.StatusLevelChainLinkDto;
+import com.example.demo.base.model.status.StatusMetaDto;
 import com.example.demo.base.model.status.StatusType;
 
 import java.util.Collection;
@@ -20,7 +20,7 @@ public class BasePowerNode extends AbstractPowerNode<BaseStatus, BaseConnection>
     }
 
     @Override
-    protected BaseStatus getStatus(StatusType statusType, Collection<StatusLevelChainLinkDto> statusDtos) {
+    protected BaseStatus getStatus(StatusType statusType, Collection<StatusMetaDto> statusDtos) {
         return new BaseStatus(statusType, statusDtos);
     }
 

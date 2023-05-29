@@ -2,7 +2,7 @@ package com.example.demo.java.fx.model.power;
 
 import com.example.demo.base.model.grid.Coordinates;
 import com.example.demo.base.model.power.AbstractPowerNode;
-import com.example.demo.base.model.status.StatusLevelChainLinkDto;
+import com.example.demo.base.model.status.StatusMetaDto;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
@@ -50,7 +50,7 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
     }
 
     @Override
-    protected FxStatus getStatus(StatusType statusType, Collection<StatusLevelChainLinkDto> statusDtos) {
+    protected FxStatus getStatus(StatusType statusType, Collection<StatusMetaDto> statusDtos) {
         return new FxStatus(statusType, statusDtos, basePane.getStatusPane().getSize()); // В данный момент status без координат в матрице статусов, мб стоит выпилить вообще координаты из статусов
     }
 
@@ -78,7 +78,7 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
         return basePane1;
     }
 
-    public void addStatus(StatusType statusType, Collection<StatusLevelChainLinkDto> statusDtos) {
+    public void addStatus(StatusType statusType, Collection<StatusMetaDto> statusDtos) {
         super.addStatus(statusType, statusDtos);
         basePane.getStatusPane().refreshStatuses(statuses);
     }

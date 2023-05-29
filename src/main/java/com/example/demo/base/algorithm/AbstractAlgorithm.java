@@ -14,7 +14,7 @@ import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.model.status.BlockType;
-import com.example.demo.base.model.status.StatusLevelChainLinkDto;
+import com.example.demo.base.model.status.StatusMetaDto;
 import com.example.demo.base.model.status.StatusType;
 import com.example.demo.base.service.BaseConfiguration;
 import com.example.demo.base.service.connection.ConnectionService;
@@ -301,7 +301,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
             do {
                 // Нода для размещения нагрузки
                 PNODE resultNode = RandomUtils.randomValue(nodes);
-                StatusLevelChainLinkDto shouldStatus = getShouldStatus(resultNode, currentLevel, PowerNodeType.LOAD);
+                StatusMetaDto shouldStatus = getShouldStatus(resultNode, currentLevel, PowerNodeType.LOAD);
                 // Расчёт мощности нагрузки
                 int randomPower = random.nextInt(loadCfg.getMaxLoad() - loadCfg.getMinLoad()) + loadCfg.getMinLoad();
                 int resPower = randomPower;
@@ -388,7 +388,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         }
     }
 
-    protected StatusLevelChainLinkDto getShouldStatus(PNODE powerNode, VoltageLevel voltageLevel, PowerNodeType powerNodeType) {
+    protected StatusMetaDto getShouldStatus(PNODE powerNode, VoltageLevel voltageLevel, PowerNodeType powerNodeType) {
         return powerNode.getStatuses()
             .stream()
             .filter(status ->

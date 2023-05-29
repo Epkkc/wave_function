@@ -1,7 +1,6 @@
 package com.example.demo.base.model.status;
 
 import com.example.demo.base.model.enums.VoltageLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,9 +14,9 @@ import java.util.Set;
 public class BaseStatus {
 
     protected StatusType type;
-    protected Map<VoltageLevel, StatusLevelChainLinkDto> voltageLevelChainLinkHashMap = new HashMap<>();
+    protected Map<VoltageLevel, StatusMetaDto> voltageLevelChainLinkHashMap = new HashMap<>();
 
-    public BaseStatus(StatusType type, Collection<StatusLevelChainLinkDto> statusDtos) {
+    public BaseStatus(StatusType type, Collection<StatusMetaDto> statusDtos) {
         this.type = type;
         statusDtos.forEach(dto -> voltageLevelChainLinkHashMap.put(dto.getVoltageLevel(), dto));
     }

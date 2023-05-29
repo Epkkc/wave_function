@@ -9,7 +9,7 @@ import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.status.BaseStatus;
-import com.example.demo.base.model.status.StatusLevelChainLinkDto;
+import com.example.demo.base.model.status.StatusMetaDto;
 import com.example.demo.base.model.status.StatusType;
 import com.example.demo.base.service.BaseConfiguration;
 import lombok.Getter;
@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
@@ -135,7 +134,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
 
 
     private void addRingStatusArea(int x, int y, int boundingAreaFrom, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder,
-                                   String nodeUuid) {
+                                   String nodeUuid, Integer availablePower) {
         matrix.getArea(x, y, boundingAreaTo).stream()
             .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
             .forEach(node -> {
@@ -153,12 +152,17 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                         return;
                     }
                 }
-                node.addStatus(statusType, List.of(new StatusLevelChainLinkDto(voltageLevel, chainLinkOrder, nodeUuid)));
+                node.addStatus(statusType, List.of(new StatusMetaDto(voltageLevel, chainLinkOrder, nodeUuid, availablePower)));
             });
     }
 
+    private void addRingStatusArea(int x, int y, int boundingAreaFrom, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder,
+                                   String nodeUuid) {
+        addRingStatusArea(x, y, boundingAreaFrom, boundingAreaTo, statusType, voltageLevel, rounded, chainLinkOrder, nodeUuid, null);
+    }
+
     // todo доработать этот метод, используя StatusDto
-    private void addStatusAreaTo(int x, int y, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder, String nodeUuid) {
+    private void addStatusAreaTo(int x, int y, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder, String nodeUuid, Integer availablePower) {
         matrix.getArea(x, y, boundingAreaTo).stream()
             .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
             .forEach(node -> {
@@ -168,21 +172,20 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                         return;
                     }
                 }
-                node.addStatus(statusType, List.of(new StatusLevelChainLinkDto(voltageLevel, chainLinkOrder, nodeUuid)));
+                node.addStatus(statusType, List.of(new StatusMetaDto(voltageLevel, chainLinkOrder, nodeUuid, availablePower)));
             });
     }
 
-    private void addBaseBlockingStatus(int x, int y, String nodeUuid) {
-        // Добавляем запрет на расстановку рядом любых объектов
-//        matrix.getArea(x, y).forEach(node -> PowerNodeType.getValidValues().forEach(
-//            pnt -> node.addStatus(pnt.getBlockingStatus(), 0, nodeUuid, VoltageLevel.values()))
-//        ); // todo удалить
+    private void addStatusAreaTo(int x, int y, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder, String nodeUuid) {
+        addStatusAreaTo(x, y, boundingAreaTo, statusType, voltageLevel, rounded, chainLinkOrder, nodeUuid, null);
+    }
 
+        private void addBaseBlockingStatus(int x, int y, String nodeUuid) {
         matrix.getArea(x, y).forEach(node -> PowerNodeType.getValidValues().forEach(
             pnt -> {
-                List<StatusLevelChainLinkDto> res = new ArrayList<>();
+                List<StatusMetaDto> res = new ArrayList<>();
                 for (VoltageLevel level : VoltageLevel.values()) {
-                    res.add(new StatusLevelChainLinkDto(level, 0, nodeUuid));
+                    res.add(new StatusMetaDto(level, 0, nodeUuid));
                 }
                 node.addStatus(pnt.getBlockingStatus(), res);
             })

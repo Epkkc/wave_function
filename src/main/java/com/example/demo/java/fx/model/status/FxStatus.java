@@ -1,9 +1,7 @@
 package com.example.demo.java.fx.model.status;
 
-import com.example.demo.base.model.grid.Coordinates;
-import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.status.BaseStatus;
-import com.example.demo.base.model.status.StatusLevelChainLinkDto;
+import com.example.demo.base.model.status.StatusMetaDto;
 import com.example.demo.base.model.status.StatusType;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -29,7 +27,7 @@ public class FxStatus extends BaseStatus {
     private final StringJoiner tooltipMessage;
 
 
-    public FxStatus(StatusType statusType, Collection<StatusLevelChainLinkDto> statusDtos, double size) {
+    public FxStatus(StatusType statusType, Collection<StatusMetaDto> statusDtos, double size) {
         super(statusType, statusDtos);
         this.shape = getStatusForm(size, statusType);
         this.tooltipMessage = new StringJoiner(", ", statusType.getTooltipPrefix() + "\n", "");
