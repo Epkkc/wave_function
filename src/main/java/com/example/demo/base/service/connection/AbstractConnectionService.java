@@ -5,12 +5,12 @@ import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
-import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.AbstractLine;
+import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.service.BaseConfiguration;
-import com.example.demo.base.service.element.AbstractElementService;
+import com.example.demo.base.service.element.ElementService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
@@ -22,7 +22,7 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 @RequiredArgsConstructor
-public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>, ELEMENTSERVICE extends AbstractElementService<PNODE, LINE>> implements ConnectionService<PNODE> {
+public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>, ELEMENTSERVICE extends ElementService<PNODE, LINE>> implements ConnectionService<PNODE> {
 
     protected final ELEMENTSERVICE elementService;
     protected final BaseConfiguration baseConfiguration;
@@ -64,7 +64,6 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
     public void connectNodes(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker) {
         LINE baseLine = getLine(node1, node2, voltageLevel, breaker); //todo добавить логику breaker-а
 
-        elementService.addEdge(1);
         elementService.getLines().add(baseLine);
         node1.getConnections().get(voltageLevel).addConnection();
         node2.getConnections().get(voltageLevel).addConnection();

@@ -10,8 +10,12 @@ import java.util.List;
 
 public interface ElementService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> {
     void addPowerNodeToGrid(PNODE node);
-    void addEdge(int value);
-    void addNode(int value);
+    void addLine(LINE line);
     List<LINE> getLines();
     Matrix<PNODE> getMatrix();
+    int getTotalNumberOfNodes();
+    int getTotalNumberOfEdges();
+    int getSumLoad();
+    int getSumPower();
+    PNODE getNodeByUuid(String uuid);
 }

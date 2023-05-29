@@ -72,6 +72,7 @@ public class FxAlgorithmService {
             .transformerPowerSet(List.of(10000))
             .enabled(false)
             .numberOfNodes(2)
+            .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
             .level(LEVEL_220)
@@ -81,6 +82,7 @@ public class FxAlgorithmService {
             .transformerPowerSet(List.of(5000))
             .enabled(false)
             .numberOfNodes(3)
+            .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
             .level(LEVEL_110)
@@ -90,6 +92,7 @@ public class FxAlgorithmService {
             .transformerPowerSet(List.of(2500))
             .enabled(true)
             .numberOfNodes(1000)
+            .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
             .level(LEVEL_35)
@@ -99,6 +102,7 @@ public class FxAlgorithmService {
             .transformerPowerSet(List.of(1000))
             .enabled(true)
             .numberOfNodes(1000)
+            .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
             .level(LEVEL_10)
@@ -108,6 +112,7 @@ public class FxAlgorithmService {
             .transformerPowerSet(List.of(500))
             .enabled(true)
             .numberOfNodes(1000)
+            .maxChainLength(3)
             .build());
 
         List<LoadConfiguration> loadConfigurations = new ArrayList<>();
@@ -120,6 +125,7 @@ public class FxAlgorithmService {
             .boundingAreaFrom(2)
             .boundingAreaTo(3)
             .maxLineLength(3)
+            .maxChainLength(3)
             .enabled(true)
             .build());
         loadConfigurations.add(LoadConfiguration.builder()
@@ -129,6 +135,7 @@ public class FxAlgorithmService {
             .boundingAreaFrom(3)
             .boundingAreaTo(5)
             .maxLineLength(5)
+            .maxChainLength(3)
             .enabled(true)
             .build());
 
@@ -160,7 +167,12 @@ public class FxAlgorithmService {
         Algorithm algorithm = new FxAlgorithm(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations,
             fabric, exportService, true);
 
-        GeneralResult generalResult = algorithm.start();
+        GeneralResult generalResult = null;
+        try {
+            generalResult = algorithm.start();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         return generalResult;
     }

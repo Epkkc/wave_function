@@ -7,7 +7,7 @@ import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.service.connection.ConnectionService;
-import com.example.demo.base.service.element.AbstractElementService;
+import com.example.demo.base.service.element.ElementService;
 import com.example.demo.base.service.status.StatusService;
 import com.example.demo.export.service.ExportService;
 import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerLine, FxConfiguration> {
 
-    public FxAlgorithm(Matrix<FxAbstractPowerNode> matrix, AbstractElementService<FxAbstractPowerNode, FxPowerLine> elementService, StatusService<FxAbstractPowerNode> statusService,
+    public FxAlgorithm(Matrix<FxAbstractPowerNode> matrix, ElementService<FxAbstractPowerNode, FxPowerLine> elementService, StatusService<FxAbstractPowerNode> statusService,
                        ConnectionService<FxAbstractPowerNode> connectionService, FxConfiguration configuration, List<TransformerConfiguration> transformerConfigurations,
                        List<LoadConfiguration> loadConfigurations, List<GeneratorConfiguration> generatorConfigurations, PowerNodeFactory<FxAbstractPowerNode> nodeFactory,
                        ExportService<FxAbstractPowerNode, FxPowerLine> exportService, boolean randomFirst) {

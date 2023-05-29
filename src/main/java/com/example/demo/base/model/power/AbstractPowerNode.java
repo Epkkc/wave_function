@@ -5,6 +5,7 @@ import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.model.status.BlockType;
+import com.example.demo.base.model.status.StatusLevelChainLinkDto;
 import com.example.demo.base.model.status.StatusType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -26,17 +28,18 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
     protected int x;
     protected int y;
     protected int power;
+    protected int chainLinkOrder;
     protected String uuid = UUID.randomUUID().toString();
     protected List<VoltageLevel> voltageLevels;
     protected List<STATUS> statuses;
     protected Map<VoltageLevel, CONNECTION> connections;
-    protected int chainLinkNumber;
 
-    public AbstractPowerNode(PowerNodeType nodeType, int x, int y, int power, Collection<VoltageLevel> voltageLevels) {
+    public AbstractPowerNode(PowerNodeType nodeType, int x, int y, int power, int chainLinkOrder, Collection<VoltageLevel> voltageLevels) {
         this.nodeType = nodeType;
         this.x = x;
         this.y = y;
         this.power = power;
+        this.chainLinkOrder = chainLinkOrder;
         this.voltageLevels = voltageLevels.stream().toList();
         this.statuses = new ArrayList<>();
         this.connections = new HashMap<>();
@@ -45,8 +48,8 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
 
     protected abstract void initConnections();
 
-    public void addStatus(StatusType statusType, VoltageLevel... voltageLevels) {
-        Collection<VoltageLevel> levels = List.of(voltageLevels);
+    public void addStatus(StatusType statusType, Collection<StatusLevelChainLinkDto> statusDtos) {
+        Collection<VoltageLevel> levels = statusDtos.stream().map(StatusLevelChainLinkDto::getVoltageLevel).toList();
         Optional<STATUS> existed = statuses.stream().filter(status -> status.getType().equals(statusType)).findFirst();
         Optional<STATUS> opposite = statuses.stream()
             .filter(status -> status.getType().getNodeType().equals(statusType.getNodeType()) && !status.getType().getBlockType().equals(statusType.getBlockType()))
@@ -55,7 +58,7 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
         if (opposite.isPresent()) {
             if (BlockType.BLOCK.equals(statusType.getBlockType())) {
                 Collection<VoltageLevel> finalLevels = levels;
-                opposite.ifPresent(opp -> opp.removeVoltageLevel(finalLevels.stream().toList()));
+                opposite.ifPresent(opp -> opp.removeVoltageLevels(finalLevels.stream().toList()));
             } else {
                 // SHOULD Оставляю только те уровни напряжения, которых нет в блокирующем статусе
                 Collection<VoltageLevel> finalLevels1 = levels;
@@ -65,15 +68,28 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
 
         if (levels.isEmpty()) return;
 
-        Collection<VoltageLevel> finalLevels2 = levels;
+        Collection<VoltageLevel> finalLevels = levels;
+        Collection<StatusLevelChainLinkDto> finalStatusDtos = statusDtos.stream().filter(dto -> finalLevels.contains(dto.getVoltageLevel())).toList();
+
         existed.ifPresentOrElse(
-            ex -> ex.addVoltageLevel(finalLevels2.stream().toList()),
-            () -> statuses.add(getStatus(statusType, voltageLevels))
+            ex -> updateExistedStatus(ex, finalStatusDtos),
+            () -> statuses.add(getStatus(statusType, finalStatusDtos))
         );
 
         // Удаляем статусы, в которых нет ни одного voltageLevel-а
         statuses.removeIf(status -> status.getVoltageLevels().isEmpty());
     }
 
-    protected abstract STATUS getStatus(StatusType statusType, VoltageLevel... voltageLevels);
+    protected void updateExistedStatus(STATUS existed, Collection<StatusLevelChainLinkDto> statusDtos) {
+        for (StatusLevelChainLinkDto statusDto : statusDtos) {
+            existed.getVoltageLevelChainLinkHashMap().merge(statusDto.getVoltageLevel(),
+                statusDto, (s1, s2) -> s1.getChainLinkOrder() < s2.getChainLinkOrder() ? s1 : s2);
+        }
+//        if (existed.getChainLinkOrder() > chainLinkOrder) { // todo удалить
+//            existed.setChainLinkOrder(chainLinkOrder);
+//            existed.setNodeUuid(nodeUuid);
+//        }
+    }
+
+    protected abstract STATUS getStatus(StatusType statusType, Collection<StatusLevelChainLinkDto> statusDtos);
 }

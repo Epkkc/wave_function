@@ -25,8 +25,8 @@ public class FxLoad extends FxAbstractPowerNode {
     @JsonIgnore
     private List<Shape> shapes = new ArrayList<>();
 
-    public FxLoad(int x, int y, int power, VoltageLevel voltageLevel, double size) {
-        super(PowerNodeType.LOAD, x, y, power, List.of(voltageLevel), size);
+    public FxLoad(int x, int y, int power, int chainLinkOrder, VoltageLevel voltageLevel, double size) {
+        super(PowerNodeType.LOAD, x, y, power, chainLinkOrder,List.of(voltageLevel), size);
         this.voltageLevel = voltageLevel;
         fillBasePane1();
     }
@@ -85,7 +85,7 @@ public class FxLoad extends FxAbstractPowerNode {
         Text text = new Text();
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFont(Font.getDefault());
-        text.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), Integer.toString(power)));
+        text.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power), String.format("Номер звена: %s", chainLinkOrder)));
 
         StackPane stickyNotesPane = new StackPane();
         stickyNotesPane.setPadding(new Insets(2));

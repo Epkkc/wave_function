@@ -31,8 +31,8 @@ public class FxGenerator extends FxAbstractPowerNode {
     private Circle circle;
     private VoltageLevel voltageLevel;
 
-    public FxGenerator(int x, int y, int power, VoltageLevel voltageLevel, double size) {
-        super(PowerNodeType.GENERATOR, x, y, power, List.of(voltageLevel), size);
+    public FxGenerator(int x, int y, int power, int chainLinkOrder, VoltageLevel voltageLevel, double size) {
+        super(PowerNodeType.GENERATOR, x, y, power, chainLinkOrder, List.of(voltageLevel), size);
         this.voltageLevel = voltageLevel;
         fillBasePane();
     }
@@ -117,7 +117,7 @@ public class FxGenerator extends FxAbstractPowerNode {
         Text text = new Text();
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFont(Font.getDefault());
-        text.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), Integer.toString(power)));
+        text.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power), String.format("Номер звена: %s", chainLinkOrder)));
 
         StackPane stickyNotesPane = new StackPane();
         stickyNotesPane.setPadding(new Insets(2));

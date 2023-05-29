@@ -11,6 +11,6 @@ import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 public interface FxNodeFactory {
 
     PowerNodeType getType();
-    FxAbstractPowerNode createNode(int x, int y, int power, VoltageLevel... voltageLevels);
+    FxAbstractPowerNode createNode(int x, int y, int power, int chainLinkOrder, VoltageLevel... voltageLevels);
 
 }

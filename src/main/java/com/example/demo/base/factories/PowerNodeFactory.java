@@ -10,6 +10,6 @@ import java.util.Collection;
 
 public interface PowerNodeFactory<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>> {
 
-    PNODE createNode(PowerNodeType type, int x, int y, int power, Collection<VoltageLevel> voltageLevels);
+    PNODE createNode(PowerNodeType type, int x, int y, int power, int chainLinkOrder, Collection<VoltageLevel> voltageLevels);
 
 }

@@ -25,5 +25,6 @@ public class TransformerConfiguration {
     private List<Integer> transformerPowerSet;
     private int numberOfNodes;
     private double maxLineLength; // Максимальная длина линии, которой будет соединён трансформатор с трансформатором
+    private int maxChainLength; // Максимальная длина цепочки трансформаторов
 
 }

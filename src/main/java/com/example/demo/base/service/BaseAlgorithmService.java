@@ -65,6 +65,7 @@ public class BaseAlgorithmService {
             .transformerPowerSet(List.of(10000))
             .enabled(false)
             .numberOfNodes(2)
+            .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
             .level(LEVEL_220)
@@ -74,6 +75,7 @@ public class BaseAlgorithmService {
             .transformerPowerSet(List.of(5000))
             .enabled(true)
             .numberOfNodes(3)
+            .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
             .level(LEVEL_110)
@@ -83,6 +85,7 @@ public class BaseAlgorithmService {
             .transformerPowerSet(List.of(2500))
             .enabled(true)
             .numberOfNodes(6)
+            .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
             .level(LEVEL_35)
@@ -92,6 +95,7 @@ public class BaseAlgorithmService {
             .transformerPowerSet(List.of(1000))
             .enabled(true)
             .numberOfNodes(15)
+            .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
             .level(LEVEL_10)
@@ -101,6 +105,7 @@ public class BaseAlgorithmService {
             .transformerPowerSet(List.of(500))
             .enabled(true)
             .numberOfNodes(20)
+            .maxChainLength(3)
             .build());
 
         List<LoadConfiguration> loadConfigurations = new ArrayList<>();
@@ -113,6 +118,7 @@ public class BaseAlgorithmService {
             .boundingAreaFrom(2)
             .boundingAreaTo(3)
             .maxLineLength(3)
+            .maxChainLength(2)
             .build());
         loadConfigurations.add(LoadConfiguration.builder()
             .level(LEVEL_35)
@@ -121,6 +127,7 @@ public class BaseAlgorithmService {
             .boundingAreaFrom(3)
             .boundingAreaTo(5)
             .maxLineLength(5)
+            .maxChainLength(1)
             .build());
 
         List<GeneratorConfiguration> generatorConfigurations = new ArrayList<>();
@@ -159,7 +166,7 @@ public class BaseAlgorithmService {
     private void fillMatrix(Matrix<BasePowerNode> matrix) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                BasePowerNode powerNode = new BasePowerNode(PowerNodeType.EMPTY, i, j, 0, List.of());
+                BasePowerNode powerNode = new BasePowerNode(PowerNodeType.EMPTY, i, j, 0, 0, List.of());
                 matrix.fill(powerNode);
             }
         }

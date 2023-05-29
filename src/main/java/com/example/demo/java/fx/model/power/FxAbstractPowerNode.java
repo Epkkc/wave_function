@@ -2,6 +2,7 @@ package com.example.demo.java.fx.model.power;
 
 import com.example.demo.base.model.grid.Coordinates;
 import com.example.demo.base.model.power.AbstractPowerNode;
+import com.example.demo.base.model.status.StatusLevelChainLinkDto;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
@@ -37,8 +38,8 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
     protected final double defaultOpacity = 1d;
 
 
-    public FxAbstractPowerNode(PowerNodeType nodeType, int x, int y, int power, List<VoltageLevel> voltageLevels, double size) {
-        super(nodeType, x, y, power, voltageLevels);
+    public FxAbstractPowerNode(PowerNodeType nodeType, int x, int y, int power, int chainLinkOrder, List<VoltageLevel> voltageLevels, double size) {
+        super(nodeType, x, y, power, chainLinkOrder, voltageLevels);
         this.size = size;
         basePane = createBasePane();
     }
@@ -49,8 +50,8 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
     }
 
     @Override
-    protected FxStatus getStatus(StatusType statusType, VoltageLevel... voltageLevels) {
-        return new FxStatus(statusType, basePane.getStatusPane().getSize(), voltageLevels); // В данный момент status без координат в матрице статусов, мб стоит выпилить вообще координаты из статусов
+    protected FxStatus getStatus(StatusType statusType, Collection<StatusLevelChainLinkDto> statusDtos) {
+        return new FxStatus(statusType, statusDtos, basePane.getStatusPane().getSize()); // В данный момент status без координат в матрице статусов, мб стоит выпилить вообще координаты из статусов
     }
 
     protected BasePane createBasePane() {
@@ -77,8 +78,8 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
         return basePane1;
     }
 
-    public void addStatus(StatusType type, VoltageLevel... voltageLevel) {
-        super.addStatus(type, voltageLevel);
+    public void addStatus(StatusType statusType, Collection<StatusLevelChainLinkDto> statusDtos) {
+        super.addStatus(statusType, statusDtos);
         basePane.getStatusPane().refreshStatuses(statuses);
     }
 

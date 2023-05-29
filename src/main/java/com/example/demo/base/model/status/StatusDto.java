@@ -9,6 +9,7 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 @Getter
+@Deprecated(forRemoval = true) //todo удалить, если не пригодится
 public class StatusDto {
 
     private final StatusType statusType;

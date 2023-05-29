@@ -18,9 +18,9 @@ public class FxGeneratorFactory extends FxPowerNodeFactory {
     }
 
     @Override
-    public FxAbstractPowerNode createNode(int x, int y, int power, VoltageLevel... voltageLevels) {
+    public FxAbstractPowerNode createNode(int x, int y, int power, int chainLinkOrder, VoltageLevel... voltageLevels) {
         assert voltageLevels.length == 1;
-        return new FxGenerator(x, y, power, voltageLevels[0], elementsService.getBaseSize());
+        return new FxGenerator(x, y, power, chainLinkOrder, voltageLevels[0], elementsService.getBaseSize());
     }
 
 }

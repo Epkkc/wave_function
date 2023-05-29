@@ -67,7 +67,7 @@ public class DeserializeMain extends Application {
                 continue;
             }
 
-            FxAbstractPowerNode node = fabric.createNode(nodeDto.getNodeType(), nodeDto.getX(), nodeDto.getY(), nodeDto.getPower(), nodeDto.getVoltageLevels());
+            FxAbstractPowerNode node = fabric.createNode(nodeDto.getNodeType(), nodeDto.getX(), nodeDto.getY(), nodeDto.getPower(), 0, nodeDto.getVoltageLevels());
             node.setUuid(nodeDto.getUuid());
 
             elementService.addPowerNodeToGrid(node);

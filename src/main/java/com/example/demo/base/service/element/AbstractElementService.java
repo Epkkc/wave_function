@@ -10,22 +10,26 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @RequiredArgsConstructor
 public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ElementService<PNODE, LINE> {
 
     protected final Matrix<PNODE> matrix;
+    protected final Map<String, PNODE> uuidToNodeMap = new HashMap<>();
     protected final List<LINE> lines = new ArrayList<>();
     protected int sumLoad;
     protected int sumPower;
-    protected int totalNumberOfNodes;
-    protected int totalNumberOfEdges;
 
+    @Override
     public void addPowerNodeToGrid(PNODE node) {
         matrix.add(node);
-        addNode(1);
+        uuidToNodeMap.merge(node.getUuid(), node, (n1, n2) -> {
+            throw new UnsupportedOperationException(String.format("There is two nodes with equal uuid\nnode1=%s\nnoe2=%s", n1, n2));
+        } );
         if (PowerNodeType.LOAD.equals(node.getNodeType())) {
             sumLoad+=node.getPower();
         }
@@ -34,11 +38,24 @@ public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? e
         }
     }
 
-    public void addEdge(int value) {
-        totalNumberOfEdges+=value;
+    @Override
+    public void addLine(LINE line) {
+        lines.add(line);
     }
 
-    public void addNode(int value) {
-        totalNumberOfNodes+=value;
+    @Override
+    public int getTotalNumberOfNodes() {
+        return uuidToNodeMap.size();
     }
+
+    @Override
+    public int getTotalNumberOfEdges() {
+        return lines.size();
+    }
+
+    @Override
+    public PNODE getNodeByUuid(String uuid) {
+        return uuidToNodeMap.get(uuid);
+    }
+
 }

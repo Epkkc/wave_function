@@ -19,13 +19,14 @@ public class FxSubstationFactory extends FxPowerNodeFactory {
     }
 
     @Override
-    public FxAbstractPowerNode createNode(int x, int y, int power, VoltageLevel... voltageLevels) {
+    public FxAbstractPowerNode createNode(int x, int y, int power, int chainLinkOrder, VoltageLevel... voltageLevels) {
         FxAbstractPowerNode node;
         if (voltageLevels.length == 2) {
             node = new FxTwoSubStation(
                 x,
                 y,
                 power,
+                chainLinkOrder,
                 voltageLevels[0],
                 voltageLevels[1],
                 elementsService.getBaseSize()
@@ -35,6 +36,7 @@ public class FxSubstationFactory extends FxPowerNodeFactory {
                 x,
                 y,
                 power,
+                chainLinkOrder,
                 voltageLevels[0],
                 voltageLevels[1],
                 voltageLevels[2],

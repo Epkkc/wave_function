@@ -3,6 +3,7 @@ package com.example.demo.java.fx.model.status;
 import com.example.demo.base.model.grid.Coordinates;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.status.BaseStatus;
+import com.example.demo.base.model.status.StatusLevelChainLinkDto;
 import com.example.demo.base.model.status.StatusType;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -17,6 +18,7 @@ import javafx.stage.Popup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Collection;
 import java.util.StringJoiner;
 
 @Data
@@ -27,10 +29,9 @@ public class FxStatus extends BaseStatus {
     private final StringJoiner tooltipMessage;
 
 
-    public FxStatus(StatusType statusType, double size, VoltageLevel... voltageLevels) {
-        super(statusType, voltageLevels);
+    public FxStatus(StatusType statusType, Collection<StatusLevelChainLinkDto> statusDtos, double size) {
+        super(statusType, statusDtos);
         this.shape = getStatusForm(size, statusType);
-        addVoltageLevel(voltageLevels);
         this.tooltipMessage = new StringJoiner(", ", statusType.getTooltipPrefix() + "\n", "");
     }
 
@@ -74,8 +75,14 @@ public class FxStatus extends BaseStatus {
     }
 
     private String createTooltipMessage() {
-        StringJoiner joiner = new StringJoiner(", ", type.getTooltipPrefix() + "\n", "");
-        voltageLevels.forEach(level -> joiner.add(level.getDescription()));
+        StringJoiner joiner = new StringJoiner("\n");
+        joiner.add(type.getTooltipPrefix());
+        joiner.add("Уровни напряжения:");
+        voltageLevelChainLinkHashMap.forEach((voltageLevel, dto) -> {
+            joiner.add("Уровень напряжения: " + voltageLevel.getDescription());
+            joiner.add("Номер звена: " + dto.getChainLinkOrder());
+            joiner.add("Uuid ноды: " + dto.getNodeUuid());
+        });
         return joiner.toString();
     }
 

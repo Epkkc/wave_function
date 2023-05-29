@@ -22,8 +22,8 @@ public class FxPowerNodeAbstractFactory implements PowerNodeFactory<FxAbstractPo
     }
 
     @Override
-    public FxAbstractPowerNode createNode(PowerNodeType type, int x, int y, int power, Collection<VoltageLevel> voltageLevels) {
-        return factoriesMap.get(type).createNode(x, y, power, voltageLevels.toArray(VoltageLevel[]::new));
+    public FxAbstractPowerNode createNode(PowerNodeType type, int x, int y, int power, int chainLinkOrder, Collection<VoltageLevel> voltageLevels) {
+        return factoriesMap.get(type).createNode(x, y, power, chainLinkOrder, voltageLevels.toArray(VoltageLevel[]::new));
     }
 
 }

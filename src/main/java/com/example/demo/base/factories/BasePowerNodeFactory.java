@@ -9,8 +9,8 @@ import java.util.Collection;
 public class BasePowerNodeFactory implements PowerNodeFactory<BasePowerNode> {
 
     @Override
-    public BasePowerNode createNode(PowerNodeType type, int x, int y, int power, Collection<VoltageLevel> voltageLevels) {
-        return new BasePowerNode(type, x, y, power, voltageLevels);
+    public BasePowerNode createNode(PowerNodeType type, int x, int y, int power, int chainLinkOrder, Collection<VoltageLevel> voltageLevels) {
+        return new BasePowerNode(type, x, y, power, chainLinkOrder, voltageLevels);
     }
 
 }

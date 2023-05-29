@@ -25,8 +25,8 @@ public class FxTwoSubStation extends FxAbstractPowerNode {
     private VoltageLevel level1;
     private VoltageLevel level2;
 
-    public FxTwoSubStation(int x, int y, int power, VoltageLevel level1, VoltageLevel level2, double size) {
-        super(PowerNodeType.SUBSTATION, x, y, power, List.of(level1, level2), size);
+    public FxTwoSubStation(int x, int y, int power, int chainLinkOrder, VoltageLevel level1, VoltageLevel level2, double size) {
+        super(PowerNodeType.SUBSTATION, x, y, power, chainLinkOrder, List.of(level1, level2), size);
         this.level1 = level1;
         this.level2 = level2;
         fillBasePane();
@@ -87,7 +87,7 @@ public class FxTwoSubStation extends FxAbstractPowerNode {
                 double x = bnds.getMinX() - (stickyNotesPane.getWidth() / 2) + (circle.getRadius());
                 double y = bnds.getMinY() - stickyNotesPane.getHeight();
                 setHoverOpacity(voltageLevel);
-                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), Integer.toString(power)));
+                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power), String.format("Номер звена: %s", chainLinkOrder)));
                 popup.show(circle, x, y);
             } else {
                 setDefaultOpacity(voltageLevel);
