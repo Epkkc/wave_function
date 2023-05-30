@@ -16,7 +16,7 @@ public class BasePowerNode extends AbstractPowerNode<BaseStatus, BaseConnection>
 
     @Override
     protected void initConnections() {
-        voltageLevels.forEach(level -> connections.put(level, new BaseConnection(level, 0, 2)));
+        voltageLevels.forEach(level -> connections.put(level, new BaseConnection(level, 100)));
     }
 
     @Override

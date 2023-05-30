@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_10;
@@ -124,8 +125,8 @@ public class FxAlgorithmService {
             .maxLoad(20)
             .boundingAreaFrom(2)
             .boundingAreaTo(3)
-            .maxLineLength(3)
-            .maxChainLength(3)
+            .maxLineLength(4)
+            .maxChainLength(4)
             .enabled(true)
             .build());
         loadConfigurations.add(LoadConfiguration.builder()
@@ -135,29 +136,41 @@ public class FxAlgorithmService {
             .boundingAreaFrom(3)
             .boundingAreaTo(5)
             .maxLineLength(5)
-            .maxChainLength(3)
+            .maxChainLength(1)
             .enabled(true)
             .build());
 
         List<GeneratorConfiguration> generatorConfigurations = new ArrayList<>();
         generatorConfigurations.add(GeneratorConfiguration.builder()
-            .level(LEVEL_110)
+            .level(LEVEL_35)
             .minPower(200)
-            .maxPower(300)
-            .boundingArea(LEVEL_110.getBoundingArea() - 2)
+            .maxPower(400)
+            .boundingArea(LEVEL_35.getBoundingArea() - 4)
             .transformerArea(2)
+            .enabled(true)
+            .build());
+        generatorConfigurations.add(GeneratorConfiguration.builder()
+            .level(LEVEL_110)
+            .minPower(500)
+            .maxPower(800)
+            .boundingArea(LEVEL_110.getBoundingArea() - 4)
+            .transformerArea(3)
+            .enabled(true)
             .build());
         generatorConfigurations.add(GeneratorConfiguration.builder()
             .level(LEVEL_220)
-            .minPower(500)
+            .minPower(700)
             .maxPower(1000)
-            .boundingArea(LEVEL_220.getBoundingArea() - 2).transformerArea(3).build());
+            .boundingArea(LEVEL_220.getBoundingArea() - 2).transformerArea(3)
+            .enabled(false)
+            .build());
         generatorConfigurations.add(GeneratorConfiguration.builder()
             .level(LEVEL_500)
             .minPower(1000)
             .maxPower(3000)
             .boundingArea(LEVEL_500.getBoundingArea() - 2)
             .transformerArea(3)
+            .enabled(false)
             .build());
 
         configuration.setTransformerConfigurations(transformerConfigurations);
@@ -171,7 +184,7 @@ public class FxAlgorithmService {
         try {
             generalResult = algorithm.start();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e + "\n" + Arrays.toString(e.getStackTrace()));
         }
 
         return generalResult;

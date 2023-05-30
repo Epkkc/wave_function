@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.lang.Math.pow;
@@ -29,6 +30,15 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
 
     @Override
     public void connectNode(PNODE node) {
+        connectNode(node, Set.of());
+    }
+
+    @Override
+    public void connectNode(PNODE node, Set<String> ignoreUuids) {
+        if (ignoreUuids == null) {
+            throw new IllegalArgumentException("Collection ignoreUuids = null");
+        }
+
         List<PNODE> powerNodes = elementService.getMatrix().toOrderedNodeList();
 
         Collections.reverse(powerNodes);
@@ -45,6 +55,7 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
                     .filter(n -> nodeTypeMatchCondition(node, n))
                     .filter(n -> !connectedNodes.contains(n.getUuid()))
                     .filter(n -> !n.getUuid().equals(node.getUuid()))
+                    .filter(n -> !ignoreUuids.contains(n.getUuid()))
                     .filter(n -> sqrt(
                         pow(node.getX() - n.getX(), 2) + pow(node.getY() - n.getY(), 2)) <= getMaxLineLength(node, voltageLevel))
                     .filter(n -> n.getConnections().containsKey(voltageLevel))
@@ -52,21 +63,34 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
 //                    .limit(connectionPoint.getLimit() - connectionPoint.getConnections()) // TODO при добавлении лимитов
                     .forEach(n -> {
                         connectedNodes.add(n.getUuid());
-
-                        //todo добавить логику определения breaker-а
-
-                        connectNodes(n, node, voltageLevel, false);
+                        connectNodes(n, node, voltageLevel);
                     })
         );
     }
 
     @Override
-    public void connectNodes(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker) {
-        LINE baseLine = getLine(node1, node2, voltageLevel, breaker); //todo добавить логику breaker-а
+    public void connectNodes(PNODE node1, PNODE node2, VoltageLevel voltageLevel) {
+        LINE baseLine = getLine(node1, node2, voltageLevel, getBreakerProperty(node1, node2)); //todo добавить логику breaker-а
 
         elementService.getLines().add(baseLine);
-        node1.getConnections().get(voltageLevel).addConnection();
-        node2.getConnections().get(voltageLevel).addConnection();
+        node1.getConnections().get(voltageLevel).addConnection(node2.getUuid());
+        node2.getConnections().get(voltageLevel).addConnection(node1.getUuid());
+    }
+
+    @Override
+    public void connectNodes(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker) {
+        LINE baseLine = getLine(node1, node2, voltageLevel, breaker);
+        // TODO ДОБАВИТЬ ПРОВЕРКУ НА НЕПРЕВЫШЕНИЕ ЛИМИТА, СЕЙЧАС ЛИНИЯ ОТРИСОВЫВАЕТСЯ, НО НЕ ПОПАДАЕТ В CONNECTED_UUIDs
+        elementService.getLines().add(baseLine);
+        node1.getConnections().get(voltageLevel).addConnection(node2.getUuid());
+        node2.getConnections().get(voltageLevel).addConnection(node1.getUuid());
+    }
+
+    protected boolean getBreakerProperty(PNODE node1, PNODE node2) {
+        // Если соединяются нагрузка и ПС, то устанавливаем breaker
+        // Если ПС является порождающей нагрузку нодой, то этот метод не должен быть вызван
+        return node1.getNodeType().equals(PowerNodeType.SUBSTATION) && node2.getNodeType().equals(PowerNodeType.LOAD) ||
+            node2.getNodeType().equals(PowerNodeType.SUBSTATION) && node1.getNodeType().equals(PowerNodeType.LOAD); // Breaker устанавливается в том случае, когда нагрузка соединяется с ПС, с которой ещё не был соединён фидер
     }
 
     protected abstract LINE getLine(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker);
@@ -91,14 +115,8 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
 
     protected boolean nodeTypeMatchCondition(PNODE mainNode, PNODE freeNode) {
         switch (mainNode.getNodeType()) {
-            case SUBSTATION -> {
+            case SUBSTATION, LOAD, GENERATOR -> {
                 return PowerNodeType.SUBSTATION.equals(freeNode.getNodeType()); // ПС соединяется только с ПС, поскольку на этапе расстановки ПС нет никаких альтернативных нод
-            }
-            case LOAD -> {
-                return PowerNodeType.SUBSTATION.equals(freeNode.getNodeType()) || PowerNodeType.LOAD.equals(freeNode.getNodeType());  // Нагрузка соединяется с ПС и другими нагрузками для выстраивания древовидной структуры
-            }
-            case GENERATOR -> {
-                return  PowerNodeType.SUBSTATION.equals(freeNode.getNodeType()); // Генератор соединяется только с ПС
             }
             default -> {
                 return false;

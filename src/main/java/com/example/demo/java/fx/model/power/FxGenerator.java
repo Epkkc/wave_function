@@ -66,7 +66,7 @@ public class FxGenerator extends FxAbstractPowerNode {
 
         addHoverListeners();
 
-        connections.put(voltageLevel, new ConnectionPoint(0, - circleRadius, voltageLevel, 0, 1));
+        connections.put(voltageLevel, new ConnectionPoint(0, - circleRadius, voltageLevel, 100));
     }
 
     public Path drawSemiRing(double centerX, double centerY, double radius, double innerRadius, Paint paint, boolean sweepFlag) {

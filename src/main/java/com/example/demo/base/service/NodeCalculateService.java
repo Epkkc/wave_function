@@ -12,9 +12,9 @@ public class NodeCalculateService {
 
     public void setNumberOfNodes(List<TransformerConfiguration> configurations) {
         // todo проверка на отрицательные значения количества узлов и ветвей
-        if ((baseConfiguration.getNumberOfNodes() - 1) > baseConfiguration.getNumberOfEdges()) {
+        if ((baseConfiguration.getRequiredNumberOfNodes() - 1) > baseConfiguration.getRequiredNumberOfEdges()) {
             throw new UnsupportedOperationException(
-                String.format("Количество ветвей=%d не может быть меньше, чем количество узлов=%d минус 1", baseConfiguration.getNumberOfEdges(), baseConfiguration.getNumberOfNodes()));
+                String.format("Количество ветвей=%d не может быть меньше, чем количество узлов=%d минус 1", baseConfiguration.getRequiredNumberOfEdges(), baseConfiguration.getRequiredNumberOfNodes()));
         }
 
 

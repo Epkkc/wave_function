@@ -10,6 +10,6 @@ public interface Connection {
 
     int getLimit();
 
-    boolean addConnection();
+    boolean addConnection(String uuid);
 
 }

@@ -33,7 +33,7 @@ public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerL
 
     @Override
     protected void afterAllTransformersSet() {
-        sleep(4000);
+        sleep(3000);
     }
 
     @Override
@@ -41,14 +41,11 @@ public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerL
         sleep(configuration.getLevel().getTimeout());
     }
 
-    @Override
-    protected void afterAllLoadSet() {
-        sleep(4000);
-    }
 
     @Override
     protected void afterGeneratorSet(GeneratorConfiguration configuration) {
-        sleep(configuration.getLevel().getTimeout());
+//        sleep(configuration.getLevel().getTimeout());
+        sleep(2000);
     }
 
     private void sleep(int delay) {

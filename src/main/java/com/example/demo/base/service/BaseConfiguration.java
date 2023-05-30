@@ -14,8 +14,8 @@ public class BaseConfiguration {
     protected final int rows;
     protected final int columns;
     protected final int delay;
-    protected final int numberOfNodes;
-    protected final int numberOfEdges;
+    protected final int requiredNumberOfNodes;
+    protected final int requiredNumberOfEdges;
     protected List<TransformerConfiguration> transformerConfigurations;
     protected List<LoadConfiguration> loadConfigurations;
     protected List<GeneratorConfiguration> generatorConfigurations;

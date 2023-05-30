@@ -5,27 +5,38 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class BaseConnection implements Connection {
 
     /**
      * Уровень напряжения точки присоединения
      */
     protected VoltageLevel voltageLevel;
-    /**
-     * Число присоединений
-     */
-    protected int connections;
+
     /**
      * Ограничение на максимальное количество присоединений
      */
     protected int limit;
 
-    public boolean addConnection() {
-        if (connections < limit) {
-            connections++;
+    protected Set<String> connectedUuids = new HashSet<>();
+
+    public BaseConnection(VoltageLevel voltageLevel, int limit) {
+        this.voltageLevel = voltageLevel;
+        this.limit = limit;
+    }
+
+    @Override
+    public int getConnections() {
+        return connectedUuids.size();
+    }
+
+    public boolean addConnection(String uuid) {
+        if (getConnections() < limit && !connectedUuids.contains(uuid)) {
+            connectedUuids.add(uuid);
             return true;
         }
         return false;

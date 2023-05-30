@@ -63,9 +63,9 @@ public class FxThreeSubStation extends FxAbstractPowerNode {
         circle3.setStrokeWidth(size * 8 / 300);
         circle3.setTranslateY(radius-offset);
 
-        connections.put(level1, new ConnectionPoint(-offset - radius, -offset, level1, 0, 2));
-        connections.put(level2, new ConnectionPoint(offset + radius, -offset, level2, 0, 2));
-        connections.put(level3, new ConnectionPoint(0, radius+offset, level3, 0, 2));
+        connections.put(level1, new ConnectionPoint(-offset - radius, -offset, level1, 100));
+        connections.put(level2, new ConnectionPoint(offset + radius, -offset, level2, 100));
+        connections.put(level3, new ConnectionPoint(0, radius+offset, level3, 100));
 
         Bounds bounds1 = circle1.localToScreen(circle1.getLayoutBounds());
 

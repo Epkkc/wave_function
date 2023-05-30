@@ -31,16 +31,16 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
     protected final boolean roundedArea;
 
     @Override
-    public void setTransformerStatusToArea(PNODE powerNode, TransformerConfiguration... configurations) {
-        int maxLevel = Arrays.stream(configurations)
+    public void setTransformerStatusToArea(PNODE powerNode, List<TransformerConfiguration> transformerConfigurations) {
+        int maxLevel = transformerConfigurations.stream()
             .map(TransformerConfiguration::getLevel)
             .map(VoltageLevel::getVoltageLevel)
             .reduce(Integer::max)
             .orElseThrow(
-                () -> new UnsupportedOperationException(String.format("Unable to find max voltage level among transformer configurations=%s", Arrays.stream(configurations).toList()))
+                () -> new UnsupportedOperationException(String.format("Unable to find max voltage level among transformer configurations=%s", transformerConfigurations))
             );
 
-        for (TransformerConfiguration configuration : configurations) {
+        for (TransformerConfiguration configuration : transformerConfigurations) {
             // Установка blocking статусов
             addStatusAreaTo(
                 powerNode.getX(), powerNode.getY(),

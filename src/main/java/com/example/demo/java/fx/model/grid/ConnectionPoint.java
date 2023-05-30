@@ -21,8 +21,8 @@ public class ConnectionPoint extends BaseConnection {
      */
     protected double y;
 
-    public ConnectionPoint(double x, double y, VoltageLevel voltageLevel, int connections, int limit) {
-        super(voltageLevel, connections, limit);
+    public ConnectionPoint(double x, double y, VoltageLevel voltageLevel, int limit) {
+        super(voltageLevel, limit);
         this.x = x;
         this.y = y;
     }
