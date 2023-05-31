@@ -1,5 +1,6 @@
 package com.example.demo.java.fx.model.power;
 
+import com.example.demo.base.model.power.LevelChainNumberDto;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
@@ -25,14 +26,25 @@ public class FxTwoSubStation extends FxAbstractPowerNode {
     private VoltageLevel level1;
     private VoltageLevel level2;
 
-    public FxTwoSubStation(int x, int y, int power, int chainLinkOrder, VoltageLevel level1, VoltageLevel level2, double size) {
-        super(PowerNodeType.SUBSTATION, x, y, power, chainLinkOrder, List.of(level1, level2), size);
-        this.level1 = level1;
-        this.level2 = level2;
-        fillBasePane();
+    public FxTwoSubStation(int x, int y, int power, List<LevelChainNumberDto> levelChainNumberDtos, double size) {
+        super(PowerNodeType.SUBSTATION, x, y, power, levelChainNumberDtos, size);
+        if (levelChainNumberDtos.size() != 2) {
+            throw new UnsupportedOperationException("Creation two windings substation with LevelChainNumberDto size != 2 : " + levelChainNumberDtos);
+        }
+        this.level1 = levelChainNumberDtos.get(0).getVoltageLevel();
+        this.level2 = levelChainNumberDtos.get(1).getVoltageLevel();
+        fillBasePane(levelChainNumberDtos);
     }
 
-    protected void fillBasePane() {
+    protected void fillBasePane(List<LevelChainNumberDto> levelChainNumberDtos) {
+        LevelChainNumberDto dto1 = levelChainNumberDtos.stream()
+            .filter(node -> node.getVoltageLevel().equals(level1))
+            .findFirst()
+            .orElseThrow(() -> new UnsupportedOperationException("There is no levelChainNumberDto with voltage level " + level1));
+        LevelChainNumberDto dto2 = levelChainNumberDtos.stream()
+            .filter(node -> node.getVoltageLevel().equals(level2))
+            .findFirst()
+            .orElseThrow(() -> new UnsupportedOperationException("There is no levelChainNumberDto with voltage level " + level2));
 
         double radius = size * 7 / 30;
         double offset = radius / 2;
@@ -51,9 +63,9 @@ public class FxTwoSubStation extends FxAbstractPowerNode {
         circle2.setStrokeWidth(size * 8 / 300);
         circle2.setTranslateX(offset);
 
-        connections.put(level1, new ConnectionPoint(-offset - radius, 0, level1, 100));
+        connections.put(level1, new ConnectionPoint(-offset - radius, 0, level1, 100, dto1.getChainLinkNumber()));
 
-        connections.put(level2, new ConnectionPoint(offset + radius, 0, level2, 100));
+        connections.put(level2, new ConnectionPoint(offset + radius, 0, level2, 100, dto2.getChainLinkNumber()));
 
         Bounds bounds1 = circle1.localToScreen(circle1.getLayoutBounds());
 
@@ -87,7 +99,7 @@ public class FxTwoSubStation extends FxAbstractPowerNode {
                 double x = bnds.getMinX() - (stickyNotesPane.getWidth() / 2) + (circle.getRadius());
                 double y = bnds.getMinY() - stickyNotesPane.getHeight();
                 setHoverOpacity(voltageLevel);
-                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power), String.format("Номер звена: %s", chainLinkOrder)));
+                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power), String.format("Номер звена: %s", connections.get(voltageLevel).getChainLinkOrder())));
                 popup.show(circle, x, y);
             } else {
                 setDefaultOpacity(voltageLevel);

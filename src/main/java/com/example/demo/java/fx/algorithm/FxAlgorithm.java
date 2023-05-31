@@ -11,6 +11,7 @@ import com.example.demo.base.service.element.ElementService;
 import com.example.demo.base.service.status.StatusService;
 import com.example.demo.export.service.ExportService;
 import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
+import com.example.demo.java.fx.model.power.FxBaseNode;
 import com.example.demo.java.fx.model.power.FxPowerLine;
 import com.example.demo.java.fx.service.FxConfiguration;
 import com.example.demo.thread.StoppableThread;
@@ -24,6 +25,11 @@ public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerL
                        List<LoadConfiguration> loadConfigurations, List<GeneratorConfiguration> generatorConfigurations, PowerNodeFactory<FxAbstractPowerNode> nodeFactory,
                        ExportService<FxAbstractPowerNode, FxPowerLine> exportService, boolean randomFirst) {
         super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations, nodeFactory, exportService, randomFirst);
+    }
+
+    @Override
+    protected FxAbstractPowerNode getBaseNode(int x, int y) {
+        return new FxBaseNode(x, y, configurationService.getBaseSize());
     }
 
     @Override

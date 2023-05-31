@@ -55,9 +55,9 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
             // Устанавливаем SHOULD_TRANSFORMER статусы только если powerNode.chainLinkOrder < configuration.maxChainLength
             // (Если = то у следующих элементов уже будет +1, что превысит лимит maxChainLength)
             // Высшему классу напряжения присваиваем номер цепочки в ноде + 1, остальным (низким) присваиваем номер цепочки = 1
-            if (powerNode.getChainLinkOrder() < configuration.getMaxChainLength()) {
-//                int chainLinkOrder = configuration.getLevel().getVoltageLevel() == maxLevel ? powerNode.getChainLinkOrder() + 1 : 1;
-                int chainLinkOrder = powerNode.getChainLinkOrder() + 1;
+            if (getChainLinkOrder(powerNode, configuration.getLevel()) < configuration.getMaxChainLength()) {
+//                int chainLinkOrder = configuration.getLevel().getVoltageLevel() == maxLevel ? powerNode.getChainLinkOrder() + 1 : 1; // todo скорее всего удалить вместо с maxLevel
+                int chainLinkOrder = getChainLinkOrder(powerNode, configuration.getLevel()) + 1;
 
                 addRingStatusArea(powerNode.getX(), powerNode.getY(),
                     configuration.getBoundingAreaFrom(),
@@ -103,14 +103,14 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
         );
 
         // Установка should статусов
-        if (powerNode.getChainLinkOrder() < configuration.getMaxChainLength()) {
+        if (getChainLinkOrder(powerNode, configuration.getLevel()) < configuration.getMaxChainLength()) {
             addRingStatusArea(
                 powerNode.getX(), powerNode.getY(),
                 configuration.getBoundingAreaFrom(),
                 configuration.getBoundingAreaTo(),
                 powerNode.getNodeType().getShouldStatus(),
                 configuration.getLevel(),
-                true, powerNode.getChainLinkOrder() + 1,
+                true, getChainLinkOrder(powerNode, configuration.getLevel()) + 1,
                 powerNode.getUuid()
             );
         }
@@ -133,6 +133,23 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
         addBaseBlockingStatus(powerNode.getX(), powerNode.getY(), powerNode.getUuid());
     }
 
+    @Override
+    public void removeStatusesByNodeUuid(String uuid) {
+        matrix.toNodeList().forEach(
+            node -> {
+                node.getStatuses().forEach(status -> status.getVoltageLevelChainLinkHashMap().forEach(
+                        (voltageLevel, meta) -> {
+                            if (meta.getNodeUuid().equals(uuid)) {
+                                // Этот статус был порождён нодой uuid
+                                status.getVoltageLevelChainLinkHashMap().remove(voltageLevel);
+                            }
+                        }
+                    )
+                );
+                node.getStatuses().removeIf(status -> status.getVoltageLevels().isEmpty());
+            }
+        );
+    }
 
     private void addRingStatusArea(int x, int y, int boundingAreaFrom, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder,
                                    String nodeUuid, Integer availablePower) {
@@ -163,7 +180,8 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
     }
 
     // todo доработать этот метод, используя StatusDto
-    private void addStatusAreaTo(int x, int y, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder, String nodeUuid, Integer availablePower) {
+    private void addStatusAreaTo(int x, int y, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder, String nodeUuid,
+                                 Integer availablePower) {
         matrix.getArea(x, y, boundingAreaTo).stream()
             .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
             .forEach(node -> {
@@ -181,7 +199,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
         addStatusAreaTo(x, y, boundingAreaTo, statusType, voltageLevel, rounded, chainLinkOrder, nodeUuid, null);
     }
 
-        private void addBaseBlockingStatus(int x, int y, String nodeUuid) {
+    private void addBaseBlockingStatus(int x, int y, String nodeUuid) {
         matrix.getArea(x, y).forEach(node -> PowerNodeType.getValidValues().forEach(
             pnt -> {
                 List<StatusMetaDto> res = new ArrayList<>();
@@ -191,6 +209,10 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                 node.addStatus(pnt.getBlockingStatus(), res);
             })
         );
+    }
+
+    private int getChainLinkOrder(PNODE node, VoltageLevel voltageLevel) {
+        return node.getConnections().get(voltageLevel).getChainLinkOrder();
     }
 
 }

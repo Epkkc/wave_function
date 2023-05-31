@@ -18,6 +18,8 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class FxElementService extends AbstractElementService<FxAbstractPowerNode, FxPowerLine> {
     // TODO Попытаться разобраться как перенести линии на задний план, а ноды на передний
@@ -52,6 +54,17 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
         slowRemovingLine(line);
     }
 
+    @Override
+    public void removeNode(FxAbstractPowerNode node, FxAbstractPowerNode replaceNode) {
+        super.removeNode(node, replaceNode);
+        slowRemovingNode(node, replaceNode);
+    }
+
+    @Override
+    protected void beforeRemovingLines(List<FxPowerLine> linesForRemove) {
+        linesForRemove.forEach(this::slowRemovingLine);
+    }
+
     private void slowRemovingLine(FxPowerLine line) {
         line.getLine().setStroke(Color.BLACK);
         Timeline timeline = new Timeline();
@@ -62,13 +75,35 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
 //        });
 
         timeline.getKeyFrames().add(new KeyFrame(Duration.ZERO, new KeyValue(line.getLine().opacityProperty(), 1.0d)));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(100_000), new KeyValue(line.getLine().opacityProperty(), 0d)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(10_000), new KeyValue(line.getLine().opacityProperty(), 0d)));
         timeline.play();
 
         timeline.setOnFinished(actionEvent -> {
             Platform.runLater(() -> {
                 root.getChildren().remove(line.getLine());
 //                root.getChildren().remove(removingText);
+            });
+        });
+    }
+
+    private void slowRemovingNode(FxAbstractPowerNode node, FxAbstractPowerNode replaceNode) {
+        node. // todo сделать общий метод в FxAbstractPowerNode для изменения цвета всех элементов, а также для получения opacityProperty всех элементов
+        line.getLine().setStroke(Color.BLACK);
+        Timeline timeline = new Timeline();
+
+//        Text removingText = getRemovingLabel(line);
+//        Platform.runLater(() -> {
+//            root.getChildren().add(removingText);
+//        });
+
+        timeline.getKeyFrames().add(new KeyFrame(Duration.ZERO, new KeyValue(line.getLine().opacityProperty(), 1.0d)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(10_000), new KeyValue(line.getLine().opacityProperty(), 0d)));
+        timeline.play();
+
+        timeline.setOnFinished(actionEvent -> {
+            Platform.runLater(() -> {
+                root.getChildren().remove(node.getStackPane());
+                gridPane.add(replaceNode.getStackPane(), replaceNode.getY(), replaceNode.getX());
             });
         });
     }

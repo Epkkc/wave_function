@@ -41,7 +41,6 @@ public class FxAlgorithmService {
 
     private final int rows;
     private final int columns;
-    private final int delays;
     private final int numberOfNodes;
     private final int numberOfEdges;
 
@@ -123,21 +122,23 @@ public class FxAlgorithmService {
             .level(LEVEL_10)
             .minLoad(10)
             .maxLoad(20)
-            .boundingAreaFrom(2)
+            .boundingAreaFrom(1)
             .boundingAreaTo(3)
-            .maxLineLength(4)
-            .maxChainLength(4)
+            .maxLineLength(3)
+            .maxChainLength(5)
             .enabled(true)
+            .generationRate(100)
             .build());
         loadConfigurations.add(LoadConfiguration.builder()
             .level(LEVEL_35)
             .minLoad(40)
             .maxLoad(70)
-            .boundingAreaFrom(3)
-            .boundingAreaTo(5)
-            .maxLineLength(5)
+            .boundingAreaFrom(2)
+            .boundingAreaTo(3)
+            .maxLineLength(3)
             .maxChainLength(1)
             .enabled(true)
+            .generationRate(40)
             .build());
 
         List<GeneratorConfiguration> generatorConfigurations = new ArrayList<>();

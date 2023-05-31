@@ -14,5 +14,6 @@ public interface StatusService<PNODE extends AbstractPowerNode<? extends BaseSta
     void setTransformerStatusToArea(PNODE powerNode, List<TransformerConfiguration> transformerConfigurations);
     void setLoadStatusToArea(PNODE powerNode, LoadConfiguration loadCfg);
     void setGeneratorStatusToArea(PNODE powerNode, GeneratorConfiguration genCfg);
+    void removeStatusesByNodeUuid(String uuid);
 
 }

@@ -73,8 +73,8 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
         LINE baseLine = getLine(node1, node2, voltageLevel, getBreakerProperty(node1, node2)); //todo добавить логику breaker-а
 
         elementService.getLines().add(baseLine);
-        node1.getConnections().get(voltageLevel).addConnection(node2.getUuid());
-        node2.getConnections().get(voltageLevel).addConnection(node1.getUuid());
+        node1.getConnections().get(voltageLevel).addConnection(node2.getUuid(), baseLine.getUuid());
+        node2.getConnections().get(voltageLevel).addConnection(node1.getUuid(), baseLine.getUuid());
     }
 
     @Override
@@ -82,8 +82,8 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
         LINE baseLine = getLine(node1, node2, voltageLevel, breaker);
         // TODO ДОБАВИТЬ ПРОВЕРКУ НА НЕПРЕВЫШЕНИЕ ЛИМИТА, СЕЙЧАС ЛИНИЯ ОТРИСОВЫВАЕТСЯ, НО НЕ ПОПАДАЕТ В CONNECTED_UUIDs
         elementService.getLines().add(baseLine);
-        node1.getConnections().get(voltageLevel).addConnection(node2.getUuid());
-        node2.getConnections().get(voltageLevel).addConnection(node1.getUuid());
+        node1.getConnections().get(voltageLevel).addConnection(node2.getUuid(), baseLine.getUuid());
+        node2.getConnections().get(voltageLevel).addConnection(node1.getUuid(), baseLine.getUuid());
     }
 
     protected boolean getBreakerProperty(PNODE node1, PNODE node2) {

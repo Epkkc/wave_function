@@ -12,6 +12,7 @@ import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.BaseConnection;
+import com.example.demo.base.model.power.LevelChainNumberDto;
 import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.model.status.BlockType;
 import com.example.demo.base.model.status.StatusMetaDto;
@@ -66,7 +67,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         // todo могут оставаться ни с чем не соединённые обмотки ТР-ов 35кВ, можно к ним прикреплять какую-нибудь нагрузку, типа предприятия
 
         // Расстановка нагрузок и генераторов
-        fillLoadsRefactoring();
+        fillLoadsAndGenerators();
 
         String generatedFileName = exportService.saveAsFile();
 
@@ -125,12 +126,24 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         // Соединяем несоединённые обмотки трансформаторов с новыми нагрузками
         List<PNODE> unconnectedNodes = getUnconnectedNodes();
         for (PNODE unconnectedNode : unconnectedNodes) {
-            Optional<PNODE> excessLoad = getExcessLoad();
-            if (excessLoad.isPresent()) {
-                // todo удалить lessLoad вместе с линиями, которые к ней присоединены, также удалить статусы, которые она породила
-                // Создать новую нагрузку и соединить её с unconnected трансформатором
+            Optional<PNODE> excessLoadO = getExcessLoad();
+            if (excessLoadO.isPresent()) {
+                PNODE excessLoad = excessLoadO.get();
+
+                elementService.removeNode(excessLoad, getBaseNode(excessLoad.getX(), excessLoad.getY())); // Удаление excessLoad ноды и линий с ней связанных
+                statusService.removeStatusesByNodeUuid(excessLoad.getUuid()); // Удаление статусов, порождённых excessLoad
+
+                // todo Создать новую нагрузку и соединить её с unconnected трансформатором
+                // Обновляем статусы вокруг unconnectedNode
+                statusService.setTransformerStatusToArea(unconnectedNode,
+                    transformerConfigurations.stream().filter(cfg -> unconnectedNode.getVoltageLevels().contains(cfg.getLevel())).collect(
+                        Collectors.toList()));
+
+                // todo Найти SHOULD_LOAD статус, порождённый unconnectedNode и создать для него load, далее обычный fillLoad()
+
             } else {
                 // На схеме нет лишних нод, это означает, что мы не можем сделать схему валидной
+                System.out.println("There is no excess loads");
                 break;
             }
         }
@@ -155,6 +168,8 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         printSchemeMetaInformation("After finalizing");
     }
 
+    protected abstract PNODE getBaseNode(int x, int y);
+
     protected Optional<LINE> getExcessLine() {
         // Линия является лишней, если она соединяет две ноды, которые имеют минимум два соединения в этом connection-е
         return elementService.getLines().stream()
@@ -177,7 +192,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         // Линия соединяет две подстанции
         if (PowerNodeType.SUBSTATION.equals(point1.getNodeType()) && PowerNodeType.SUBSTATION.equals(point2.getNodeType())) {
             return substationsHaveEqualChainLinkOrder(line) || (
-                    pointConnectedWithAnotherSubstationWithLessChainLinkOrder(point1, line) &&
+                pointConnectedWithAnotherSubstationWithLessChainLinkOrder(point1, line) &&
                     pointConnectedWithAnotherSubstationWithLessChainLinkOrder(point2, line)
             );
         }
@@ -185,7 +200,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     }
 
     private boolean substationsHaveEqualChainLinkOrder(LINE line) {
-        return line.getPoint1().getChainLinkOrder() == line.getPoint2().getChainLinkOrder();
+        return getChainLinkOrder(line.getPoint1(), line.getVoltageLevel()) == getChainLinkOrder(line.getPoint2(), line.getVoltageLevel());
     }
 
     protected boolean pointConnectedWithAnotherSubstationWithLessChainLinkOrder(PNODE point, LINE line) {
@@ -201,12 +216,19 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
         for (String connectedNodeUuid : extraNodeUuids) {
             PNODE connectedNode = elementService.getNodeByUuid(connectedNodeUuid);
-            if (PowerNodeType.SUBSTATION.equals(connectedNode.getNodeType()) && connectedNode.getChainLinkOrder() < point.getChainLinkOrder()) {
+            if (PowerNodeType.SUBSTATION.equals(connectedNode.getNodeType()) &&
+                getChainLinkOrder(connectedNode, line.getVoltageLevel()) < getChainLinkOrder(point, line.getVoltageLevel())
+            ) {
                 connectedWithAnotherSubstation = true;
                 break;
             }
         }
         return connectedWithAnotherSubstation;
+    }
+
+
+    private int getChainLinkOrder(PNODE node, VoltageLevel voltageLevel) {
+        return node.getConnections().get(voltageLevel).getChainLinkOrder();
     }
 
     protected PNODE getSecondPoint(LINE line, PNODE firstPoint) {
@@ -222,13 +244,15 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     }
 
     protected Optional<PNODE> getExcessLoad() {
+        // Сортируем по chainLinkOrder DESC и по общему количеству присоединений ASC
         List<PNODE> nodes = matrix.toNodeList().stream()
             .filter(node -> PowerNodeType.LOAD.equals(node.getNodeType()))
-            .sorted(Comparator.comparing(PNODE::getChainLinkOrder, Comparator.reverseOrder()))
+            .sorted(Comparator.<PNODE, Integer>comparing(node -> getChainLinkOrder(node, node.getVoltageLevels().get(0)), Comparator.reverseOrder())
+                .thenComparingInt(node -> node.getConnections().values().size()))
             .toList();
 
         for (PNODE node : nodes) {
-            if (node.getChainLinkOrder() > 1) {
+            if (getChainLinkOrder(node, node.getVoltageLevels().get(0)) > 1) {
                 return Optional.of(node);
             } else {
                 // Необходимо убедиться, что выбранная нода является не единственным присоединением трансформатора (среди нагрузок и генераторов)
@@ -377,8 +401,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                     powerNode.getX(),
                     powerNode.getY(),
                     currentConfiguration.getTransformerPowerSet().get(0), // todo настроить выбор мощности
-                    first ? 1 : getShouldStatus(powerNode, currentConfiguration.getLevel(), PowerNodeType.SUBSTATION).getChainLinkOrder(),
-                    voltageLevels);
+                    getLevelChainNumberDto(powerNode, currentConfiguration, voltageLevels, first));
                 fillTransformerToGrid(resultNode, nodeTransformerConfigurations);
 
                 System.out.println(resultNode);
@@ -400,6 +423,21 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         }
     }
 
+    private List<LevelChainNumberDto> getLevelChainNumberDto(PNODE node, TransformerConfiguration configuration, List<VoltageLevel> voltageLevels, boolean first) {
+        List<LevelChainNumberDto> result = new ArrayList<>();
+        for (VoltageLevel voltageLevel : voltageLevels) {
+            int chainLinkOrder;
+            if (configuration.getLevel().equals(voltageLevel)) {
+                chainLinkOrder = first ? 1 : getShouldStatus(node, voltageLevel, PowerNodeType.SUBSTATION).getChainLinkOrder();
+            } else {
+                chainLinkOrder = 1;
+            }
+            result.add(new LevelChainNumberDto(voltageLevel, chainLinkOrder));
+        }
+
+        return result;
+    }
+
     protected List<VoltageLevel> getSubstationVoltageLevels(TransformerConfiguration configuration, boolean firstInCfg, int iter) {
         // Определяем будет ли трансформатор трёхобмоточным
         boolean three = configuration.getLevel().isThreeWindings() && random.nextBoolean();
@@ -413,7 +451,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         }
     }
 
-    protected void fillLoadsRefactoring() {
+    protected void fillLoadsAndGenerators() {
         List<PNODE> nodes = matrix.getAll(
             node -> node.getStatuses().stream()
                 .anyMatch(status -> status.getType().getBlockType().equals(BlockType.SHOULD)
@@ -425,6 +463,11 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
             for (LoadConfiguration loadConfiguration : loadConfigurations) {
                 // todo Будущая доработка: нужна проверка, что есть хотя бы одна enable конфигурация
                 if (!loadConfiguration.isEnabled()) {
+                    continue;
+                }
+
+                int rate = loadConfiguration.getGenerationRate() - random.nextInt(100);
+                if (rate < 0) {
                     continue;
                 }
 
@@ -452,7 +495,8 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
                 resultNode = nodeFactory.createNode(
                     PowerNodeType.LOAD, resultNode.getX(), resultNode.getY(),
-                    resPower, shouldStatus.getChainLinkOrder(), List.of(loadConfiguration.getLevel())
+                    resPower,
+                    List.of(new LevelChainNumberDto(loadConfiguration.getLevel(), shouldStatus.getChainLinkOrder()))
                 );
 
                 checkGeneratorNeed();
@@ -556,7 +600,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         // Расчёт мощности генератора
         int generatorPower = getGeneratorPower(configuration);
 
-        resultNode = nodeFactory.createNode(PowerNodeType.GENERATOR, resultNode.getX(), resultNode.getY(), generatorPower, 1, List.of(configuration.getLevel()));
+        resultNode = nodeFactory.createNode(PowerNodeType.GENERATOR, resultNode.getX(), resultNode.getY(), generatorPower, List.of(new LevelChainNumberDto(configuration.getLevel(), 1)));
         fillGeneratorToGrid(resultNode, transformer, configuration);
         afterGeneratorSet(configuration);
     }
@@ -573,62 +617,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 //            break;
 //        }
         return resPower;
-    }
-
-    protected void fillGenerators() {
-        int totalLoad = (int) (elementService.getSumLoad() * 1.1);
-        int totalGeneration = 0;
-
-        for (GeneratorConfiguration generatorConfiguration : generatorConfigurations) {
-
-            VoltageLevel currentLevel = generatorConfiguration.getLevel();
-
-            //TODO  Нужно получить все трансформаторы, имеющие обмотки с currentLevel и отсортировать их по
-            // количеству присоединений в возрастающем порядке
-            List<PNODE> transformers = matrix.getAll(
-                    node -> PowerNodeType.SUBSTATION.equals(node.getNodeType())
-                        && node.getConnections().containsKey(currentLevel)
-                ).stream()
-                .sorted(Comparator.comparingInt(node -> node.getConnections().get(currentLevel).getConnections()))
-                .toList();
-
-            for (PNODE transformer : transformers) {
-                // Здесь area квадратная !!! Потому что мы делаем не через SHOULD статусы
-                List<PNODE> area = matrix.getArea(transformer.getX(), transformer.getY(), generatorConfiguration.getTransformerArea()).stream()
-                    .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
-                    .filter(node -> node.getStatuses().stream()
-                        .noneMatch(status -> StatusType.BLOCK_GENERATOR.equals(status.getType())
-                            && status.getVoltageLevels().contains(generatorConfiguration.getLevel())))
-                    .collect(Collectors.toList());
-
-                if (area.isEmpty()) continue;
-
-                // Нода для размещения нагрузки
-                PNODE resultNode = RandomUtils.randomValue(area);
-
-                if (resultNode == null) {
-                    throw new UnsupportedOperationException("PowerNode is null");
-                }
-
-                // Расчёт мощности генератора
-                // TODO можно сделать как случайный выбор из набора мощностей
-                int randomPower = random.nextInt(generatorConfiguration.getMaxPower() - generatorConfiguration.getMinPower()) + generatorConfiguration.getMinPower();
-                int resPower;
-                if ((totalLoad - totalGeneration) > randomPower) {
-                    resPower = randomPower;
-                } else if ((totalLoad - totalGeneration) > generatorConfiguration.getMinPower()) {
-                    resPower = random.nextInt(totalLoad - totalGeneration - generatorConfiguration.getMinPower()) + generatorConfiguration.getMinPower();
-                } else {
-                    break;
-                }
-
-                resultNode = nodeFactory.createNode(PowerNodeType.GENERATOR, resultNode.getX(), resultNode.getY(), resPower, 1, List.of(currentLevel));
-                fillGeneratorToGrid(resultNode, transformer, generatorConfiguration);
-                totalGeneration += resPower;
-
-                afterGeneratorSet(generatorConfiguration);
-            }
-        }
     }
 
     protected StatusMetaDto getShouldStatus(PNODE powerNode, VoltageLevel voltageLevel, PowerNodeType powerNodeType) {

@@ -21,8 +21,8 @@ public class FxMain extends Application {
 
     static int rows = 16;
     static int columns = 30;
-    static int numberOfNodes = 50;
-    static int numberOfEdges = 50;
+    static int numberOfNodes = 60;
+    static int numberOfEdges = 59;
 
     public static void main(String[] args) {
         launch();
@@ -32,7 +32,7 @@ public class FxMain extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        FxAlgorithmService algorithmService = new FxAlgorithmService(rows, columns, 2000, numberOfNodes, numberOfEdges);
+        FxAlgorithmService algorithmService = new FxAlgorithmService(rows, columns, numberOfNodes, numberOfEdges);
 
         Group sceneRoot = new Group();
 

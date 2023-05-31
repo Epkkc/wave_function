@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-public class BaseConnection implements Connection {
+public class BaseConnection {
 
     /**
      * Уровень напряжения точки присоединения
@@ -28,28 +28,31 @@ public class BaseConnection implements Connection {
     protected int limit;
 
     protected Set<String> connectedUuids = new HashSet<>();
+    protected Set<String> lineUuids = new HashSet<>();
 
-    public BaseConnection(VoltageLevel voltageLevel, int limit) {
+    public BaseConnection(VoltageLevel voltageLevel, int limit, int chainLinkOrder) {
         this.voltageLevel = voltageLevel;
         this.limit = limit;
+        this.chainLinkOrder = chainLinkOrder;
     }
 
-    @Override
     public int getConnections() {
         return connectedUuids.size();
     }
 
-    public boolean addConnection(String uuid) {
-        if (getConnections() < limit && !connectedUuids.contains(uuid)) {
-            connectedUuids.add(uuid);
+    public boolean addConnection(String nodeUuid, String lineUuid) {
+        if (getConnections() < limit && !connectedUuids.contains(nodeUuid)) {
+            connectedUuids.add(nodeUuid);
+            lineUuids.add(lineUuid);
             return true;
         }
         return false;
     }
 
-    public boolean removeConnection(String uuid) {
-        if (connectedUuids.contains(uuid)) {
-            connectedUuids.remove(uuid);
+    public boolean removeConnection(String nodeUuid, String lineUuid) {
+        if (connectedUuids.contains(nodeUuid)) {
+            connectedUuids.remove(nodeUuid);
+            lineUuids.remove(lineUuid);
             return true;
         }
         return false;

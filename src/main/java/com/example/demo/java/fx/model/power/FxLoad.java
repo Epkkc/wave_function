@@ -1,8 +1,9 @@
 package com.example.demo.java.fx.model.power;
 
-import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
+import com.example.demo.base.model.power.LevelChainNumberDto;
+import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -25,13 +26,16 @@ public class FxLoad extends FxAbstractPowerNode {
     @JsonIgnore
     private List<Shape> shapes = new ArrayList<>();
 
-    public FxLoad(int x, int y, int power, int chainLinkOrder, VoltageLevel voltageLevel, double size) {
-        super(PowerNodeType.LOAD, x, y, power, chainLinkOrder,List.of(voltageLevel), size);
-        this.voltageLevel = voltageLevel;
-        fillBasePane1();
+    public FxLoad(int x, int y, int power, List<LevelChainNumberDto> levelChainNumberDtos, double size) {
+        super(PowerNodeType.LOAD, x, y, power, levelChainNumberDtos, size);
+        if (levelChainNumberDtos.size() != 1) {
+            throw new UnsupportedOperationException("Creation load with LevelChainNumberDto size != 1 : " + levelChainNumberDtos);
+        }
+        this.voltageLevel = levelChainNumberDtos.get(0).getVoltageLevel();
+        fillBasePane(levelChainNumberDtos.get(0));
     }
 
-    protected void fillBasePane1() {
+    protected void fillBasePane(LevelChainNumberDto dto) {
         double length = size / 5;
         double width = size / 50;
 
@@ -71,9 +75,9 @@ public class FxLoad extends FxAbstractPowerNode {
         shapes.add(rightLine);
         shapes.add(leftLine);
 
-        addHoverListener();
+        connections.put(dto.getVoltageLevel(), new ConnectionPoint(0, -length, dto.getVoltageLevel(), 100, dto.getChainLinkNumber()));
 
-        connections.put(voltageLevel, new ConnectionPoint(0, -length, voltageLevel, 100));
+        addHoverListener();
     }
 
     @Override
@@ -85,7 +89,8 @@ public class FxLoad extends FxAbstractPowerNode {
         Text text = new Text();
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFont(Font.getDefault());
-        text.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power), String.format("Номер звена: %s", chainLinkOrder)));
+        text.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power),
+            String.format("Номер звена: %s", connections.get(voltageLevel).getChainLinkOrder())));
 
         StackPane stickyNotesPane = new StackPane();
         stickyNotesPane.setPadding(new Insets(2));

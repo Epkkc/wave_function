@@ -2,13 +2,14 @@ package com.example.demo.deserealisation;
 
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
+import com.example.demo.base.model.power.LevelChainNumberDto;
 import com.example.demo.deserealisation.service.DeserializationService;
 import com.example.demo.export.dto.PowerLineDto;
 import com.example.demo.export.dto.PowerNodeDto;
 import com.example.demo.export.dto.SaveDto;
 import com.example.demo.java.fx.factories.FxPowerNodeAbstractFactory;
-import com.example.demo.java.fx.model.power.FxBaseNode;
 import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
+import com.example.demo.java.fx.model.power.FxBaseNode;
 import com.example.demo.java.fx.service.FxConfiguration;
 import com.example.demo.java.fx.service.FxConnectionService;
 import com.example.demo.java.fx.service.FxElementService;
@@ -27,6 +28,7 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class DeserializeMain extends Application {
 
@@ -67,7 +69,9 @@ public class DeserializeMain extends Application {
                 continue;
             }
 
-            FxAbstractPowerNode node = fabric.createNode(nodeDto.getNodeType(), nodeDto.getX(), nodeDto.getY(), nodeDto.getPower(), 0, nodeDto.getVoltageLevels());
+            FxAbstractPowerNode node = fabric.createNode(nodeDto.getNodeType(), nodeDto.getX(), nodeDto.getY(), nodeDto.getPower(),
+                nodeDto.getVoltageLevels().stream().map(level -> new LevelChainNumberDto(level, 0)).collect(
+                    Collectors.toList()));
             node.setUuid(nodeDto.getUuid());
 
             elementService.addPowerNodeToGrid(node);

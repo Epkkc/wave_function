@@ -1,10 +1,13 @@
 package com.example.demo.java.fx.factories;
 
+import com.example.demo.base.model.power.LevelChainNumberDto;
 import com.example.demo.java.fx.model.power.FxGenerator;
 import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.java.fx.service.FxElementService;
+
+import java.util.List;
 
 public class FxGeneratorFactory extends FxPowerNodeFactory {
 
@@ -18,9 +21,9 @@ public class FxGeneratorFactory extends FxPowerNodeFactory {
     }
 
     @Override
-    public FxAbstractPowerNode createNode(int x, int y, int power, int chainLinkOrder, VoltageLevel... voltageLevels) {
-        assert voltageLevels.length == 1;
-        return new FxGenerator(x, y, power, chainLinkOrder, voltageLevels[0], elementsService.getBaseSize());
+    public FxAbstractPowerNode createNode(int x, int y, int power, List<LevelChainNumberDto> levelChainNumberDtos) {
+        assert levelChainNumberDtos.size() == 1;
+        return new FxGenerator(x, y, power, levelChainNumberDtos, elementsService.getBaseSize());
     }
 
 }

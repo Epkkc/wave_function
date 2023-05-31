@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @RequiredArgsConstructor
@@ -30,12 +32,12 @@ public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? e
         matrix.add(node);
         uuidToNodeMap.merge(node.getUuid(), node, (n1, n2) -> {
             throw new UnsupportedOperationException(String.format("There is two nodes with equal uuid\nnode1=%s\nnoe2=%s", n1, n2));
-        } );
+        });
         if (PowerNodeType.LOAD.equals(node.getNodeType())) {
-            sumLoad+=node.getPower();
+            sumLoad += node.getPower();
         }
         if (PowerNodeType.GENERATOR.equals(node.getNodeType())) {
-            sumPower +=node.getPower();
+            sumPower += node.getPower();
         }
     }
 
@@ -49,11 +51,30 @@ public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? e
         PNODE point1 = line.getPoint1();
         PNODE point2 = line.getPoint2();
 
-        point1.getConnections().get(line.getVoltageLevel()).removeConnection(point2.getUuid());
-        point2.getConnections().get(line.getVoltageLevel()).removeConnection(point1.getUuid());
+        point1.getConnections().get(line.getVoltageLevel()).removeConnection(point2.getUuid(), line.getUuid());
+        point2.getConnections().get(line.getVoltageLevel()).removeConnection(point1.getUuid(), line.getUuid());
 
         lines.remove(line);
     }
+
+    @Override
+    public void removeNode(PNODE node, PNODE replaceNode) {
+        matrix.remove(node.getX(), node.getY());
+        matrix.add(replaceNode);
+
+        List<LINE> linesForRemove = node.getConnections().values().stream()
+            .map(BaseConnection::getLineUuids)
+            .flatMap(Set::stream)
+            .map(this::getLine)
+            .map(opt -> opt.orElseThrow(() -> new UnsupportedOperationException("Unable to find one of lines for node : " + node)))
+            .toList();
+
+        beforeRemovingLines(linesForRemove);
+
+        linesForRemove.forEach(this::removeLine);
+    }
+
+    protected abstract void beforeRemovingLines(List<LINE> linesForRemove);
 
     @Override
     public Optional<LINE> getLine(String uuid) {

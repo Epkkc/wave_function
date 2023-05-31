@@ -3,11 +3,13 @@ package com.example.demo.java.fx.factories;
 import com.example.demo.base.factories.PowerNodeFactory;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
+import com.example.demo.base.model.power.LevelChainNumberDto;
 import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.java.fx.service.FxElementService;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class FxPowerNodeAbstractFactory implements PowerNodeFactory<FxAbstractPowerNode> {
 
@@ -22,8 +24,8 @@ public class FxPowerNodeAbstractFactory implements PowerNodeFactory<FxAbstractPo
     }
 
     @Override
-    public FxAbstractPowerNode createNode(PowerNodeType type, int x, int y, int power, int chainLinkOrder, Collection<VoltageLevel> voltageLevels) {
-        return factoriesMap.get(type).createNode(x, y, power, chainLinkOrder, voltageLevels.toArray(VoltageLevel[]::new));
+    public FxAbstractPowerNode createNode(PowerNodeType type, int x, int y, int power, List<LevelChainNumberDto> levelChainNumberDtos) {
+        return factoriesMap.get(type).createNode(x, y, power, levelChainNumberDtos);
     }
 
 }

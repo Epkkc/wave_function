@@ -27,25 +27,24 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
     protected int x;
     protected int y;
     protected int power;
-    protected int chainLinkOrder;
+
     protected String uuid = UUID.randomUUID().toString();
     protected List<VoltageLevel> voltageLevels;
     protected List<STATUS> statuses;
     protected Map<VoltageLevel, CONNECTION> connections;
 
-    public AbstractPowerNode(PowerNodeType nodeType, int x, int y, int power, int chainLinkOrder, Collection<VoltageLevel> voltageLevels) {
+    public AbstractPowerNode(PowerNodeType nodeType, int x, int y, int power, List<LevelChainNumberDto> levelChainNumberDtos) {
         this.nodeType = nodeType;
         this.x = x;
         this.y = y;
         this.power = power;
-        this.chainLinkOrder = chainLinkOrder;
-        this.voltageLevels = voltageLevels.stream().toList();
+        this.voltageLevels = levelChainNumberDtos.stream().map(LevelChainNumberDto::getVoltageLevel).toList();
         this.statuses = new ArrayList<>();
         this.connections = new HashMap<>();
-        initConnections();
+        initConnections(levelChainNumberDtos);
     }
 
-    protected abstract void initConnections();
+    protected abstract void initConnections(List<LevelChainNumberDto> levelChainNumberDtos);
 
     public void addStatus(StatusType statusType, Collection<StatusMetaDto> statusDtos) {
         Collection<VoltageLevel> levels = statusDtos.stream().map(StatusMetaDto::getVoltageLevel).toList();

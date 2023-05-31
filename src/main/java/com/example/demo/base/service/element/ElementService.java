@@ -13,6 +13,7 @@ public interface ElementService<PNODE extends AbstractPowerNode<? extends BaseSt
     void addPowerNodeToGrid(PNODE node);
     void addLine(LINE line);
     void removeLine(LINE line);
+    void removeNode(PNODE node, PNODE replaceNode);
     List<LINE> getLines();
     Optional<LINE> getLine(String uuid);
     Matrix<PNODE> getMatrix();

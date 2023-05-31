@@ -7,16 +7,19 @@ import com.example.demo.base.model.status.StatusMetaDto;
 import com.example.demo.base.model.status.StatusType;
 
 import java.util.Collection;
+import java.util.List;
 
 public class BasePowerNode extends AbstractPowerNode<BaseStatus, BaseConnection> {
 
-    public BasePowerNode(PowerNodeType nodeType, int x, int y, int power, int chainLinkOrder, Collection<VoltageLevel> voltageLevels) {
-        super(nodeType, x, y, chainLinkOrder, power, voltageLevels);
+    public BasePowerNode(PowerNodeType nodeType, int x, int y, int power, List<LevelChainNumberDto> levelChainNumberDtos) {
+        super(nodeType, x, y, power, levelChainNumberDtos);
     }
 
     @Override
-    protected void initConnections() {
-        voltageLevels.forEach(level -> connections.put(level, new BaseConnection(level, 100)));
+    protected void initConnections(List<LevelChainNumberDto> levelChainNumberDtos) {
+        for (LevelChainNumberDto dto : levelChainNumberDtos) {
+            connections.put(dto.getVoltageLevel(), new BaseConnection(dto.getVoltageLevel(), 100, dto.getChainLinkNumber()));
+        }
     }
 
     @Override

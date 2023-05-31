@@ -1,8 +1,9 @@
 package com.example.demo.java.fx.model.power;
 
-import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
+import com.example.demo.base.model.power.LevelChainNumberDto;
+import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -27,15 +28,31 @@ public class FxThreeSubStation extends FxAbstractPowerNode {
     private VoltageLevel level3;
 
 
-    public FxThreeSubStation(int x, int y, int power, int chainLinkOrder, VoltageLevel level1, VoltageLevel level2, VoltageLevel level3, double size) {
-        super(PowerNodeType.SUBSTATION, x, y, power, chainLinkOrder, List.of(level1, level2, level3), size);
-        this.level1 = level1;
-        this.level2 = level2;
-        this.level3 = level3;
-        fillBasePane();
+    public FxThreeSubStation(int x, int y, int power, List<LevelChainNumberDto> levelChainNumberDtos, double size) {
+        super(PowerNodeType.SUBSTATION, x, y, power, levelChainNumberDtos, size);
+        if (levelChainNumberDtos.size() != 3) {
+            throw new UnsupportedOperationException("Creation three windings substation with LevelChainNumberDto size != 3 : " + levelChainNumberDtos);
+        }
+        this.level1 = levelChainNumberDtos.get(0).getVoltageLevel();
+        this.level2 = levelChainNumberDtos.get(1).getVoltageLevel();
+        this.level3 = levelChainNumberDtos.get(2).getVoltageLevel();
+        fillBasePane(levelChainNumberDtos);
     }
 
-    protected void fillBasePane() {
+    protected void fillBasePane(List<LevelChainNumberDto> levelChainNumberDtos) {
+        LevelChainNumberDto dto1 = levelChainNumberDtos.stream()
+            .filter(node -> node.getVoltageLevel().equals(level1))
+            .findFirst()
+            .orElseThrow(() -> new UnsupportedOperationException("There is no levelChainNumberDto with voltage level " + level1));
+        LevelChainNumberDto dto2 = levelChainNumberDtos.stream()
+            .filter(node -> node.getVoltageLevel().equals(level2))
+            .findFirst()
+            .orElseThrow(() -> new UnsupportedOperationException("There is no levelChainNumberDto with voltage level " + level2));
+        LevelChainNumberDto dto3 = levelChainNumberDtos.stream()
+            .filter(node -> node.getVoltageLevel().equals(level3))
+            .findFirst()
+            .orElseThrow(() -> new UnsupportedOperationException("There is no levelChainNumberDto with voltage level " + level3));
+
 
         double radius = size * 7 / 30;
         double offset = radius / 2;
@@ -61,11 +78,11 @@ public class FxThreeSubStation extends FxAbstractPowerNode {
         circle3.setFill(Color.TRANSPARENT);
         circle3.setStroke(level3.getColor());
         circle3.setStrokeWidth(size * 8 / 300);
-        circle3.setTranslateY(radius-offset);
+        circle3.setTranslateY(radius - offset);
 
-        connections.put(level1, new ConnectionPoint(-offset - radius, -offset, level1, 100));
-        connections.put(level2, new ConnectionPoint(offset + radius, -offset, level2, 100));
-        connections.put(level3, new ConnectionPoint(0, radius+offset, level3, 100));
+        connections.put(level1, new ConnectionPoint(-offset - radius, -offset, level1, 100, dto1.getChainLinkNumber()));
+        connections.put(level2, new ConnectionPoint(offset + radius, -offset, level2, 100, dto2.getChainLinkNumber()));
+        connections.put(level3, new ConnectionPoint(0, radius + offset, level3, 100, dto3.getChainLinkNumber()));
 
         Bounds bounds1 = circle1.localToScreen(circle1.getLayoutBounds());
 
@@ -102,7 +119,8 @@ public class FxThreeSubStation extends FxAbstractPowerNode {
                 double x = bnds.getMinX() - (stickyNotesPane.getWidth() / 2) + (circle.getRadius());
                 double y = bnds.getMinY() - stickyNotesPane.getHeight();
                 setHoverOpacity(voltageLevel);
-                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power), String.format("Номер звена: %s", chainLinkOrder)));
+                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power),
+                    String.format("Номер звена: %s", connections.get(voltageLevel).getChainLinkOrder())));
                 popup.show(circle, x, y);
             } else {
                 setDefaultOpacity(voltageLevel);

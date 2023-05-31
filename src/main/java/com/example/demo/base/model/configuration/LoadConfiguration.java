@@ -21,7 +21,7 @@ public class LoadConfiguration {
     private int boundingAreaTo;
     private boolean enabled;
     private int maxChainLinks; // Максимальное число звеньев цепи, состоящей из одинаковых элементов
-    private double generationRate; // Шанс генерации ноды
+    private int generationRate; // Шанс генерации ноды от 0 до 100 %
     private double maxLineLength; // Максимальная длина линии, которой будет соединён генератор с трансформатором и другими нагрузками
     private int maxChainLength; // Максимальная длина цепочки нагрузок
 

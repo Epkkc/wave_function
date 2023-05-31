@@ -4,6 +4,7 @@ import com.example.demo.base.factories.PowerNodeFactory;
 import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
+import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.BaseLine;
 import com.example.demo.base.model.power.BasePowerNode;
@@ -26,4 +27,8 @@ public class BaseAlgorithm extends AbstractAlgorithm<BasePowerNode, BaseLine, Ba
         super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations, nodeFactory, exportService, randomFirst);
     }
 
+    @Override
+    protected BasePowerNode getBaseNode(int x, int y) {
+        return new BasePowerNode(PowerNodeType.EMPTY, x, y, 0, List.of());
+    }
 }

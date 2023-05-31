@@ -15,4 +15,5 @@ public class FxPowerLine extends AbstractLine<FxAbstractPowerNode> {
         super(point1, point2, voltageLevel, breaker);
         this.line = line;
     }
+
 }

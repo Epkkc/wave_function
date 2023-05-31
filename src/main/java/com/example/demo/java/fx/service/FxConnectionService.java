@@ -48,7 +48,7 @@ public class FxConnectionService extends AbstractConnectionService<FxAbstractPow
 
         Shape line = !breaker ? createLine(node1, connectionPoint1, node2, connectionPoint2, voltageLevel) : createPath(node1, connectionPoint1, node2, connectionPoint2, voltageLevel);
 
-        FxPowerLine powerLine = new FxPowerLine(node1, node2, voltageLevel, false, line); // todo сделать логику breaker
+        FxPowerLine powerLine = new FxPowerLine(node1, node2, voltageLevel, breaker, line);
         addHoverListener(powerLine);
 
         Platform.runLater(() -> elementService.getRoot().getChildren().add(line));
@@ -58,14 +58,9 @@ public class FxConnectionService extends AbstractConnectionService<FxAbstractPow
 
     private Shape createLine(FxAbstractPowerNode node1, ConnectionPoint point1, FxAbstractPowerNode node2, ConnectionPoint point2, VoltageLevel voltageLevel) {
 
-
         while (node1.getStackPane().isNeedsLayout() || node2.getStackPane().isNeedsLayout()) {
-//            System.out.println("Node1 needs layout = " + node1.getStackPane().isNeedsLayout());
-//            System.out.println("Node2 needs layout = " + node2.getStackPane().isNeedsLayout());
             try {
                 Thread.sleep(100);
-//                System.out.println("Node1 needs layout = " + node1.getStackPane().isNeedsLayout());
-//                System.out.println("Node2 needs layout = " + node2.getStackPane().isNeedsLayout());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

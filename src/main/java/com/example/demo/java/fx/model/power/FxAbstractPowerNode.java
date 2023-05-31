@@ -2,6 +2,7 @@ package com.example.demo.java.fx.model.power;
 
 import com.example.demo.base.model.grid.Coordinates;
 import com.example.demo.base.model.power.AbstractPowerNode;
+import com.example.demo.base.model.power.LevelChainNumberDto;
 import com.example.demo.base.model.status.StatusMetaDto;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.example.demo.base.model.enums.PowerNodeType;
@@ -40,14 +41,14 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
     protected final double defaultOpacity = 1d;
 
 
-    public FxAbstractPowerNode(PowerNodeType nodeType, int x, int y, int power, int chainLinkOrder, List<VoltageLevel> voltageLevels, double size) {
-        super(nodeType, x, y, power, chainLinkOrder, voltageLevels);
+    public FxAbstractPowerNode(PowerNodeType nodeType, int x, int y, int power, List<LevelChainNumberDto> levelChainNumberDtos, double size) {
+        super(nodeType, x, y, power, levelChainNumberDtos);
         this.size = size;
-        basePane = createBasePane();
+        basePane = createBasePane(levelChainNumberDtos);
     }
 
     @Override
-    protected void initConnections() {
+    protected void initConnections(List<LevelChainNumberDto> levelChainNumberDtos) {
         // Пусто, так как сами ноды проставляют себе connections
     }
 
@@ -56,7 +57,7 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
         return new FxStatus(statusType, statusDtos, basePane.getStatusPane().getSize()); // В данный момент status без координат в матрице статусов, мб стоит выпилить вообще координаты из статусов
     }
 
-    protected BasePane createBasePane() {
+    protected BasePane createBasePane(Collection<LevelChainNumberDto> levelChainNumberDtos) {
         BasePane basePane1 = new BasePane(size);
 
         double infoSize = size / 14;

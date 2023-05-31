@@ -166,7 +166,7 @@ public class BaseAlgorithmService {
     private void fillMatrix(Matrix<BasePowerNode> matrix) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                BasePowerNode powerNode = new BasePowerNode(PowerNodeType.EMPTY, i, j, 0, 0, List.of());
+                BasePowerNode powerNode = new BasePowerNode(PowerNodeType.EMPTY, i, j, 0, List.of());
                 matrix.fill(powerNode);
             }
         }
