@@ -56,7 +56,8 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
             // (Если = то у следующих элементов уже будет +1, что превысит лимит maxChainLength)
             // Высшему классу напряжения присваиваем номер цепочки в ноде + 1, остальным (низким) присваиваем номер цепочки = 1
             if (powerNode.getChainLinkOrder() < configuration.getMaxChainLength()) {
-                int chainLinkOrder = configuration.getLevel().getVoltageLevel() == maxLevel ? powerNode.getChainLinkOrder() + 1 : 1;
+//                int chainLinkOrder = configuration.getLevel().getVoltageLevel() == maxLevel ? powerNode.getChainLinkOrder() + 1 : 1;
+                int chainLinkOrder = powerNode.getChainLinkOrder() + 1;
 
                 addRingStatusArea(powerNode.getX(), powerNode.getY(),
                     configuration.getBoundingAreaFrom(),
@@ -190,15 +191,6 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                 node.addStatus(pnt.getBlockingStatus(), res);
             })
         );
-    }
-
-
-    private void findStatusesWithEmptyVoltages() {
-        List<PNODE> powerNodes = matrix.toNodeList()
-            .stream()
-            .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
-            .toList();
-        System.out.println(powerNodes);
     }
 
 }

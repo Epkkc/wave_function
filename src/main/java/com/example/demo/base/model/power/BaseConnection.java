@@ -18,6 +18,11 @@ public class BaseConnection implements Connection {
     protected VoltageLevel voltageLevel;
 
     /**
+     * Порядковый номер в цепочке соединённых нод
+     */
+    protected int chainLinkOrder;
+
+    /**
      * Ограничение на максимальное количество присоединений
      */
     protected int limit;
@@ -37,6 +42,14 @@ public class BaseConnection implements Connection {
     public boolean addConnection(String uuid) {
         if (getConnections() < limit && !connectedUuids.contains(uuid)) {
             connectedUuids.add(uuid);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeConnection(String uuid) {
+        if (connectedUuids.contains(uuid)) {
+            connectedUuids.remove(uuid);
             return true;
         }
         return false;

@@ -7,11 +7,14 @@ import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.status.BaseStatus;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ElementService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> {
     void addPowerNodeToGrid(PNODE node);
     void addLine(LINE line);
+    void removeLine(LINE line);
     List<LINE> getLines();
+    Optional<LINE> getLine(String uuid);
     Matrix<PNODE> getMatrix();
     int getTotalNumberOfNodes();
     int getTotalNumberOfEdges();

@@ -21,8 +21,8 @@ public class FxMain extends Application {
 
     static int rows = 16;
     static int columns = 30;
-    static int numberOfNodes = 60;
-    static int numberOfEdges = 70;
+    static int numberOfNodes = 50;
+    static int numberOfEdges = 50;
 
     public static void main(String[] args) {
         launch();

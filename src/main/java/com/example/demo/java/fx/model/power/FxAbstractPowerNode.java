@@ -23,12 +23,14 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Collection;
 import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, ConnectionPoint> implements Coordinates {
 
 

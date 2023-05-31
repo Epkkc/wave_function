@@ -12,4 +12,6 @@ public interface Connection {
 
     boolean addConnection(String uuid);
 
+    int getChainLinkOrder();
+
 }

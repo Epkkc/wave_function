@@ -70,12 +70,11 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
         String generatedFileName = exportService.saveAsFile();
 
-        System.out.println("Before validation and optimizing");
-        System.out.println("Number of nodes = " + matrix.toNodeList().stream().filter(node -> !node.getNodeType().equals(PowerNodeType.EMPTY)).count());
-        System.out.println("Number of lines = " + elementService.getLines().size());
-        System.out.println("Total load = " + elementService.getSumLoad());
-        System.out.println("Total generation = " + elementService.getSumPower());
+        printSchemeMetaInformation("Before validation and optimizing");
+
         System.out.println("Finish");
+
+        validateScheme();
 
         finalizeScheme();
 
@@ -101,6 +100,14 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         return new GeneralResult(elementService.getTotalNumberOfNodes(), elementService.getTotalNumberOfEdges(), generatedFileName, nodeTypeResults);
     }
 
+    private void printSchemeMetaInformation(String title) {
+        System.out.println(title);
+        System.out.println("Number of nodes = " + matrix.toNodeList().stream().filter(node -> !node.getNodeType().equals(PowerNodeType.EMPTY)).count());
+        System.out.println("Number of lines = " + elementService.getLines().size());
+        System.out.println("Total load = " + elementService.getSumLoad());
+        System.out.println("Total generation = " + elementService.getSumPower());
+    }
+
     private void validateScheme() {
 
         List<PNODE> unconnectedNodes = getUnconnectedNodes();
@@ -114,11 +121,12 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     }
 
     private void finalizeScheme() {
+        System.out.println("Finalizing scheme");
         // Соединяем несоединённые обмотки трансформаторов с новыми нагрузками
         List<PNODE> unconnectedNodes = getUnconnectedNodes();
         for (PNODE unconnectedNode : unconnectedNodes) {
-            Optional<PNODE> lessLoad = getLessLoad();
-            if (lessLoad.isPresent()) {
+            Optional<PNODE> excessLoad = getExcessLoad();
+            if (excessLoad.isPresent()) {
                 // todo удалить lessLoad вместе с линиями, которые к ней присоединены, также удалить статусы, которые она породила
                 // Создать новую нагрузку и соединить её с unconnected трансформатором
             } else {
@@ -130,32 +138,90 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         // Удаление лишних линий
         // Предполагается, что в ходе синтеза мы сгенерировали лишние линии, поскольку при синтезе мы создаём все возможные связи
         if (configurationService.getRequiredNumberOfEdges() < elementService.getTotalNumberOfEdges()) {
-            for (int i = 0; i < (configurationService.getRequiredNumberOfEdges() - elementService.getTotalNumberOfEdges()); i++) {
-                Optional<LINE> lessLine = getLessLine();
-                if (lessLine.isPresent()) {
-                    // todo удалить lessLine
+            int count = elementService.getTotalNumberOfEdges() - configurationService.getRequiredNumberOfEdges();
+            for (int i = 0; i < count; i++) {
+                Optional<LINE> excessLine = getExcessLine();
+                if (excessLine.isPresent()) {
+                    System.out.println("Removing line: " + excessLine);
+                    elementService.removeLine(excessLine.get());
                 } else {
+                    System.out.println("There is no exceed lines");
                     // На схеме нет лишних линий, это означает, что мы не можем сделать схему валидной
                     break;
                 }
             }
         }
 
+        printSchemeMetaInformation("After finalizing");
     }
 
-    protected Optional<LINE> getLessLine() {
+    protected Optional<LINE> getExcessLine() {
         // Линия является лишней, если она соединяет две ноды, которые имеют минимум два соединения в этом connection-е
         return elementService.getLines().stream()
-            .filter(line -> connectionPointHasMoreThanOneConnection(line.getPoint1(), line.getVoltageLevel())
-                && connectionPointHasMoreThanOneConnection(line.getPoint2(), line.getVoltageLevel()))
+            .filter(this::excessLineCondition)
             .findFirst();
+    }
+
+    protected boolean excessLineCondition(LINE line) {
+        return line.isBreaker() || pointsHaveExtraConnections(line) && substationsCheck(line);
+    }
+
+    protected boolean pointsHaveExtraConnections(LINE line) {
+        return connectionPointHasMoreThanOneConnection(line.getPoint1(), line.getVoltageLevel())
+            && connectionPointHasMoreThanOneConnection(line.getPoint2(), line.getVoltageLevel());
+    }
+
+    protected boolean substationsCheck(LINE line) {
+        PNODE point1 = line.getPoint1();
+        PNODE point2 = line.getPoint2();
+        // Линия соединяет две подстанции
+        if (PowerNodeType.SUBSTATION.equals(point1.getNodeType()) && PowerNodeType.SUBSTATION.equals(point2.getNodeType())) {
+            return substationsHaveEqualChainLinkOrder(line) || (
+                    pointConnectedWithAnotherSubstationWithLessChainLinkOrder(point1, line) &&
+                    pointConnectedWithAnotherSubstationWithLessChainLinkOrder(point2, line)
+            );
+        }
+        return false;
+    }
+
+    private boolean substationsHaveEqualChainLinkOrder(LINE line) {
+        return line.getPoint1().getChainLinkOrder() == line.getPoint2().getChainLinkOrder();
+    }
+
+    protected boolean pointConnectedWithAnotherSubstationWithLessChainLinkOrder(PNODE point, LINE line) {
+        boolean connectedWithAnotherSubstation = false;
+
+        PNODE connectedPoint = getSecondPoint(line, point);
+
+        BaseConnection connection = point.getConnections().get(line.getVoltageLevel());
+
+        Set<String> extraNodeUuids = connection.getConnectedUuids().stream()
+            .filter(uuid -> !uuid.equals(connectedPoint.getUuid()))
+            .collect(Collectors.toSet());
+
+        for (String connectedNodeUuid : extraNodeUuids) {
+            PNODE connectedNode = elementService.getNodeByUuid(connectedNodeUuid);
+            if (PowerNodeType.SUBSTATION.equals(connectedNode.getNodeType()) && connectedNode.getChainLinkOrder() < point.getChainLinkOrder()) {
+                connectedWithAnotherSubstation = true;
+                break;
+            }
+        }
+        return connectedWithAnotherSubstation;
+    }
+
+    protected PNODE getSecondPoint(LINE line, PNODE firstPoint) {
+        if (line.getPoint1().getUuid().equals(firstPoint.getUuid())) {
+            return line.getPoint2();
+        } else {
+            return line.getPoint1();
+        }
     }
 
     protected boolean connectionPointHasMoreThanOneConnection(PNODE node, VoltageLevel voltageLevel) {
         return node.getConnections().get(voltageLevel).getConnections() > 1;
     }
 
-    protected Optional<PNODE> getLessLoad() {
+    protected Optional<PNODE> getExcessLoad() {
         List<PNODE> nodes = matrix.toNodeList().stream()
             .filter(node -> PowerNodeType.LOAD.equals(node.getNodeType()))
             .sorted(Comparator.comparing(PNODE::getChainLinkOrder, Comparator.reverseOrder()))

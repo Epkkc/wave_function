@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Data
 @RequiredArgsConstructor
@@ -41,6 +42,24 @@ public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? e
     @Override
     public void addLine(LINE line) {
         lines.add(line);
+    }
+
+    @Override
+    public void removeLine(LINE line) {
+        PNODE point1 = line.getPoint1();
+        PNODE point2 = line.getPoint2();
+
+        point1.getConnections().get(line.getVoltageLevel()).removeConnection(point2.getUuid());
+        point2.getConnections().get(line.getVoltageLevel()).removeConnection(point1.getUuid());
+
+        lines.remove(line);
+    }
+
+    @Override
+    public Optional<LINE> getLine(String uuid) {
+        return lines.stream()
+            .filter(line -> line.getUuid().equals(uuid))
+            .findFirst(); // todo переделать на hashMap
     }
 
     @Override

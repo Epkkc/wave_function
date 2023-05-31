@@ -49,8 +49,11 @@ public class LineWidthDemo extends Application {
                 if (KeyCode.SPACE.equals(keyEvent.getCode())) {
                     if (spaceActive) {
                         Timeline timeline = new Timeline();
+                        double addLength = totalEndX - totalStartX;
                         timeline.getKeyFrames().add(new KeyFrame(Duration.ZERO, new KeyValue(line.endXProperty(), totalStartX)));
-                        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(500), new KeyValue(line.endXProperty(), totalEndX)));
+                        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(200), new KeyValue(line.endXProperty(), totalStartX + addLength / 2)));
+                        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(400), new KeyValue(line.endXProperty(), totalStartX + addLength / 4 * 3)));
+                        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(600), new KeyValue(line.endXProperty(), totalStartX + addLength)));
                         timeline.play();
                     } else {
                         Timeline timeline = new Timeline();
