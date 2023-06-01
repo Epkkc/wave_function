@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static java.lang.Math.pow;
@@ -56,7 +57,6 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
             // (Если = то у следующих элементов уже будет +1, что превысит лимит maxChainLength)
             // Высшему классу напряжения присваиваем номер цепочки в ноде + 1, остальным (низким) присваиваем номер цепочки = 1
             if (getChainLinkOrder(powerNode, configuration.getLevel()) < configuration.getMaxChainLength()) {
-//                int chainLinkOrder = configuration.getLevel().getVoltageLevel() == maxLevel ? powerNode.getChainLinkOrder() + 1 : 1; // todo скорее всего удалить вместо с maxLevel
                 int chainLinkOrder = getChainLinkOrder(powerNode, configuration.getLevel()) + 1;
 
                 addRingStatusArea(powerNode.getX(), powerNode.getY(),
@@ -137,16 +137,22 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
     public void removeStatusesByNodeUuid(String uuid) {
         matrix.toNodeList().forEach(
             node -> {
-                node.getStatuses().forEach(status -> status.getVoltageLevelChainLinkHashMap().forEach(
-                        (voltageLevel, meta) -> {
-                            if (meta.getNodeUuid().equals(uuid)) {
-                                // Этот статус был порождён нодой uuid
-                                status.getVoltageLevelChainLinkHashMap().remove(voltageLevel);
+                node.getStatuses().forEach(status -> {
+                        List<VoltageLevel> levelsForRemove = new ArrayList<>();
+                        status.getVoltageLevelChainLinkHashMap().values().stream().forEach(
+                            (meta) -> {
+                                if (meta.getNodeUuid().equals(uuid)) {
+                                    // Этот статус был порождён нодой uuid
+                                    levelsForRemove.add(meta.getVoltageLevel());
+//                                status.removeVoltageLevels(List.of(meta.getVoltageLevel()));
+                                }
                             }
-                        }
-                    )
+                        );
+                        status.removeVoltageLevels(levelsForRemove);
+                    }
                 );
-                node.getStatuses().removeIf(status -> status.getVoltageLevels().isEmpty());
+
+                node.tryToRemoveStatuses();
             }
         );
     }
@@ -179,7 +185,6 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
         addRingStatusArea(x, y, boundingAreaFrom, boundingAreaTo, statusType, voltageLevel, rounded, chainLinkOrder, nodeUuid, null);
     }
 
-    // todo доработать этот метод, используя StatusDto
     private void addStatusAreaTo(int x, int y, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder, String nodeUuid,
                                  Integer availablePower) {
         matrix.getArea(x, y, boundingAreaTo).stream()

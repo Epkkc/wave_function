@@ -18,4 +18,5 @@ public class GeneralResult {
     private int numberOfEdges;
     private String fileName;
     private List<NodeTypeResult> resultList;
+    private List<String> errorMessage;
 }

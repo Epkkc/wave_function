@@ -10,6 +10,7 @@ import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.java.fx.model.status.FxStatus;
 import com.example.demo.base.model.status.StatusType;
 import com.example.demo.java.fx.model.visual.BasePane;
+import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -81,8 +82,15 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
         return basePane1;
     }
 
+    @Override
     public void addStatus(StatusType statusType, Collection<StatusMetaDto> statusDtos) {
         super.addStatus(statusType, statusDtos);
+        basePane.getStatusPane().refreshStatuses(statuses);
+    }
+
+    @Override
+    public void tryToRemoveStatuses() {
+        super.tryToRemoveStatuses();
         basePane.getStatusPane().refreshStatuses(statuses);
     }
 
@@ -104,7 +112,7 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
         return connections.keySet().stream().toList();
     }
 
-    // TODO Доработать этот
+    // TODO Доработать этот метод (Желательно сделать универсальный метод для добавления hoveListener-ов)
     protected void addHoverListener(Node node, VoltageLevel voltageLevel, String message, double x, double y) {
         Text text = new Text();
         text.setTextAlignment(TextAlignment.CENTER);
@@ -155,5 +163,8 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
             }
         });
     }
+
+    public abstract void setStrokeColor(Color color);
+    public abstract Collection<DoubleProperty> getOpacityProperty();
 
 }

@@ -51,7 +51,9 @@ public class DeserializeMain extends Application {
     public void start(Stage stage) throws Exception {
         int rows = saveDto.getRows();
         int columns = saveDto.getColumns();
-        configuration = new FxConfiguration(rows, columns, 10_000, -1, -1, 2d, 4d, 4d, 50); // todo здесь -1 это заглушки
+
+        // -1 - заглушечные данные
+        configuration = new FxConfiguration(rows, columns, -1, -1, 2d, 4d, 4d, 50);
         matrix = new Matrix<>(rows, columns);
 
         fillGraphElements(stage, configuration);
@@ -78,7 +80,6 @@ public class DeserializeMain extends Application {
         }
 
         // Нанесение линий электропередачи на карту
-        // TODO не работает
         for (PowerLineDto line : saveDto.getLines()) {
             Optional<FxAbstractPowerNode> point1 = matrix.getNode(line.getPoint1().getX(), line.getPoint1().getY());
             Optional<FxAbstractPowerNode> point2 = matrix.getNode(line.getPoint2().getX(), line.getPoint2().getY());

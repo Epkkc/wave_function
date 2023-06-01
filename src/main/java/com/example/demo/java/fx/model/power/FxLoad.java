@@ -5,8 +5,10 @@ import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.power.LevelChainNumberDto;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -17,7 +19,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FxLoad extends FxAbstractPowerNode {
 
@@ -112,5 +116,15 @@ public class FxLoad extends FxAbstractPowerNode {
                 popup.hide();
             }
         }));
+    }
+
+    @Override
+    public void setStrokeColor(Color color) {
+        shapes.forEach(element -> element.setStroke(color));
+    }
+
+    @Override
+    public Collection<DoubleProperty> getOpacityProperty() {
+        return shapes.stream().map(Node::opacityProperty).collect(Collectors.toList());
     }
 }

@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface ElementService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> {
     void addPowerNodeToGrid(PNODE node);
     void addLine(LINE line);
+    void removeLine(LINE line, boolean fromRemoveNodeMethod);
     void removeLine(LINE line);
     void removeNode(PNODE node, PNODE replaceNode);
     List<LINE> getLines();

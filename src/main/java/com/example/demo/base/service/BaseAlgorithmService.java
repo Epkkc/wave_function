@@ -33,12 +33,11 @@ public class BaseAlgorithmService {
 
     private final int rows;
     private final int columns;
-    private final int delays; // todo удалить delay отсюда и из алгоритма, сделать для него соответствующие хуки
     private final int numberOfNodes;
     private final int numberOfEdges;
 
     public GeneralResult startAlgo() {
-        BaseConfiguration configuration = new BaseConfiguration(rows, columns, delays, numberOfNodes, numberOfEdges);
+        BaseConfiguration configuration = new BaseConfiguration(rows, columns, numberOfNodes, numberOfEdges);
 
         Matrix<BasePowerNode> matrix = new Matrix<>(rows, columns);
         fillMatrix(matrix);
@@ -55,8 +54,6 @@ public class BaseAlgorithmService {
 
         List<TransformerConfiguration> transformerConfigurations = new ArrayList<>();
 
-        // TODO добавлять сюда в зависимости от положения чекбокса (VoltageLevelInfo.enabled)
-        // TODO также заполнять boundingArea теми значениями, которые заполнит пользователь
         transformerConfigurations.add(TransformerConfiguration.builder()
             .level(LEVEL_500)
             .boundingAreaFrom(LEVEL_500.getBoundingArea())
@@ -73,7 +70,7 @@ public class BaseAlgorithmService {
             .boundingAreaTo(LEVEL_220.getBoundingArea() + 3)
             .maxLineLength(LEVEL_220.getBoundingArea() + 3)
             .transformerPowerSet(List.of(5000))
-            .enabled(true)
+            .enabled(false)
             .numberOfNodes(3)
             .maxChainLength(3)
             .build());
@@ -84,7 +81,7 @@ public class BaseAlgorithmService {
             .maxLineLength(LEVEL_110.getBoundingArea() + 2)
             .transformerPowerSet(List.of(2500))
             .enabled(true)
-            .numberOfNodes(6)
+            .numberOfNodes(2)
             .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
@@ -94,7 +91,7 @@ public class BaseAlgorithmService {
             .maxLineLength(LEVEL_35.getBoundingArea() + 1)
             .transformerPowerSet(List.of(1000))
             .enabled(true)
-            .numberOfNodes(15)
+            .numberOfNodes(11)
             .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
@@ -104,7 +101,7 @@ public class BaseAlgorithmService {
             .maxLineLength(LEVEL_10.getBoundingArea() + 1)
             .transformerPowerSet(List.of(500))
             .enabled(true)
-            .numberOfNodes(20)
+            .numberOfNodes(1000)
             .maxChainLength(3)
             .build());
 
@@ -116,40 +113,56 @@ public class BaseAlgorithmService {
             .minLoad(10)
             .maxLoad(20)
             .boundingAreaFrom(2)
-            .boundingAreaTo(3)
-            .maxLineLength(3)
-            .maxChainLength(2)
+            .boundingAreaTo(4)
+            .maxLineLength(4)
+            .maxChainLength(5)
+            .enabled(true)
+            .generationRate(100)
             .build());
         loadConfigurations.add(LoadConfiguration.builder()
             .level(LEVEL_35)
             .minLoad(40)
             .maxLoad(70)
-            .boundingAreaFrom(3)
-            .boundingAreaTo(5)
-            .maxLineLength(5)
+            .boundingAreaFrom(2)
+            .boundingAreaTo(4)
+            .maxLineLength(4)
             .maxChainLength(1)
+            .enabled(true)
+            .generationRate(40)
             .build());
 
         List<GeneratorConfiguration> generatorConfigurations = new ArrayList<>();
         generatorConfigurations.add(GeneratorConfiguration.builder()
-            .level(LEVEL_110)
+            .level(LEVEL_35)
             .minPower(200)
-            .maxPower(300)
-            .boundingArea(LEVEL_110.getBoundingArea() - 2)
+            .maxPower(400)
+            .boundingArea(LEVEL_35.getBoundingArea() - 4)
             .transformerArea(2)
+            .enabled(true)
+            .build());
+        generatorConfigurations.add(GeneratorConfiguration.builder()
+            .level(LEVEL_110)
+            .minPower(500)
+            .maxPower(800)
+            .boundingArea(LEVEL_110.getBoundingArea() - 4)
+            .transformerArea(3)
+            .enabled(true)
             .build());
         generatorConfigurations.add(GeneratorConfiguration.builder()
             .level(LEVEL_220)
-            .minPower(500)
+            .minPower(700)
             .maxPower(1000)
-            .boundingArea(LEVEL_220.getBoundingArea() - 2)
-            .transformerArea(3).build());
+            .boundingArea(LEVEL_220.getBoundingArea() - 2).transformerArea(3)
+            .enabled(false)
+            .build());
         generatorConfigurations.add(GeneratorConfiguration.builder()
             .level(LEVEL_500)
             .minPower(1000)
             .maxPower(3000)
             .boundingArea(LEVEL_500.getBoundingArea() - 2)
-            .transformerArea(3).build());
+            .transformerArea(3)
+            .enabled(false)
+            .build());
 
         configuration.setTransformerConfigurations(transformerConfigurations);
         configuration.setLoadConfigurations(loadConfigurations);

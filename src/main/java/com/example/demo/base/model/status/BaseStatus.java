@@ -29,4 +29,8 @@ public class BaseStatus {
         voltageLevels.forEach(level -> voltageLevelChainLinkHashMap.remove(level));
     }
 
+    public StatusMetaDto getMeta(VoltageLevel voltageLevel) {
+        return voltageLevelChainLinkHashMap.get(voltageLevel);
+    }
+
 }

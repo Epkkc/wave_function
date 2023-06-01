@@ -1,11 +1,12 @@
 package com.example.demo.base.model.power;
 
 import com.example.demo.base.model.enums.VoltageLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -26,9 +27,7 @@ public class BaseConnection {
      * Ограничение на максимальное количество присоединений
      */
     protected int limit;
-
-    protected Set<String> connectedUuids = new HashSet<>();
-    protected Set<String> lineUuids = new HashSet<>();
+    protected List<NodeLineDto> nodeLineDtos = new ArrayList<>();
 
     public BaseConnection(VoltageLevel voltageLevel, int limit, int chainLinkOrder) {
         this.voltageLevel = voltageLevel;
@@ -36,23 +35,25 @@ public class BaseConnection {
         this.chainLinkOrder = chainLinkOrder;
     }
 
-    public int getConnections() {
-        return connectedUuids.size();
+    public int getConnectedNodes() {
+        return nodeLineDtos.size();
     }
 
     public boolean addConnection(String nodeUuid, String lineUuid) {
-        if (getConnections() < limit && !connectedUuids.contains(nodeUuid)) {
-            connectedUuids.add(nodeUuid);
-            lineUuids.add(lineUuid);
+        if (getConnectedNodes() < limit && nodeLineDtos.stream().noneMatch(dto->dto.getNodeUuid().equals(nodeUuid))) {
+//            connectedUuids.add(nodeUuid);
+//            lineUuids.add(lineUuid);
+            nodeLineDtos.add(new NodeLineDto(nodeUuid, lineUuid));
             return true;
         }
         return false;
     }
 
     public boolean removeConnection(String nodeUuid, String lineUuid) {
-        if (connectedUuids.contains(nodeUuid)) {
-            connectedUuids.remove(nodeUuid);
-            lineUuids.remove(lineUuid);
+        if (nodeLineDtos.stream().anyMatch(dto->dto.getNodeUuid().equals(nodeUuid))) {
+//            connectedNodeUuids.remove(nodeUuid);
+//            lineUuids.remove(lineUuid);
+            nodeLineDtos.removeIf(dto -> dto.getNodeUuid().equals(nodeUuid) && dto.getLineUuid().equals(lineUuid));
             return true;
         }
         return false;

@@ -8,6 +8,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
@@ -22,12 +23,12 @@ import java.util.List;
 
 @Getter
 public class FxElementService extends AbstractElementService<FxAbstractPowerNode, FxPowerLine> {
-    // TODO Попытаться разобраться как перенести линии на задний план, а ноды на передний
 
     private final FxConfiguration configuration;
     private final ScrollPane scrollPane;
     private final Group root;
     private final GridPane gridPane;
+    private final int timeLineLength = 10_000;
 
     public FxElementService(Matrix<FxAbstractPowerNode> matrix, FxConfiguration configuration, ScrollPane scrollPane, Group root, GridPane gridPane) {
         super(matrix);
@@ -49,15 +50,27 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
     }
 
     @Override
-    public void removeLine(FxPowerLine line) {
-        super.removeLine(line);
+    public void removeLine(FxPowerLine line, boolean fromRemoveNodeMethod) {
+        super.removeLine(line, fromRemoveNodeMethod);
         slowRemovingLine(line);
+        if (!fromRemoveNodeMethod) {
+            timeLineDelay();
+        }
     }
 
     @Override
     public void removeNode(FxAbstractPowerNode node, FxAbstractPowerNode replaceNode) {
         super.removeNode(node, replaceNode);
         slowRemovingNode(node, replaceNode);
+        timeLineDelay();
+    }
+
+    private void timeLineDelay() {
+        try {
+            Thread.sleep(timeLineLength);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -75,7 +88,7 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
 //        });
 
         timeline.getKeyFrames().add(new KeyFrame(Duration.ZERO, new KeyValue(line.getLine().opacityProperty(), 1.0d)));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(10_000), new KeyValue(line.getLine().opacityProperty(), 0d)));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(timeLineLength), new KeyValue(line.getLine().opacityProperty(), 0d)));
         timeline.play();
 
         timeline.setOnFinished(actionEvent -> {
@@ -87,22 +100,25 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
     }
 
     private void slowRemovingNode(FxAbstractPowerNode node, FxAbstractPowerNode replaceNode) {
-        node. // todo сделать общий метод в FxAbstractPowerNode для изменения цвета всех элементов, а также для получения opacityProperty всех элементов
-        line.getLine().setStroke(Color.BLACK);
+        node.setStrokeColor(Color.BLACK); // todo сделать общий метод в FxAbstractPowerNode для изменения цвета всех элементов, а также для получения opacityProperty всех элементов
+
         Timeline timeline = new Timeline();
 
 //        Text removingText = getRemovingLabel(line);
 //        Platform.runLater(() -> {
-//            root.getChildren().add(removingText);
+//            node.getStackPane().getChildren().add(removingText); // alligment top
 //        });
 
-        timeline.getKeyFrames().add(new KeyFrame(Duration.ZERO, new KeyValue(line.getLine().opacityProperty(), 1.0d)));
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(10_000), new KeyValue(line.getLine().opacityProperty(), 0d)));
+        for (DoubleProperty opacityProperty : node.getOpacityProperty()) {
+            timeline.getKeyFrames().add(new KeyFrame(Duration.ZERO, new KeyValue(opacityProperty, 1.0d)));
+            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(timeLineLength), new KeyValue(opacityProperty, 0d)));
+        }
+
         timeline.play();
 
         timeline.setOnFinished(actionEvent -> {
             Platform.runLater(() -> {
-                root.getChildren().remove(node.getStackPane());
+                gridPane.getChildren().remove(node.getStackPane());
                 gridPane.add(replaceNode.getStackPane(), replaceNode.getY(), replaceNode.getX());
             });
         });

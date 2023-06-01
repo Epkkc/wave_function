@@ -13,7 +13,6 @@ import java.util.List;
 public class BaseConfiguration {
     protected final int rows;
     protected final int columns;
-    protected final int delay;
     protected final int requiredNumberOfNodes;
     protected final int requiredNumberOfEdges;
     protected List<TransformerConfiguration> transformerConfigurations;

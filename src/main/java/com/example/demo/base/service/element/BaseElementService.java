@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -17,4 +19,6 @@ public class BaseElementService extends AbstractElementService<BasePowerNode, Ba
         super(matrix);
     }
 
+    @Override
+    protected void beforeRemovingLines(List<BaseLine> linesForRemove) {}
 }

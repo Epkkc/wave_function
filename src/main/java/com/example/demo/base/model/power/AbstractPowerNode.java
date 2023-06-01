@@ -75,7 +75,7 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
         );
 
         // Удаляем статусы, в которых нет ни одного voltageLevel-а
-        statuses.removeIf(status -> status.getVoltageLevels().isEmpty());
+        tryToRemoveStatuses();
     }
 
     protected void updateExistedStatus(STATUS existed, Collection<StatusMetaDto> statusDtos) {
@@ -83,11 +83,11 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
             existed.getVoltageLevelChainLinkHashMap().merge(statusDto.getVoltageLevel(),
                 statusDto, (s1, s2) -> s1.getChainLinkOrder() < s2.getChainLinkOrder() ? s1 : s2);
         }
-//        if (existed.getChainLinkOrder() > chainLinkOrder) { // todo удалить
-//            existed.setChainLinkOrder(chainLinkOrder);
-//            existed.setNodeUuid(nodeUuid);
-//        }
     }
 
     protected abstract STATUS getStatus(StatusType statusType, Collection<StatusMetaDto> statusDtos);
+
+    public void tryToRemoveStatuses() {
+        statuses.removeIf(status -> status.getVoltageLevels().isEmpty());
+    }
 }

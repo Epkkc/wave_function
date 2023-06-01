@@ -46,7 +46,7 @@ public class FxAlgorithmService {
 
 
     public GeneralResult startAlgo(Group sceneParent) {
-        FxConfiguration configuration = new FxConfiguration(rows, columns, 10_000, numberOfNodes, numberOfEdges, 2d, 4d, 4d, 45);
+        FxConfiguration configuration = new FxConfiguration(rows, columns, numberOfNodes, numberOfEdges, 2d, 4d, 4d, 45);
 
         Matrix<FxAbstractPowerNode> matrix = new Matrix<>(rows, columns);
 
@@ -91,7 +91,7 @@ public class FxAlgorithmService {
             .maxLineLength(LEVEL_110.getBoundingArea() + 2)
             .transformerPowerSet(List.of(2500))
             .enabled(true)
-            .numberOfNodes(1000)
+            .numberOfNodes(2)
             .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
@@ -101,7 +101,7 @@ public class FxAlgorithmService {
             .maxLineLength(LEVEL_35.getBoundingArea() + 1)
             .transformerPowerSet(List.of(1000))
             .enabled(true)
-            .numberOfNodes(1000)
+            .numberOfNodes(11)
             .maxChainLength(3)
             .build());
         transformerConfigurations.add(TransformerConfiguration.builder()
@@ -122,9 +122,9 @@ public class FxAlgorithmService {
             .level(LEVEL_10)
             .minLoad(10)
             .maxLoad(20)
-            .boundingAreaFrom(1)
-            .boundingAreaTo(3)
-            .maxLineLength(3)
+            .boundingAreaFrom(2)
+            .boundingAreaTo(4)
+            .maxLineLength(4)
             .maxChainLength(5)
             .enabled(true)
             .generationRate(100)
@@ -134,8 +134,8 @@ public class FxAlgorithmService {
             .minLoad(40)
             .maxLoad(70)
             .boundingAreaFrom(2)
-            .boundingAreaTo(3)
-            .maxLineLength(3)
+            .boundingAreaTo(4)
+            .maxLineLength(4)
             .maxChainLength(1)
             .enabled(true)
             .generationRate(40)

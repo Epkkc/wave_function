@@ -70,9 +70,9 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
 
     @Override
     public void connectNodes(PNODE node1, PNODE node2, VoltageLevel voltageLevel) {
-        LINE baseLine = getLine(node1, node2, voltageLevel, getBreakerProperty(node1, node2)); //todo добавить логику breaker-а
+        LINE baseLine = getLine(node1, node2, voltageLevel, getBreakerProperty(node1, node2));
 
-        elementService.getLines().add(baseLine);
+        elementService.addLine(baseLine);
         node1.getConnections().get(voltageLevel).addConnection(node2.getUuid(), baseLine.getUuid());
         node2.getConnections().get(voltageLevel).addConnection(node1.getUuid(), baseLine.getUuid());
     }
@@ -80,8 +80,7 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
     @Override
     public void connectNodes(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker) {
         LINE baseLine = getLine(node1, node2, voltageLevel, breaker);
-        // TODO ДОБАВИТЬ ПРОВЕРКУ НА НЕПРЕВЫШЕНИЕ ЛИМИТА, СЕЙЧАС ЛИНИЯ ОТРИСОВЫВАЕТСЯ, НО НЕ ПОПАДАЕТ В CONNECTED_UUIDs
-        elementService.getLines().add(baseLine);
+        elementService.addLine(baseLine);
         node1.getConnections().get(voltageLevel).addConnection(node2.getUuid(), baseLine.getUuid());
         node2.getConnections().get(voltageLevel).addConnection(node1.getUuid(), baseLine.getUuid());
     }
@@ -105,7 +104,7 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
                 return baseConfiguration.getLoadConfigurations().stream().filter(cfg -> cfg.getLevel().equals(voltageLevel)).findFirst().map(LoadConfiguration::getMaxLineLength).orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel));
             }
             case GENERATOR -> {
-                return baseConfiguration.getGeneratorConfigurations().stream().filter(cfg -> cfg.getLevel().equals(voltageLevel)).findFirst().map(GeneratorConfiguration::getMaxLineLength).orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel)); // todo скорее всего переделать на boundingAreaTo
+                return baseConfiguration.getGeneratorConfigurations().stream().filter(cfg -> cfg.getLevel().equals(voltageLevel)).findFirst().map(GeneratorConfiguration::getMaxLineLength).orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel));
             }
             default -> {
                 return 0;

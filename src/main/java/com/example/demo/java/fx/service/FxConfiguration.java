@@ -13,8 +13,8 @@ public class FxConfiguration extends BaseConfiguration {
     protected final double hGap;
     protected final double baseSize;
 
-    public FxConfiguration(int rows, int columns, int delay, int numberOfNodes, int numberOfEdges, double padding, double vGap, double hGap, double baseSize) {
-        super(rows, columns, delay, numberOfNodes, numberOfEdges);
+    public FxConfiguration(int rows, int columns, int numberOfNodes, int numberOfEdges, double padding, double vGap, double hGap, double baseSize) {
+        super(rows, columns, numberOfNodes, numberOfEdges);
         this.padding = padding;
         this.vGap = vGap;
         this.hGap = hGap;

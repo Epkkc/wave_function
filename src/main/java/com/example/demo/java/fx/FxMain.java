@@ -19,10 +19,10 @@ import java.util.concurrent.FutureTask;
 
 public class FxMain extends Application {
 
-    static int rows = 16;
+    static int rows = 22;
     static int columns = 30;
-    static int numberOfNodes = 60;
-    static int numberOfEdges = 59;
+    static int numberOfNodes = 40;
+    static int numberOfEdges = 39;
 
     public static void main(String[] args) {
         launch();
@@ -73,7 +73,7 @@ public class FxMain extends Application {
 
         thread.start();
 
-        // todo обработать получение результата
+        // todo обработать получение результата как в BaseMain
     }
 
     private StackPane getStopMessageBlock(String message) {

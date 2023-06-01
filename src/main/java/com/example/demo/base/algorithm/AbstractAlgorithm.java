@@ -13,6 +13,7 @@ import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.power.LevelChainNumberDto;
+import com.example.demo.base.model.power.NodeLineDto;
 import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.model.status.BlockType;
 import com.example.demo.base.model.status.StatusMetaDto;
@@ -64,8 +65,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
         afterAllTransformersSet();
 
-        // todo могут оставаться ни с чем не соединённые обмотки ТР-ов 35кВ, можно к ним прикреплять какую-нибудь нагрузку, типа предприятия
-
         // Расстановка нагрузок и генераторов
         fillLoadsAndGenerators();
 
@@ -97,8 +96,8 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                 nodeTypeResults.add(new NodeTypeResult(type, voltageLevel, (int) count));
             }
         }
-
-        return new GeneralResult(elementService.getTotalNumberOfNodes(), elementService.getTotalNumberOfEdges(), generatedFileName, nodeTypeResults);
+        List<String> errorMessage = validateScheme();
+        return new GeneralResult(elementService.getTotalNumberOfNodes(), elementService.getTotalNumberOfEdges(), generatedFileName, nodeTypeResults, errorMessage);
     }
 
     private void printSchemeMetaInformation(String title) {
@@ -109,45 +108,62 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         System.out.println("Total generation = " + elementService.getSumPower());
     }
 
-    private void validateScheme() {
+    private List<String> validateScheme() {
+
+        List<String> errorMessage = new ArrayList<>();
 
         List<PNODE> unconnectedNodes = getUnconnectedNodes();
-        System.out.println(String.format("Ни с чем не соединённые ноды %s шт. : %s%n", unconnectedNodes.size(), unconnectedNodes));
+        System.out.printf("Ни с чем не соединённые ноды %s шт. : %s%n", unconnectedNodes.size(), unconnectedNodes);
+        if (!unconnectedNodes.isEmpty()) {
+            errorMessage.add("Есть ни с чем не связанные ноды: " + unconnectedNodes.stream().map(PNODE::getUuid).toList());
+        }
 
-        List<PNODE> emtyStatusNodes = matrix.toNodeList()
+
+        List<PNODE> emptyStatusNodes = matrix.toNodeList()
             .stream()
             .filter(node -> node.getStatuses().stream().anyMatch(status -> status.getVoltageLevels().isEmpty()))
             .toList();
-        System.out.println("Ноды с статусами, которые не имеют ни одного уровня напряжения: " + emtyStatusNodes);
+        System.out.println("Ноды с статусами, которые не имеют ни одного уровня напряжения: " + emptyStatusNodes);
+        if (!emptyStatusNodes.isEmpty()) {
+            errorMessage.add("Есть статусы без уровней напряжения");
+        }
+
+        boolean nodeRequirement = elementService.getTotalNumberOfNodes() == configurationService.getRequiredNumberOfNodes();
+        if (!nodeRequirement) {
+            errorMessage.add(String.format("Не выполнено условие по количеству нод: требуемое = %s , фактическое = %s", configurationService.getRequiredNumberOfNodes(),
+                elementService.getTotalNumberOfNodes()));
+        }
+
+        boolean edgeRequirement = elementService.getTotalNumberOfEdges() == configurationService.getRequiredNumberOfEdges();
+        if (!edgeRequirement) {
+            errorMessage.add(String.format("Не выполнено условие по количеству нод: требуемое = %s , фактическое = %s", configurationService.getRequiredNumberOfEdges(),
+                elementService.getTotalNumberOfEdges()));
+        }
+
+        // todo раскомментировать проверку
+//        boolean loadLessThanPower = elementService.getSumLoad() <= elementService.getSumPower();
+//        if (!loadLessThanPower) {
+//            errorMessage.add(String.format("Суммарная нагрузка = %d больше, чем суммарная генерация = %d", elementService.getSumLoad(), elementService.getSumPower()));
+//        }
+
+        return errorMessage;
     }
 
     private void finalizeScheme() {
         System.out.println("Finalizing scheme");
-        // Соединяем несоединённые обмотки трансформаторов с новыми нагрузками
-        List<PNODE> unconnectedNodes = getUnconnectedNodes();
-        for (PNODE unconnectedNode : unconnectedNodes) {
-            Optional<PNODE> excessLoadO = getExcessLoad();
-            if (excessLoadO.isPresent()) {
-                PNODE excessLoad = excessLoadO.get();
 
-                elementService.removeNode(excessLoad, getBaseNode(excessLoad.getX(), excessLoad.getY())); // Удаление excessLoad ноды и линий с ней связанных
-                statusService.removeStatusesByNodeUuid(excessLoad.getUuid()); // Удаление статусов, порождённых excessLoad
+        finalizeUnconnectedNodes();
 
-                // todo Создать новую нагрузку и соединить её с unconnected трансформатором
-                // Обновляем статусы вокруг unconnectedNode
-                statusService.setTransformerStatusToArea(unconnectedNode,
-                    transformerConfigurations.stream().filter(cfg -> unconnectedNode.getVoltageLevels().contains(cfg.getLevel())).collect(
-                        Collectors.toList()));
+        finalizeExcessLines();
 
-                // todo Найти SHOULD_LOAD статус, порождённый unconnectedNode и создать для него load, далее обычный fillLoad()
+        finalizeUnconnectedNodes();
 
-            } else {
-                // На схеме нет лишних нод, это означает, что мы не можем сделать схему валидной
-                System.out.println("There is no excess loads");
-                break;
-            }
-        }
+        finalizeExcessLines();
 
+        printSchemeMetaInformation("After finalizing");
+    }
+
+    private void finalizeExcessLines() {
         // Удаление лишних линий
         // Предполагается, что в ходе синтеза мы сгенерировали лишние линии, поскольку при синтезе мы создаём все возможные связи
         if (configurationService.getRequiredNumberOfEdges() < elementService.getTotalNumberOfEdges()) {
@@ -164,9 +180,62 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                 }
             }
         }
-
-        printSchemeMetaInformation("After finalizing");
     }
+
+
+    protected void finalizeUnconnectedNodes() {
+        // Соединяем несоединённые обмотки трансформаторов с новыми нагрузками
+        List<PNODE> unconnectedNodes = getUnconnectedNodes();
+
+        OUTER:
+        for (PNODE unconnectedNode : unconnectedNodes) {
+            System.out.println("Unconnected node : " + unconnectedNode);
+            for (BaseConnection connection : unconnectedNode.getConnections().values()) {
+                if (connection.getConnectedNodes() > 0) continue;
+                System.out.println("Unconnected connection : " + connection);
+
+                Optional<PNODE> excessLoadO = getExcessLoad();
+                if (excessLoadO.isPresent()) {
+                    PNODE excessLoad = excessLoadO.get();
+
+
+                    elementService.removeNode(excessLoad, getBaseNode(excessLoad.getX(), excessLoad.getY())); // Удаление excessLoad ноды и линий с ней связанных
+                    statusService.removeStatusesByNodeUuid(excessLoad.getUuid()); // Удаление статусов, порождённых excessLoad
+
+                    // Обновляем статусы вокруг unconnectedNode
+                    statusService.setTransformerStatusToArea(unconnectedNode,
+                        transformerConfigurations.stream().filter(cfg -> unconnectedNode.getVoltageLevels().contains(cfg.getLevel())).collect(
+                            Collectors.toList()));
+
+                    Optional<PNODE> resultNode = matrix.toNodeList().stream()
+                        .filter(node -> hasShouldStatus(node, connection.getVoltageLevel(), PowerNodeType.LOAD, unconnectedNode.getUuid()))
+                        .findFirst();
+
+                    resultNode.ifPresent(node -> {
+                        LoadConfiguration loadConfiguration = loadConfigurations.stream()
+                            .filter(cfg -> cfg.getLevel().equals(connection.getVoltageLevel()))
+                            .findFirst()
+                            .orElseThrow(() -> new UnsupportedOperationException("Unable to find load configuration with voltage level = " + connection.getVoltageLevel()));
+
+                        StatusMetaDto shouldStatus = getShouldStatus(node, connection.getVoltageLevel(), PowerNodeType.LOAD);
+
+                        PNODE load = nodeFactory.createNode(
+                            PowerNodeType.LOAD, node.getX(), node.getY(),
+                            getLoadPower(loadConfiguration, shouldStatus),
+                            List.of(new LevelChainNumberDto(connection.getVoltageLevel(), 1)));
+
+                        fillLoadToGrid(load, loadConfiguration, shouldStatus);
+                    });
+                } else {
+                    // На схеме нет лишних нод, это означает, что мы не можем сделать схему валидной
+                    System.out.println("There is no excess loads");
+                    break OUTER;
+                }
+
+            }
+        }
+    }
+
 
     protected abstract PNODE getBaseNode(int x, int y);
 
@@ -210,7 +279,8 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
         BaseConnection connection = point.getConnections().get(line.getVoltageLevel());
 
-        Set<String> extraNodeUuids = connection.getConnectedUuids().stream()
+        Set<String> extraNodeUuids = connection.getNodeLineDtos().stream()
+            .map(NodeLineDto::getNodeUuid)
             .filter(uuid -> !uuid.equals(connectedPoint.getUuid()))
             .collect(Collectors.toSet());
 
@@ -240,22 +310,24 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     }
 
     protected boolean connectionPointHasMoreThanOneConnection(PNODE node, VoltageLevel voltageLevel) {
-        return node.getConnections().get(voltageLevel).getConnections() > 1;
+        return node.getConnections().get(voltageLevel).getConnectedNodes() > 1;
     }
 
     protected Optional<PNODE> getExcessLoad() {
         // Сортируем по chainLinkOrder DESC и по общему количеству присоединений ASC
-        List<PNODE> nodes = matrix.toNodeList().stream()
+        List<PNODE> loads = matrix.toNodeList().stream()
             .filter(node -> PowerNodeType.LOAD.equals(node.getNodeType()))
             .sorted(Comparator.<PNODE, Integer>comparing(node -> getChainLinkOrder(node, node.getVoltageLevels().get(0)), Comparator.reverseOrder())
                 .thenComparingInt(node -> node.getConnections().values().size()))
             .toList();
 
-        for (PNODE node : nodes) {
+        for (PNODE node : loads) {
             if (getChainLinkOrder(node, node.getVoltageLevels().get(0)) > 1) {
                 return Optional.of(node);
             } else {
-                // Необходимо убедиться, что выбранная нода является не единственным присоединением трансформатора (среди нагрузок и генераторов)
+                // Необходимо убедиться, что выбранная нода является не единственным присоединением трансформатора
+                // (среди нагрузок и генераторов)
+                // (присоединения с breaker=true не учитываются)
                 PNODE substation = getConnectedSubstation(node).orElseThrow(() -> new UnsupportedOperationException("Unable to find connected substation to load " + node));
                 int connectionsCount = getUnsubstationConnectionsCount(substation, node.getVoltageLevels().get(0));
                 if (connectionsCount > 1) {
@@ -270,8 +342,8 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
     protected Optional<PNODE> getConnectedSubstation(PNODE load) {
         for (BaseConnection value : load.getConnections().values()) {
-            for (String connectedUuid : value.getConnectedUuids()) {
-                PNODE node = elementService.getNodeByUuid(connectedUuid);
+            for (NodeLineDto dto : value.getNodeLineDtos()) {
+                PNODE node = elementService.getNodeByUuid(dto.getNodeUuid());
                 if (node != null && PowerNodeType.SUBSTATION.equals(node.getNodeType())) {
                     return Optional.of(node);
                 }
@@ -281,11 +353,15 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     }
 
     // Возвращает количество присоединённых к обмотке (voltageLevel) трансформатора нод, являющихся генераторами и нагрузками
+    // Ноды, соединённые через breaker=true не учитываются, т.к. в негативном сценарии соединяющие линии будут удалены.
     protected int getUnsubstationConnectionsCount(PNODE substation, VoltageLevel voltageLevel) {
         return (int) substation.getConnections().values().stream()
             .filter(connection -> connection.getVoltageLevel().equals(voltageLevel))
-            .map(BaseConnection::getConnectedUuids)
-            .flatMap(Set::stream)
+            .map(BaseConnection::getNodeLineDtos)
+            .flatMap(List::stream)
+            .filter(
+                dto -> !elementService.getLine(dto.getLineUuid()).orElseThrow(() -> new UnsupportedOperationException("Unable to find line with uuid : " + dto.getLineUuid())).isBreaker())
+            .map(NodeLineDto::getNodeUuid)
             .distinct()
             .map(elementService::getNodeByUuid)
             .filter(node -> PowerNodeType.LOAD.equals(node.getNodeType()) || PowerNodeType.GENERATOR.equals(node.getNodeType()))
@@ -295,7 +371,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     protected List<PNODE> getUnconnectedNodes() {
         return matrix.toNodeList().stream().filter(
             node -> node.getConnections().values().stream().anyMatch(
-                meta -> meta.getConnections() == 0)
+                meta -> meta.getConnectedNodes() == 0)
         ).toList();
     }
 
@@ -333,9 +409,9 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         } else {
             BaseConnection baseConnection = node.getConnections().get(voltageLevel);
             if (baseConnection != null) {
-                for (String uuid : baseConnection.getConnectedUuids()) {
-                    if (!processedUuids.contains(uuid)) {
-                        ignoreConnectedSubstation(elementService.getNodeByUuid(uuid), voltageLevel, ignoreUuids, processedUuids);
+                for (NodeLineDto dto : baseConnection.getNodeLineDtos()) {
+                    if (!processedUuids.contains(dto.getNodeUuid())) {
+                        ignoreConnectedSubstation(elementService.getNodeByUuid(dto.getNodeUuid()), voltageLevel, ignoreUuids, processedUuids);
                     }
                 }
             }
@@ -375,12 +451,12 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
             int count = 0;
             do {
                 PNODE powerNode;
-                if (randomFirst) {
-                    powerNode = RandomUtils.randomValue(nodes);
-                } else {
+                if (first && !randomFirst) {
                     int x = configurationService.getRows() / 2;
                     int y = configurationService.getColumns() / 2;
                     powerNode = matrix.getNode(x, y).orElseThrow(() -> new UnsupportedOperationException(String.format("There is no node in matrix with x=%s, y=%s", x, y)));
+                } else {
+                    powerNode = RandomUtils.randomValue(nodes);
                 }
 
                 if (powerNode == null) {
@@ -558,7 +634,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                         node -> PowerNodeType.SUBSTATION.equals(node.getNodeType())
                             && node.getConnections().containsKey(generatorConfiguration.getLevel())
                     ).stream()
-                    .sorted(Comparator.comparingInt(node -> node.getConnections().get(generatorConfiguration.getLevel()).getConnections())).toList();
+                    .sorted(Comparator.comparingInt(node -> node.getConnections().get(generatorConfiguration.getLevel()).getConnectedNodes())).toList();
 
                 if (transformers.isEmpty()) {
                     continue;
@@ -619,17 +695,44 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         return resPower;
     }
 
-    protected StatusMetaDto getShouldStatus(PNODE powerNode, VoltageLevel voltageLevel, PowerNodeType powerNodeType) {
+    protected StatusMetaDto getShouldStatus(PNODE powerNode, VoltageLevel voltageLevel, PowerNodeType powerNodeType, String uuid) {
         return powerNode.getStatuses()
             .stream()
             .filter(status ->
                 status.getType().getBlockType().equals(BlockType.SHOULD)
                     && status.getType().getNodeType().equals(powerNodeType)
                     && status.getVoltageLevels().contains(voltageLevel))
+            .filter(status -> {
+                if (uuid != null && uuid.length() > 0) {
+                    return status.getMeta(voltageLevel).getNodeUuid().equals(uuid);
+                } else {
+                    return true;
+                }
+            })
             .findFirst()
-            .map(baseStatus -> baseStatus.getVoltageLevelChainLinkHashMap().get(voltageLevel))
+            .map(baseStatus -> baseStatus.getMeta(voltageLevel))
             .orElseThrow(() -> new UnsupportedOperationException(
                 String.format("Chosen power node doesn`t contain status SHOULD_%s with voltageLevel=%s", powerNodeType, voltageLevel)));
+    }
+
+    protected boolean hasShouldStatus(PNODE powerNode, VoltageLevel voltageLevel, PowerNodeType powerNodeType, String uuid) {
+        return powerNode.getStatuses()
+            .stream()
+            .filter(status ->
+                status.getType().getBlockType().equals(BlockType.SHOULD)
+                    && status.getType().getNodeType().equals(powerNodeType)
+                    && status.getVoltageLevels().contains(voltageLevel))
+            .anyMatch(status -> {
+                if (uuid != null && uuid.length() > 0) {
+                    return status.getMeta(voltageLevel).getNodeUuid().equals(uuid);
+                } else {
+                    return true;
+                }
+            });
+    }
+
+    protected StatusMetaDto getShouldStatus(PNODE powerNode, VoltageLevel voltageLevel, PowerNodeType powerNodeType) {
+        return getShouldStatus(powerNode, voltageLevel, powerNodeType, null);
     }
 
     protected void afterTransformerSet(TransformerConfiguration configuration) {

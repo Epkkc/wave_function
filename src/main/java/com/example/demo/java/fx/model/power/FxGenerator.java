@@ -5,8 +5,10 @@ import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.power.LevelChainNumberDto;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -23,11 +25,13 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FxGenerator extends FxAbstractPowerNode {
     @JsonIgnore
-    private List<Shape> uiElements = new ArrayList<>();
+    private List<Shape> shapes = new ArrayList<>();
     @JsonIgnore
     private Circle circle;
     private VoltageLevel voltageLevel;
@@ -64,9 +68,9 @@ public class FxGenerator extends FxAbstractPowerNode {
         basePane.getStackPane().getChildren().add(path1);
         basePane.getStackPane().getChildren().add(path2);
 
-        uiElements.add(circle);
-        uiElements.add(path1);
-        uiElements.add(path2);
+        shapes.add(circle);
+        shapes.add(path1);
+        shapes.add(path2);
 
         connections.put(dto.getVoltageLevel(), new ConnectionPoint(0, -circleRadius, dto.getVoltageLevel(), 100, dto.getChainLinkNumber()));
 
@@ -132,7 +136,7 @@ public class FxGenerator extends FxAbstractPowerNode {
         Popup popup = new Popup();
         popup.getContent().add(stickyNotesPane);
 
-        uiElements.forEach(uiEl -> {
+        shapes.forEach(uiEl -> {
             uiEl.hoverProperty().addListener((obs, oldVal, newValue) -> {
                 if (newValue) {
                     Bounds bounds = circle.localToScreen(circle.getLayoutBounds());
@@ -150,7 +154,17 @@ public class FxGenerator extends FxAbstractPowerNode {
 
     @Override
     public void setOpacity(VoltageLevel voltageLevel, double value) {
-        uiElements.forEach(el -> el.setOpacity(value));
+        shapes.forEach(el -> el.setOpacity(value));
+    }
+
+    @Override
+    public void setStrokeColor(Color color) {
+        shapes.forEach(element -> element.setStroke(color));
+    }
+
+    @Override
+    public Collection<DoubleProperty> getOpacityProperty() {
+        return shapes.stream().map(Node::opacityProperty).collect(Collectors.toList());
     }
 
 }
