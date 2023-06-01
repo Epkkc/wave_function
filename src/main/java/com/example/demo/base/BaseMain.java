@@ -5,14 +5,14 @@ import com.example.demo.base.service.BaseAlgorithmService;
 
 public class BaseMain {
 
-    static int rows = 22;
-    static int columns = 30;
+    static int rows = 50;
+    static int columns = 50;
     static int numberOfNodes = 40;
     static int numberOfEdges = 39;
 
     public static void main(String[] args) {
 
-        int iters = 20;
+        int iters = 500;
         boolean totalValid = true;
         for (int i = 0; i < iters; i++) {
             BaseAlgorithmService baseAlgorithmService = new BaseAlgorithmService(rows, columns, numberOfNodes, numberOfEdges);
@@ -25,7 +25,7 @@ public class BaseMain {
             }
         }
 
-        System.out.println("Total valid : " + totalValid);
+        System.out.println("Total valid = " + totalValid);
 
     }
 

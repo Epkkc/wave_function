@@ -170,7 +170,7 @@ public class BaseAlgorithmService {
 
         Algorithm algorithm = new BaseAlgorithm(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations,
             generatorConfigurations,
-            factory, exportService, true);
+            factory, exportService, false);
         GeneralResult result = algorithm.start();
 
         return result;

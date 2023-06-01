@@ -152,6 +152,8 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     private void finalizeScheme() {
         System.out.println("Finalizing scheme");
 
+        deleteExcessLoads();
+
         finalizeUnconnectedNodes();
 
         finalizeExcessLines();
@@ -161,6 +163,23 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         finalizeExcessLines();
 
         printSchemeMetaInformation("After finalizing");
+    }
+
+    private void deleteExcessLoads() {
+        int required = configurationService.getRequiredNumberOfNodes();
+        int total = elementService.getTotalNumberOfNodes();
+        if (total > required)
+        for (int i = 0; i < total - required; i++) {
+            Optional<PNODE> excessLoadOptional = getExcessLoad();
+            if (excessLoadOptional.isPresent()) {
+                PNODE excessLoad = excessLoadOptional.get();
+                elementService.removeNode(excessLoad, getBaseNode(excessLoad.getX(), excessLoad.getY())); // Удаление excessLoad ноды и линий с ней связанных
+                statusService.removeStatusesByNodeUuid(excessLoad.getUuid()); // Удаление статусов, порождённых excessLoad
+                // todo может быть в теории проблема со статусами, но пока замечено не было
+            } else {
+                System.out.println("Unable to remove excess node");
+            }
+        }
     }
 
     private void finalizeExcessLines() {
