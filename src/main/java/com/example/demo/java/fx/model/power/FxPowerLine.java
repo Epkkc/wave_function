@@ -5,8 +5,6 @@ import com.example.demo.base.model.power.AbstractLine;
 import javafx.scene.shape.Shape;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Getter
 public class FxPowerLine extends AbstractLine<FxAbstractPowerNode> {
     protected Shape line;

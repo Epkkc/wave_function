@@ -15,8 +15,8 @@ import lombok.ToString;
 public class LoadConfiguration {
 
     private VoltageLevel level;
-    private int minLoad; // kWt
-    private int maxLoad; // kWt
+    private int minLoad;
+    private int maxLoad;
     private int boundingAreaFrom;
     private int boundingAreaTo;
     private boolean enabled;

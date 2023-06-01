@@ -1,21 +1,13 @@
 package com.example.demo.java.fx.model.visual;
 
-import com.example.demo.base.model.grid.Matrix;
-import com.example.demo.base.model.status.BlockType;
 import com.example.demo.java.fx.model.status.FxStatus;
-import com.example.demo.base.model.status.StatusType;
-import com.example.demo.base.model.enums.VoltageLevel;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import lombok.Data;
-import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @Data
 public class StatusPane {

@@ -28,7 +28,7 @@ public enum PowerNodeType {
         for (PowerNodeType value : values()) {
             counter += value.getGenerationRate();
         }
-        assert Double.compare(1.0,counter) == 0;
+        assert Double.compare(1.0, counter) == 0;
     }
 
     private StatusType blockingStatus;

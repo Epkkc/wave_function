@@ -44,9 +44,7 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
 
     public void addPowerNodeToGrid(FxAbstractPowerNode node) {
         super.addPowerNodeToGrid(node);
-        Platform.runLater(() -> {
-            gridPane.add(node.getStackPane(), node.getY(), node.getX());
-        });
+        Platform.runLater(() -> gridPane.add(node.getStackPane(), node.getY(), node.getX()));
     }
 
     @Override
@@ -91,16 +89,14 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(timeLineLength), new KeyValue(line.getLine().opacityProperty(), 0d)));
         timeline.play();
 
-        timeline.setOnFinished(actionEvent -> {
-            Platform.runLater(() -> {
-                root.getChildren().remove(line.getLine());
+        timeline.setOnFinished(actionEvent -> Platform.runLater(() -> {
+            root.getChildren().remove(line.getLine());
 //                root.getChildren().remove(removingText);
-            });
-        });
+        }));
     }
 
     private void slowRemovingNode(FxAbstractPowerNode node, FxAbstractPowerNode replaceNode) {
-        node.setStrokeColor(Color.BLACK); // todo сделать общий метод в FxAbstractPowerNode для изменения цвета всех элементов, а также для получения opacityProperty всех элементов
+        node.setStrokeColor(Color.BLACK);
 
         Timeline timeline = new Timeline();
 
@@ -116,12 +112,10 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
 
         timeline.play();
 
-        timeline.setOnFinished(actionEvent -> {
-            Platform.runLater(() -> {
-                gridPane.getChildren().remove(node.getStackPane());
-                gridPane.add(replaceNode.getStackPane(), replaceNode.getY(), replaceNode.getX());
-            });
-        });
+        timeline.setOnFinished(actionEvent -> Platform.runLater(() -> {
+            gridPane.getChildren().remove(node.getStackPane());
+            gridPane.add(replaceNode.getStackPane(), replaceNode.getY(), replaceNode.getX());
+        }));
     }
 
     private Text getRemovingLabel(FxPowerLine line) {

@@ -1,8 +1,8 @@
 package com.example.demo.base.model.power;
 
-import com.example.demo.base.model.grid.Coordinates;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
+import com.example.demo.base.model.grid.Coordinates;
 import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.model.status.BlockType;
 import com.example.demo.base.model.status.StatusMetaDto;

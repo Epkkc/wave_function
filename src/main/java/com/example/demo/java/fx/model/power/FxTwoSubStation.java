@@ -1,9 +1,9 @@
 package com.example.demo.java.fx.model.power;
 
-import com.example.demo.base.model.power.LevelChainNumberDto;
-import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
+import com.example.demo.base.model.power.LevelChainNumberDto;
+import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Bounds;
@@ -103,7 +103,8 @@ public class FxTwoSubStation extends FxAbstractPowerNode {
                 double x = bnds.getMinX() - (stickyNotesPane.getWidth() / 2) + (circle.getRadius());
                 double y = bnds.getMinY() - stickyNotesPane.getHeight();
                 setHoverOpacity(voltageLevel);
-                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power), String.format("Номер звена: %s", connections.get(voltageLevel).getChainLinkOrder())));
+                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power),
+                    String.format("Номер звена: %s", connections.get(voltageLevel).getChainLinkOrder())));
                 popup.show(circle, x, y);
             } else {
                 setDefaultOpacity(voltageLevel);

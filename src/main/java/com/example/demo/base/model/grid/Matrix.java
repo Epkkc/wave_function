@@ -1,7 +1,5 @@
 package com.example.demo.base.model.grid;
 
-import com.example.demo.base.model.grid.Coordinates;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -56,7 +54,6 @@ public class Matrix<T extends Coordinates> implements Iterable<T> {
     }
 
     public void add(T node) {
-//        matrix.get(node.getX()).add(node.getY(), node);
         matrix.get(node.getX()).replaceAll(n -> {
             if (n.getX() == node.getX() && n.getY() == node.getY()) {
                 return node;
@@ -133,8 +130,8 @@ public class Matrix<T extends Coordinates> implements Iterable<T> {
     public List<T> getArea(int row, int column, int radius) {
         List<T> result = new ArrayList<>();
 
-        for (int x = row-radius; x <= (row + radius); x++) {
-            for (int y = column-radius; y <= (column + radius); y++) {
+        for (int x = row - radius; x <= (row + radius); x++) {
+            for (int y = column - radius; y <= (column + radius); y++) {
                 if (x == row && y == column) continue;
                 getNode(x, y).ifPresent(result::add);
             }

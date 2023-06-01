@@ -1,6 +1,5 @@
 package com.example.demo.base.model.enums;
 
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

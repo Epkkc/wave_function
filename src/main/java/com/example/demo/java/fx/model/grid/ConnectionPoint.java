@@ -2,8 +2,6 @@ package com.example.demo.java.fx.model.grid;
 
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.power.BaseConnection;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

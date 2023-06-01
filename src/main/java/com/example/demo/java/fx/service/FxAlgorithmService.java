@@ -1,8 +1,8 @@
 package com.example.demo.java.fx.service;
 
 import com.example.demo.base.algorithm.Algorithm;
-import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.GeneralResult;
+import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.grid.Matrix;

@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public abstract class FxPowerNodeFactory implements FxNodeFactory{
+public abstract class FxPowerNodeFactory implements FxNodeFactory {
     protected final FxElementService elementsService;
 
 }

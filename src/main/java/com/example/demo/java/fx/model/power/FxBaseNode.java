@@ -16,7 +16,8 @@ public class FxBaseNode extends FxAbstractPowerNode {
     }
 
     @Override
-    protected void setOpacity(VoltageLevel voltageLevel, double value) {}
+    protected void setOpacity(VoltageLevel voltageLevel, double value) {
+    }
 
     @Override
     public void setStrokeColor(Color color) {

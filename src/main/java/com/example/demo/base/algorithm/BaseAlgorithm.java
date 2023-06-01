@@ -9,8 +9,8 @@ import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.BaseLine;
 import com.example.demo.base.model.power.BasePowerNode;
 import com.example.demo.base.service.BaseConfiguration;
-import com.example.demo.base.service.element.BaseElementService;
 import com.example.demo.base.service.connection.ConnectionService;
+import com.example.demo.base.service.element.BaseElementService;
 import com.example.demo.base.service.status.StatusService;
 import com.example.demo.export.service.BaseExportService;
 
@@ -24,7 +24,8 @@ public class BaseAlgorithm extends AbstractAlgorithm<BasePowerNode, BaseLine, Ba
                          List<LoadConfiguration> loadConfigurations,
                          List<GeneratorConfiguration> generatorConfigurations,
                          PowerNodeFactory<BasePowerNode> nodeFactory, BaseExportService exportService, boolean randomFirst) {
-        super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations, nodeFactory, exportService, randomFirst);
+        super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations, nodeFactory, exportService,
+            randomFirst);
     }
 
     @Override

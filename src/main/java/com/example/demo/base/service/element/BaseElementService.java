@@ -3,7 +3,6 @@ package com.example.demo.base.service.element;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.BaseLine;
 import com.example.demo.base.model.power.BasePowerNode;
-import com.example.demo.base.service.element.AbstractElementService;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,5 +19,6 @@ public class BaseElementService extends AbstractElementService<BasePowerNode, Ba
     }
 
     @Override
-    protected void beforeRemovingLines(List<BaseLine> linesForRemove) {}
+    protected void beforeRemovingLines(List<BaseLine> linesForRemove) {
+    }
 }

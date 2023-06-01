@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static java.lang.Math.pow;
@@ -89,7 +88,8 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
         // Если соединяются нагрузка и ПС, то устанавливаем breaker
         // Если ПС является порождающей нагрузку нодой, то этот метод не должен быть вызван
         return node1.getNodeType().equals(PowerNodeType.SUBSTATION) && node2.getNodeType().equals(PowerNodeType.LOAD) ||
-            node2.getNodeType().equals(PowerNodeType.SUBSTATION) && node1.getNodeType().equals(PowerNodeType.LOAD); // Breaker устанавливается в том случае, когда нагрузка соединяется с ПС, с которой ещё не был соединён фидер
+            node2.getNodeType().equals(PowerNodeType.SUBSTATION) && node1.getNodeType()
+                .equals(PowerNodeType.LOAD); // Breaker устанавливается в том случае, когда нагрузка соединяется с ПС, с которой ещё не был соединён фидер
     }
 
     protected abstract LINE getLine(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker);
@@ -98,13 +98,28 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
     protected double getMaxLineLength(PNODE node, VoltageLevel voltageLevel) {
         switch (node.getNodeType()) {
             case SUBSTATION -> {
-                return baseConfiguration.getTransformerConfigurations().stream().filter(cfg -> cfg.getLevel().equals(voltageLevel)).findFirst().map(TransformerConfiguration::getMaxLineLength).orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel));
+                return baseConfiguration.getTransformerConfigurations()
+                    .stream()
+                    .filter(cfg -> cfg.getLevel().equals(voltageLevel))
+                    .findFirst()
+                    .map(TransformerConfiguration::getMaxLineLength)
+                    .orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel));
             }
             case LOAD -> {
-                return baseConfiguration.getLoadConfigurations().stream().filter(cfg -> cfg.getLevel().equals(voltageLevel)).findFirst().map(LoadConfiguration::getMaxLineLength).orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel));
+                return baseConfiguration.getLoadConfigurations()
+                    .stream()
+                    .filter(cfg -> cfg.getLevel().equals(voltageLevel))
+                    .findFirst()
+                    .map(LoadConfiguration::getMaxLineLength)
+                    .orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel));
             }
             case GENERATOR -> {
-                return baseConfiguration.getGeneratorConfigurations().stream().filter(cfg -> cfg.getLevel().equals(voltageLevel)).findFirst().map(GeneratorConfiguration::getMaxLineLength).orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel));
+                return baseConfiguration.getGeneratorConfigurations()
+                    .stream()
+                    .filter(cfg -> cfg.getLevel().equals(voltageLevel))
+                    .findFirst()
+                    .map(GeneratorConfiguration::getMaxLineLength)
+                    .orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel));
             }
             default -> {
                 return 0;

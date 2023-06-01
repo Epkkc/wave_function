@@ -16,8 +16,8 @@ import lombok.ToString;
 public class GeneratorConfiguration {
 
     private VoltageLevel level;
-    private int minPower; // kWt
-    private int maxPower; // kWt
+    private int minPower;
+    private int maxPower;
     private int boundingArea;
     private int transformerArea;
     private boolean enabled;

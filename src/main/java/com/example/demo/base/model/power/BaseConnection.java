@@ -5,9 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -40,7 +38,7 @@ public class BaseConnection {
     }
 
     public boolean addConnection(String nodeUuid, String lineUuid) {
-        if (getConnectedNodes() < limit && nodeLineDtos.stream().noneMatch(dto->dto.getNodeUuid().equals(nodeUuid))) {
+        if (getConnectedNodes() < limit && nodeLineDtos.stream().noneMatch(dto -> dto.getNodeUuid().equals(nodeUuid))) {
 //            connectedUuids.add(nodeUuid);
 //            lineUuids.add(lineUuid);
             nodeLineDtos.add(new NodeLineDto(nodeUuid, lineUuid));
@@ -50,7 +48,7 @@ public class BaseConnection {
     }
 
     public boolean removeConnection(String nodeUuid, String lineUuid) {
-        if (nodeLineDtos.stream().anyMatch(dto->dto.getNodeUuid().equals(nodeUuid))) {
+        if (nodeLineDtos.stream().anyMatch(dto -> dto.getNodeUuid().equals(nodeUuid))) {
 //            connectedNodeUuids.remove(nodeUuid);
 //            lineUuids.remove(lineUuid);
             nodeLineDtos.removeIf(dto -> dto.getNodeUuid().equals(nodeUuid) && dto.getLineUuid().equals(lineUuid));

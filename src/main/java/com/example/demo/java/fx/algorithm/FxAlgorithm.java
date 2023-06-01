@@ -24,7 +24,8 @@ public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerL
                        ConnectionService<FxAbstractPowerNode> connectionService, FxConfiguration configuration, List<TransformerConfiguration> transformerConfigurations,
                        List<LoadConfiguration> loadConfigurations, List<GeneratorConfiguration> generatorConfigurations, PowerNodeFactory<FxAbstractPowerNode> nodeFactory,
                        ExportService<FxAbstractPowerNode, FxPowerLine> exportService, boolean randomFirst) {
-        super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations, nodeFactory, exportService, randomFirst);
+        super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations, nodeFactory, exportService,
+            randomFirst);
     }
 
     @Override

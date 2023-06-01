@@ -1,14 +1,14 @@
 package com.example.demo.java.fx.model.power;
 
+import com.example.demo.base.model.enums.PowerNodeType;
+import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.grid.Coordinates;
 import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.LevelChainNumberDto;
 import com.example.demo.base.model.status.StatusMetaDto;
-import com.example.demo.java.fx.model.grid.ConnectionPoint;
-import com.example.demo.base.model.enums.PowerNodeType;
-import com.example.demo.base.model.enums.VoltageLevel;
-import com.example.demo.java.fx.model.status.FxStatus;
 import com.example.demo.base.model.status.StatusType;
+import com.example.demo.java.fx.model.grid.ConnectionPoint;
+import com.example.demo.java.fx.model.status.FxStatus;
 import com.example.demo.java.fx.model.visual.BasePane;
 import javafx.beans.property.DoubleProperty;
 import javafx.geometry.Bounds;
@@ -55,7 +55,8 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
 
     @Override
     protected FxStatus getStatus(StatusType statusType, Collection<StatusMetaDto> statusDtos) {
-        return new FxStatus(statusType, statusDtos, basePane.getStatusPane().getSize()); // В данный момент status без координат в матрице статусов, мб стоит выпилить вообще координаты из статусов
+        return new FxStatus(statusType, statusDtos,
+            basePane.getStatusPane().getSize()); // В данный момент status без координат в матрице статусов, мб стоит выпилить вообще координаты из статусов
     }
 
     protected BasePane createBasePane(Collection<LevelChainNumberDto> levelChainNumberDtos) {
@@ -165,6 +166,7 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
     }
 
     public abstract void setStrokeColor(Color color);
+
     public abstract Collection<DoubleProperty> getOpacityProperty();
 
 }

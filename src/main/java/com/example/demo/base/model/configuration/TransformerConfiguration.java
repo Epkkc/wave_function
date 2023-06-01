@@ -19,9 +19,9 @@ import java.util.List;
 public class TransformerConfiguration {
 
     private VoltageLevel level;
-    private int boundingAreaFrom; //TODO Предполагается, что это поле будет настраиваемым
-    private int boundingAreaTo; //TODO Предполагается, что это поле будет настраиваемым
-    private boolean enabled; //TODO Предполагается, что можно будет чекбоксом включить отключить уровни напряжения
+    private int boundingAreaFrom;
+    private int boundingAreaTo;
+    private boolean enabled;
     private List<Integer> transformerPowerSet;
     private int numberOfNodes;
     private double maxLineLength; // Максимальная длина линии, которой будет соединён трансформатор с трансформатором

@@ -1,11 +1,9 @@
 package com.example.demo.base.factories;
 
 import com.example.demo.base.model.enums.PowerNodeType;
-import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.power.BasePowerNode;
 import com.example.demo.base.model.power.LevelChainNumberDto;
 
-import java.util.Collection;
 import java.util.List;
 
 public class BasePowerNodeFactory implements PowerNodeFactory<BasePowerNode> {
