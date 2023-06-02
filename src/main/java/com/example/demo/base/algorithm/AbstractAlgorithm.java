@@ -158,6 +158,9 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
         finalizeExcessLines();
 
+        // Повтор требуется для того, чтобы покрыть сценарий, когда обмотка трансформатора соединена с другими нодами
+        // исключительно через breaker-ы. Тогда в негативном сценарии все линии с breaker-ами будут удалены методом выше
+        // и обмотка останется ни с чем не соединённой.
         finalizeUnconnectedNodes();
 
         finalizeExcessLines();
@@ -217,7 +220,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                 if (excessLoadO.isPresent()) {
                     PNODE excessLoad = excessLoadO.get();
 
-
+                    System.out.println("Removing excess load : " + excessLoad);
                     elementService.removeNode(excessLoad, getBaseNode(excessLoad.getX(), excessLoad.getY())); // Удаление excessLoad ноды и линий с ней связанных
                     statusService.removeStatusesByNodeUuid(excessLoad.getUuid()); // Удаление статусов, порождённых excessLoad
 
@@ -374,7 +377,13 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     // Возвращает количество присоединённых к обмотке (voltageLevel) трансформатора нод, являющихся генераторами и нагрузками
     // Ноды, соединённые через breaker=true не учитываются, т.к. в негативном сценарии соединяющие линии будут удалены.
     protected int getUnsubstationConnectionsCount(PNODE substation, VoltageLevel voltageLevel) {
-        return (int) substation.getConnections().values().stream()
+        boolean b = substation.getConnections()
+            .get(voltageLevel)
+            .getNodeLineDtos()
+            .stream()
+            .anyMatch(dto -> elementService.getLine(dto.getLineUuid()).map(line -> line.isBreaker()).orElse(false)); // todo for delete
+
+        int a =  (int) substation.getConnections().values().stream()
             .filter(connection -> connection.getVoltageLevel().equals(voltageLevel))
             .map(BaseConnection::getNodeLineDtos)
             .flatMap(List::stream)
@@ -385,6 +394,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
             .map(elementService::getNodeByUuid)
             .filter(node -> PowerNodeType.LOAD.equals(node.getNodeType()) || PowerNodeType.GENERATOR.equals(node.getNodeType()))
             .count();
+        return a;
     }
 
     protected List<PNODE> getUnconnectedNodes() {

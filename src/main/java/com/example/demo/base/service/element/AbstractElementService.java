@@ -76,6 +76,7 @@ public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? e
 
         beforeRemovingLines(linesForRemove);
 
+        System.out.println("Removing excess load lines : " + linesForRemove);
         linesForRemove.forEach(line -> removeLine(line, true));
     }
 
