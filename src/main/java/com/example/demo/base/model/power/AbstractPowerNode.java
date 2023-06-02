@@ -27,7 +27,7 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
     protected int x;
     protected int y;
     protected int power;
-
+    protected int availablePower;
     protected String uuid = UUID.randomUUID().toString();
     protected List<VoltageLevel> voltageLevels;
     protected List<STATUS> statuses;
@@ -38,6 +38,7 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
         this.x = x;
         this.y = y;
         this.power = power;
+        this.availablePower = power;
         this.voltageLevels = levelChainNumberDtos.stream().map(LevelChainNumberDto::getVoltageLevel).toList();
         this.statuses = new ArrayList<>();
         this.connections = new HashMap<>();
@@ -89,5 +90,9 @@ public abstract class AbstractPowerNode<STATUS extends BaseStatus, CONNECTION ex
 
     public void tryToRemoveStatuses() {
         statuses.removeIf(status -> status.getVoltageLevels().isEmpty());
+    }
+
+    public void decreaseAvailablePower(int value) {
+        availablePower -= value;
     }
 }

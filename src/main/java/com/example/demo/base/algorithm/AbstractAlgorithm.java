@@ -51,6 +51,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     protected final ExportService<PNODE, LINE> exportService;
     protected final Random random = new Random();
     protected final boolean randomFirst;
+    private static final int NEGATIVE_LOAD_POWER = -1;
 
 
     @Override
@@ -140,11 +141,12 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                 elementService.getTotalNumberOfEdges()));
         }
 
-        // todo раскомментировать проверку
-//        boolean loadLessThanPower = elementService.getSumLoad() <= elementService.getSumPower();
-//        if (!loadLessThanPower) {
-//            errorMessage.add(String.format("Суммарная нагрузка = %d больше, чем суммарная генерация = %d", elementService.getSumLoad(), elementService.getSumPower()));
-//        }
+        boolean loadLessThanPower = elementService.getSumLoad() <= elementService.getSumPower();
+        if (!loadLessThanPower) {
+            errorMessage.add(String.format("Суммарная нагрузка = %d больше, чем суммарная генерация = %d", elementService.getSumLoad(), elementService.getSumPower()));
+        }
+
+        // todo добавить проверку на то, что у всех нод неотрицательный power
 
         return errorMessage;
     }
@@ -158,6 +160,8 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
         finalizeExcessLines();
 
+        finalizeGenerators();
+
         // Повтор требуется для того, чтобы покрыть сценарий, когда обмотка трансформатора соединена с другими нодами
         // исключительно через breaker-ы. Тогда в негативном сценарии все линии с breaker-ами будут удалены методом выше
         // и обмотка останется ни с чем не соединённой.
@@ -165,23 +169,66 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
         finalizeExcessLines();
 
+        finalizeGenerators();
+
+        deleteExcessLoads();
+
         printSchemeMetaInformation("After finalizing");
+    }
+
+    private void finalizeGenerators() {
+        List<PNODE> generators = elementService.getMatrix().toNodeList().stream()
+            .filter(node -> PowerNodeType.GENERATOR.equals(node.getNodeType()))
+            .collect(Collectors.toList());
+        while (elementService.getSumPower() < elementService.getSumLoad() && !generators.isEmpty()) {
+            PNODE generator = generators.get(generators.size() - 1);
+            GeneratorConfiguration configuration = getGenerationCfg(generator.getVoltageLevels().get(0));
+            int maxGeneratorPower = configuration.getMaxNumberOfBlocks() * configuration.getBlockPower();
+            if (generator.getPower() < maxGeneratorPower) {
+                generator.setPower(maxGeneratorPower);
+            }
+            generators.remove(generators.size() - 1);
+        }
+
+        if (elementService.getSumPower() < elementService.getSumLoad()) {
+            while (elementService.getSumPower() < elementService.getSumLoad()) {
+                deleteExcessLoad();
+                checkGeneratorNeed();
+            }
+        }
+    }
+
+    private GeneratorConfiguration getGenerationCfg(VoltageLevel voltageLevel) {
+        return configurationService.getGeneratorConfigurations()
+            .stream()
+            .filter(cfg -> cfg.getLevel().equals(voltageLevel))
+            .findFirst()
+            .orElseThrow(() -> new UnsupportedOperationException("Unable to find generation configuration with voltage level = " + voltageLevel));
     }
 
     private void deleteExcessLoads() {
         int required = configurationService.getRequiredNumberOfNodes();
         int total = elementService.getTotalNumberOfNodes();
         if (total > required)
-        for (int i = 0; i < total - required; i++) {
-            Optional<PNODE> excessLoadOptional = getExcessLoad();
-            if (excessLoadOptional.isPresent()) {
-                PNODE excessLoad = excessLoadOptional.get();
-                elementService.removeNode(excessLoad, getBaseNode(excessLoad.getX(), excessLoad.getY())); // Удаление excessLoad ноды и линий с ней связанных
-                statusService.removeStatusesByNodeUuid(excessLoad.getUuid()); // Удаление статусов, порождённых excessLoad
-                // todo может быть в теории проблема со статусами, но пока замечено не было
-            } else {
-                System.out.println("Unable to remove excess node");
+            for (int i = 0; i < total - required; i++) {
+                boolean deletionResult = deleteExcessLoad();
+                if (!deletionResult) {
+                    System.out.println("Unable to remove excess node");
+                    break;
+                }
             }
+    }
+
+    private boolean deleteExcessLoad() {
+        Optional<PNODE> excessLoadOptional = getExcessLoad();
+        if (excessLoadOptional.isPresent()) {
+            PNODE excessLoad = excessLoadOptional.get();
+            elementService.removeNode(excessLoad, getBaseNode(excessLoad.getX(), excessLoad.getY())); // Удаление excessLoad ноды и линий с ней связанных
+            statusService.removeStatusesByNodeUuid(excessLoad.getUuid()); // Удаление статусов, порождённых excessLoad
+            // todo вернуть присоединённой подстанции load.power в availablePower
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -374,6 +421,36 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         return Optional.empty();
     }
 
+    protected Optional<PNODE> getSourceConnectedSubstation(PNODE load) {
+        int loadChainLinkOrder = getLoadChainLinkOrder(load);
+        if (loadChainLinkOrder > 1) {
+            // Если chainLinkNumber > 1, то нужно вызвать этот же метод для соединённой нагрузки с chainLinkNumber - 1
+            for (BaseConnection value : load.getConnections().values()) {
+                for (NodeLineDto dto : value.getNodeLineDtos()) {
+                    PNODE node = elementService.getNodeByUuid(dto.getNodeUuid());
+                    if (node != null && PowerNodeType.LOAD.equals(node.getNodeType()) && getLoadChainLinkOrder(node) == (loadChainLinkOrder - 1)) {
+                        return getSourceConnectedSubstation(node);
+                    }
+                }
+            }
+        } else {
+            // Иначе (chainLinkNumber == 1) вернуть результат метода getConnectedSubstation(load)
+            return getConnectedSubstation(load);
+        }
+
+
+        return Optional.empty();
+    }
+
+    private int getLoadChainLinkOrder(PNODE load) {
+        if (PowerNodeType.LOAD.equals(load.getNodeType())) {
+            return load.getConnections().get(load.getVoltageLevels().get(0)).getChainLinkOrder();
+        } else {
+            throw new UnsupportedOperationException("Wrong parameter \"load\" : " + load);
+        }
+    }
+
+
     // Возвращает количество присоединённых к обмотке (voltageLevel) трансформатора нод, являющихся генераторами и нагрузками
     // Ноды, соединённые через breaker=true не учитываются, т.к. в негативном сценарии соединяющие линии будут удалены.
     protected int getUnsubstationConnectionsCount(PNODE substation, VoltageLevel voltageLevel) {
@@ -383,7 +460,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
             .stream()
             .anyMatch(dto -> elementService.getLine(dto.getLineUuid()).map(line -> line.isBreaker()).orElse(false)); // todo for delete
 
-        int a =  (int) substation.getConnections().values().stream()
+        int a = (int) substation.getConnections().values().stream()
             .filter(connection -> connection.getVoltageLevel().equals(voltageLevel))
             .map(BaseConnection::getNodeLineDtos)
             .flatMap(List::stream)
@@ -416,7 +493,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
     protected void fillLoadToGrid(PNODE load, LoadConfiguration loadCfg, StatusMetaDto shouldStatus) {
         elementService.addPowerNodeToGrid(load);
-
+        getSourceSubstation(loadCfg, shouldStatus).decreaseAvailablePower(load.getPower());
         PNODE parentNode = elementService.getNodeByUuid(shouldStatus.getNodeUuid());
         // Соединяем новую ноду с нодой, установившей SHOULD статус.
         connectionService.connectNodes(load, parentNode, loadCfg.getLevel(), false);
@@ -598,6 +675,10 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
                 int resPower = getLoadPower(loadConfiguration, shouldStatus);
 
+                if (resPower == NEGATIVE_LOAD_POWER) {
+                    continue;
+                }
+
                 resultNode = nodeFactory.createNode(
                     PowerNodeType.LOAD, resultNode.getX(), resultNode.getY(),
                     resPower,
@@ -629,20 +710,34 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
     protected int getLoadPower(LoadConfiguration loadConfiguration, StatusMetaDto shouldStatus) {
         // Расчёт мощности нагрузки
-        int randomPower = random.nextInt(loadConfiguration.getMaxLoad() - loadConfiguration.getMinLoad()) + loadConfiguration.getMinLoad();
-        int resPower = randomPower;
 
-//        todo сделать определение мощности нагрузки
-//        int resPower;
-//        if ((transformer.getPower() - filledPower) > randomPower) {
-//            resPower = randomPower;
-//        } else if ((transformer.getPower() - filledPower) > loadCfg.getMinLoad()) {
-//            resPower = random.nextInt(transformer.getPower() - filledPower - loadCfg.getMinLoad()) + loadCfg.getMinLoad();
-//        } else {
-//            break;
-//        }
+        // TODO При расстановке нагрузки уменьшать availablePower трансформатора
+        PNODE parentNode = elementService.getNodeByUuid(shouldStatus.getNodeUuid());
+        PNODE sourceSubstation;
+        if (PowerNodeType.SUBSTATION.equals(parentNode.getNodeType())) {
+            sourceSubstation = parentNode;
+        } else {
+            sourceSubstation = getSourceConnectedSubstation(parentNode).orElseThrow(() -> new UnsupportedOperationException("Unable to find source substation of load :" + parentNode));
+        }
 
-        return resPower;
+        int availablePower = sourceSubstation.getAvailablePower();
+
+        if (availablePower < loadConfiguration.getMinLoad()) {
+            return NEGATIVE_LOAD_POWER;
+        } else {
+            int randomPower = random.nextInt(loadConfiguration.getMaxLoad() - loadConfiguration.getMinLoad()) + loadConfiguration.getMinLoad();
+            return Math.min(randomPower, availablePower);
+        }
+    }
+
+    protected PNODE getSourceSubstation(LoadConfiguration loadConfiguration, StatusMetaDto shouldStatus) {
+        // TODO При расстановке нагрузки уменьшать availablePower трансформатора
+        PNODE parentNode = elementService.getNodeByUuid(shouldStatus.getNodeUuid());
+        if (PowerNodeType.SUBSTATION.equals(parentNode.getNodeType())) {
+            return parentNode;
+        } else {
+            return getSourceConnectedSubstation(parentNode).orElseThrow(() -> new UnsupportedOperationException("Unable to find source substation of load :" + parentNode));
+        }
     }
 
     protected void checkGeneratorNeed() {
@@ -711,16 +806,18 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     }
 
     protected int getGeneratorPower(GeneratorConfiguration configuration) {
-        int randomPower = random.nextInt(configuration.getMaxPower() - configuration.getMinPower()) + configuration.getMinPower();
-        int resPower = randomPower;
-        // todo сделать определение мощности генератора
-//        if ((totalLoad - totalGeneration) > randomPower) {
-//            resPower = randomPower;
-//        } else if ((totalLoad - totalGeneration) > generatorConfiguration.getMinPower()) {
-//            resPower = random.nextInt(totalLoad - totalGeneration - generatorConfiguration.getMinPower()) + generatorConfiguration.getMinPower();
-//        } else {
-//            break;
-//        }
+
+        int numberOfBlocks = random.nextInt(configuration.getMaxNumberOfBlocks() + 1 - configuration.getMinNumberOfBlocks()) + configuration.getMinNumberOfBlocks();
+
+        int luck = elementService.getSumLoad() - elementService.getSumPower();
+
+        int resPower;
+        if (luck < numberOfBlocks * configuration.getBlockPower()) {
+            resPower = numberOfBlocks * configuration.getBlockPower();
+        } else {
+            resPower = configuration.getMaxNumberOfBlocks() * configuration.getBlockPower();
+        }
+
         return resPower;
     }
 

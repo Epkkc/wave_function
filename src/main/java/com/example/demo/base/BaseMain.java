@@ -12,7 +12,8 @@ public class BaseMain {
 
     public static void main(String[] args) {
 
-        int iters = 100;
+        int iters = 500;
+        int failedCount = 0;
         boolean totalValid = true;
         for (int i = 0; i < iters; i++) {
             BaseAlgorithmService baseAlgorithmService = new BaseAlgorithmService(rows, columns, numberOfNodes, numberOfEdges);
@@ -22,10 +23,12 @@ public class BaseMain {
             System.out.printf("Iter = %d, valid = %s%n", i, valid);
             if (!valid) {
                 System.out.println("Error message :\n" + result.getErrorMessage());
+                failedCount++;
             }
         }
 
         System.out.println("Total valid = " + totalValid);
+        System.out.println("Failed count = " + failedCount);
 
     }
 

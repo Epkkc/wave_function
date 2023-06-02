@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -23,6 +24,8 @@ public class FxMain extends Application {
     static int columns = 30;
     static int numberOfNodes = 40;
     static int numberOfEdges = 39;
+
+    public static boolean CONTROL_PRESSED = false;
 
     public static void main(String[] args) {
         launch();
@@ -61,6 +64,16 @@ public class FxMain extends Application {
                 } else {
                     stopMessage.setOpacity(0);
                 }
+            } else if (KeyCode.Z.equals(keyEvent.getCode())) {
+                if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) {
+                    System.out.println("CONTROL PRESSED");
+                    onControl();
+                    System.out.println("CONTROL VALUE = " + CONTROL_PRESSED);
+                } else if (keyEvent.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+                    System.out.println("CONTROL RELEASED");
+                    offControl();
+                    System.out.println("CONTROL VALUE = " + CONTROL_PRESSED);
+                }
             }
         });
 
@@ -91,5 +104,12 @@ public class FxMain extends Application {
         stackPane.getChildren().add(text);
 
         return stackPane;
+    }
+
+    private void onControl() {
+        CONTROL_PRESSED = true;
+    }
+    private void offControl() {
+        CONTROL_PRESSED = false;
     }
 }

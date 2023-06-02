@@ -28,7 +28,7 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
     private final ScrollPane scrollPane;
     private final Group root;
     private final GridPane gridPane;
-    private final int timeLineLength = 10_000;
+    private final int timeLineLength = 2_000;
 
     public FxElementService(Matrix<FxAbstractPowerNode> matrix, FxConfiguration configuration, ScrollPane scrollPane, Group root, GridPane gridPane) {
         super(matrix);

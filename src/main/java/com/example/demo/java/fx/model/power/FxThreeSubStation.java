@@ -123,7 +123,7 @@ public class FxThreeSubStation extends FxAbstractPowerNode {
                 double x = bnds.getMinX() - (stickyNotesPane.getWidth() / 2) + (circle.getRadius());
                 double y = bnds.getMinY() - stickyNotesPane.getHeight();
                 setHoverOpacity(voltageLevel);
-                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power),
+                lowText.setText(String.join("\n", getUuid(), voltageLevel.getDescription(), String.format("Мощность: %s", power), String.format("Доступная мощность: %s", availablePower),
                     String.format("Номер звена: %s", connections.get(voltageLevel).getChainLinkOrder())));
                 popup.show(circle, x, y);
             } else {
