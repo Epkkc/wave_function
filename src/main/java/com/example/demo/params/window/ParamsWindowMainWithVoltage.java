@@ -25,6 +25,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -273,11 +274,15 @@ public class ParamsWindowMainWithVoltage extends Application {
             menuTable.getColumnConstraints().add(columnConstraints);
         }
 
+        Text field1Title = new Text("Field 1");
+        menuTable.add(field1Title, 0, 0, totalMenuTableColumns/2, 1);
+
         ExtendedControl textInputControl1 = new ExtendedControl();
-        textInputControl1.setPromptText("Field 1");
-        menuTable.add(textInputControl1, 0, 0, totalMenuTableColumns, 1);
+        textInputControl1.setPromptText("");
+        menuTable.add(textInputControl1, totalMenuTableColumns/2, 0, totalMenuTableColumns/2, 1);
 
         ExtendedControl textInputControl2 = new ExtendedControl();
+
         textInputControl2.setPromptText("Field 2");
         menuTable.add(textInputControl2, 0, 1, totalMenuTableColumns, 1);
 

@@ -87,6 +87,7 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
     protected boolean getBreakerProperty(PNODE node1, PNODE node2) {
         // Если соединяются нагрузка и ПС, то устанавливаем breaker
         // Если ПС является порождающей нагрузку нодой, то этот метод не должен быть вызван
+        //todo переделать, чтобы breaker устанавливался только в том случае, когда соединяются две LOAD, принадлежащие к разным фидерам
         return node1.getNodeType().equals(PowerNodeType.SUBSTATION) && node2.getNodeType().equals(PowerNodeType.LOAD) ||
             node2.getNodeType().equals(PowerNodeType.SUBSTATION) && node1.getNodeType()
                 .equals(PowerNodeType.LOAD); // Breaker устанавливается в том случае, когда нагрузка соединяется с ПС, с которой ещё не был соединён фидер
@@ -129,12 +130,19 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
 
     protected boolean nodeTypeMatchCondition(PNODE mainNode, PNODE freeNode) {
         switch (mainNode.getNodeType()) {
-            case SUBSTATION, LOAD, GENERATOR -> {
+            case SUBSTATION, GENERATOR -> {
                 return PowerNodeType.SUBSTATION.equals(freeNode.getNodeType()); // ПС соединяется только с ПС, поскольку на этапе расстановки ПС нет никаких альтернативных нод
+            }
+            case LOAD -> {
+                return PowerNodeType.LOAD.equals(freeNode.getNodeType()) && additionalLoadCondition(mainNode, freeNode);
             }
             default -> {
                 return false;
             }
         }
+    }
+
+    protected boolean additionalLoadCondition(PNODE mainNode, PNODE freeNode) {
+        return true;
     }
 }

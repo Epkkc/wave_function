@@ -8,7 +8,7 @@ module com.example.demo {
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
-
+    requires java.xml.bind;
 
     exports com.example.demo.java.fx.factories;
     exports com.example.demo.utils;
@@ -28,7 +28,8 @@ module com.example.demo {
     exports com.example.demo.params.window;
     exports com.example.demo.export.service;
     exports com.example.demo.base.factories;
-
+    exports com.example.demo.export.cim;
+    exports com.example.demo.export.cim.model;
 
     opens com.example.demo.java.fx.factories to javafx.fxml;
     opens com.example.demo.thread to javafx.fxml;

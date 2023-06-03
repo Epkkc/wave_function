@@ -35,4 +35,6 @@ public interface ElementService<PNODE extends AbstractPowerNode<? extends BaseSt
     int getSumPower();
 
     PNODE getNodeByUuid(String uuid);
+
+    List<PNODE> getNodes();
 }

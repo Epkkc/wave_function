@@ -17,6 +17,7 @@ public class GeneralResult {
     private int numberOfNodes;
     private int numberOfEdges;
     private String fileName;
+    private String cimFileName;
     private List<NodeTypeResult> resultList;
     private List<String> errorMessage;
 }

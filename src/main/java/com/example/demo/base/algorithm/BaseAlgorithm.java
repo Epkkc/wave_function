@@ -12,6 +12,7 @@ import com.example.demo.base.service.BaseConfiguration;
 import com.example.demo.base.service.connection.ConnectionService;
 import com.example.demo.base.service.element.BaseElementService;
 import com.example.demo.base.service.status.StatusService;
+import com.example.demo.export.cim.CimExportService;
 import com.example.demo.export.service.BaseExportService;
 
 import java.util.List;
@@ -23,8 +24,8 @@ public class BaseAlgorithm extends AbstractAlgorithm<BasePowerNode, BaseLine, Ba
                          List<TransformerConfiguration> transformerConfigurations,
                          List<LoadConfiguration> loadConfigurations,
                          List<GeneratorConfiguration> generatorConfigurations,
-                         PowerNodeFactory<BasePowerNode> nodeFactory, BaseExportService exportService, boolean randomFirst) {
-        super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations, nodeFactory, exportService,
+                         PowerNodeFactory<BasePowerNode> nodeFactory, BaseExportService exportService, CimExportService<BasePowerNode, BaseLine> cimExportService, boolean randomFirst) {
+        super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations, nodeFactory, exportService, cimExportService,
             randomFirst);
     }
 

@@ -22,8 +22,8 @@ public class FxMain extends Application {
 
     static int rows = 22;
     static int columns = 30;
-    static int numberOfNodes = 40;
-    static int numberOfEdges = 39;
+    static int numberOfNodes = 90;
+    static int numberOfEdges = 70;
 
     public static boolean CONTROL_PRESSED = false;
 
@@ -63,16 +63,6 @@ public class FxMain extends Application {
                     stopMessage.setOpacity(0.85);
                 } else {
                     stopMessage.setOpacity(0);
-                }
-            } else if (KeyCode.Z.equals(keyEvent.getCode())) {
-                if (keyEvent.getEventType().equals(KeyEvent.KEY_PRESSED)) {
-                    System.out.println("CONTROL PRESSED");
-                    onControl();
-                    System.out.println("CONTROL VALUE = " + CONTROL_PRESSED);
-                } else if (keyEvent.getEventType().equals(KeyEvent.KEY_RELEASED)) {
-                    System.out.println("CONTROL RELEASED");
-                    offControl();
-                    System.out.println("CONTROL VALUE = " + CONTROL_PRESSED);
                 }
             }
         });

@@ -6,6 +6,7 @@ import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.grid.Matrix;
+import com.example.demo.export.cim.CimExportService;
 import com.example.demo.export.service.AbstractExportService;
 import com.example.demo.export.service.ExportService;
 import com.example.demo.java.fx.algorithm.FxAlgorithm;
@@ -61,6 +62,8 @@ public class FxAlgorithmService {
         FxPowerNodeAbstractFactory fabric = new FxPowerNodeAbstractFactory(elementService);
 
         ExportService<FxAbstractPowerNode, FxPowerLine> exportService = new AbstractExportService<>(configuration, elementService, matrix);
+
+        CimExportService<FxAbstractPowerNode, FxPowerLine> cimExportService = new CimExportService<>(configuration, elementService);
 
         List<TransformerConfiguration> transformerConfigurations = new ArrayList<>();
 
@@ -120,12 +123,12 @@ public class FxAlgorithmService {
         // http://kabelmag2012.narod.ru/TransfS.html
         loadConfigurations.add(LoadConfiguration.builder()
             .level(LEVEL_10)
-            .minLoad(100)
-            .maxLoad(200)
-            .boundingAreaFrom(2)
-            .boundingAreaTo(4)
-            .maxLineLength(4)
-            .maxChainLength(5)
+            .minLoad(30)
+            .maxLoad(50)
+            .boundingAreaFrom(1)
+            .boundingAreaTo(3)
+            .maxLineLength(3)
+            .maxChainLength(6)
             .enabled(true)
             .generationRate(100)
             .build());
@@ -137,7 +140,7 @@ public class FxAlgorithmService {
             .boundingAreaTo(4)
             .maxLineLength(4)
             .maxChainLength(1)
-            .enabled(true)
+            .enabled(false)
             .generationRate(40)
             .build());
 
@@ -146,7 +149,7 @@ public class FxAlgorithmService {
             .level(LEVEL_35)
             .minNumberOfBlocks(2)
             .maxNumberOfBlocks(4)
-            .blockPower(150)
+            .blockPower(1500)
             .boundingArea(LEVEL_35.getBoundingArea() - 4)
             .transformerArea(2)
             .enabled(true)
@@ -155,7 +158,7 @@ public class FxAlgorithmService {
             .level(LEVEL_110)
             .minNumberOfBlocks(3)
             .maxNumberOfBlocks(6)
-            .blockPower(240)
+            .blockPower(2400)
             .boundingArea(LEVEL_110.getBoundingArea() - 4)
             .transformerArea(3)
             .enabled(true)
@@ -183,7 +186,7 @@ public class FxAlgorithmService {
         configuration.setGeneratorConfigurations(generatorConfigurations);
 
         Algorithm algorithm = new FxAlgorithm(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations,
-            fabric, exportService, true);
+            fabric, exportService, cimExportService, true);
 
         GeneralResult generalResult = null;
         try {

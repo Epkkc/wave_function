@@ -22,9 +22,11 @@ import com.example.demo.base.service.BaseConfiguration;
 import com.example.demo.base.service.connection.ConnectionService;
 import com.example.demo.base.service.element.ElementService;
 import com.example.demo.base.service.status.StatusService;
+import com.example.demo.export.cim.CimExportService;
 import com.example.demo.export.service.ExportService;
 import com.example.demo.utils.RandomUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +51,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     protected final List<GeneratorConfiguration> generatorConfigurations;
     protected final PowerNodeFactory<PNODE> nodeFactory;
     protected final ExportService<PNODE, LINE> exportService;
+    protected final CimExportService<PNODE, LINE> cimExportService;
     protected final Random random = new Random();
     protected final boolean randomFirst;
     private static final int NEGATIVE_LOAD_POWER = -1;
@@ -70,6 +73,9 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         fillLoadsAndGenerators();
 
         String generatedFileName = exportService.saveAsFile();
+
+//        String cimFileName = cimExportService.exportIntoCim();
+        String cimFileName = "cimFile"; // todo проверить
 
         printSchemeMetaInformation("Before validation and optimizing");
 
@@ -98,7 +104,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
             }
         }
         List<String> errorMessage = validateScheme();
-        return new GeneralResult(elementService.getTotalNumberOfNodes(), elementService.getTotalNumberOfEdges(), generatedFileName, nodeTypeResults, errorMessage);
+        return new GeneralResult(elementService.getTotalNumberOfNodes(), elementService.getTotalNumberOfEdges(), generatedFileName, cimFileName, nodeTypeResults, errorMessage);
     }
 
     private void printSchemeMetaInformation(String title) {
@@ -501,6 +507,9 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         Set<String> ignoreUuids = new HashSet<>();
         Set<String> processedUuids = new HashSet<>();
         ignoreConnectedSubstation(parentNode, loadCfg.getLevel(), ignoreUuids, processedUuids);
+
+        // Здесь все ноды фидера, включая подстанции с которыми уже есть связь
+        Set<String> collect = CollectionUtils.union(ignoreUuids, processedUuids).stream().collect(Collectors.toSet());
 
         // Соединяем сгенерированную ноду с соседями
         connectionService.connectNode(load, ignoreUuids);

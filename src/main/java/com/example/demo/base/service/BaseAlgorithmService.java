@@ -10,12 +10,14 @@ import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
+import com.example.demo.base.model.power.BaseLine;
 import com.example.demo.base.model.power.BasePowerNode;
 import com.example.demo.base.service.connection.BaseConnectionService;
 import com.example.demo.base.service.connection.ConnectionService;
 import com.example.demo.base.service.element.BaseElementService;
 import com.example.demo.base.service.status.BaseStatusService;
 import com.example.demo.base.service.status.StatusService;
+import com.example.demo.export.cim.CimExportService;
 import com.example.demo.export.service.BaseExportService;
 import lombok.RequiredArgsConstructor;
 
@@ -51,6 +53,8 @@ public class BaseAlgorithmService {
         PowerNodeFactory<BasePowerNode> factory = new BasePowerNodeFactory();
 
         BaseExportService exportService = new BaseExportService(configuration, elementService, matrix);
+
+        CimExportService<BasePowerNode, BaseLine> cimExportService = new CimExportService<>(configuration, elementService);
 
         List<TransformerConfiguration> transformerConfigurations = new ArrayList<>();
 
@@ -174,7 +178,7 @@ public class BaseAlgorithmService {
 
         Algorithm algorithm = new BaseAlgorithm(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations,
             generatorConfigurations,
-            factory, exportService, false);
+            factory, exportService, cimExportService, false);
         GeneralResult result = algorithm.start();
 
         return result;

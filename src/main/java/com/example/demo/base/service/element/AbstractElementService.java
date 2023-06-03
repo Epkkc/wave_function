@@ -106,4 +106,9 @@ public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? e
     public List<LINE> getLines() {
         return uuidToLineMap.values().stream().collect(Collectors.toList());
     }
+
+    @Override
+    public List<PNODE> getNodes() {
+        return uuidToNodeMap.values().stream().collect(Collectors.toList());
+    }
 }
