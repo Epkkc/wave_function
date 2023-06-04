@@ -1,18 +1,18 @@
 package com.example.demo.base.service.connection;
 
-import com.example.demo.base.model.configuration.GeneratorConfiguration;
-import com.example.demo.base.model.configuration.LoadConfiguration;
-import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.enums.VoltageLevel;
 import com.example.demo.base.model.power.AbstractLine;
 import com.example.demo.base.model.power.AbstractPowerNode;
 import com.example.demo.base.model.power.BaseConnection;
+import com.example.demo.base.model.power.NodeLineDto;
 import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.service.BaseConfiguration;
+import com.example.demo.base.service.TopologyService;
 import com.example.demo.base.service.element.ElementService;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -24,8 +24,9 @@ import static java.lang.Math.sqrt;
 @RequiredArgsConstructor
 public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>, ELEMENTSERVICE extends ElementService<PNODE, LINE>> implements ConnectionService<PNODE> {
 
-    protected final ELEMENTSERVICE elementService;
+    protected final ELEMENTSERVICE elementService; // todo убрать потом параметризацию заменив на интерфейс
     protected final BaseConfiguration baseConfiguration;
+    protected final TopologyService<PNODE, LINE> topologyService;
 
     @Override
     public void connectNode(PNODE node) {
@@ -43,7 +44,7 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
         Collections.reverse(powerNodes);
 
         // Убираем саму node, чтобы не соединять её саму с собой
-        powerNodes.remove(0);
+        powerNodes.remove(0); // todo удалить, потому что есть фильтр в стриме
 
         // Этот сэт для того, чтобы трансформаторы не были соединены друг с другом обоими обмотками
         Set<String> connectedNodes = new HashSet<>();
@@ -51,13 +52,13 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
         node.getConnections().forEach((voltageLevel, connectionPoint) ->
                 powerNodes.stream()
                     .filter(n -> !PowerNodeType.EMPTY.equals(n.getNodeType()))
-                    .filter(n -> nodeTypeMatchCondition(node, n))
+                    .filter(n -> !ignoreUuids.contains(n.getUuid()))
                     .filter(n -> !connectedNodes.contains(n.getUuid()))
                     .filter(n -> !n.getUuid().equals(node.getUuid()))
-                    .filter(n -> !ignoreUuids.contains(n.getUuid()))
                     .filter(n -> sqrt(
                         pow(node.getX() - n.getX(), 2) + pow(node.getY() - n.getY(), 2)) <= getMaxLineLength(node, voltageLevel))
                     .filter(n -> n.getConnections().containsKey(voltageLevel))
+                    .filter(n -> nodeTypeMatchCondition(node, n))
 //                    .filter(n -> n.getConnectionPoints().get(voltageLevel).getLimit() > n.getConnectionPoints().get(voltageLevel).getConnections()) // TODO при добавлении лимитов
 //                    .limit(connectionPoint.getLimit() - connectionPoint.getConnections()) // TODO при добавлении лимитов
                     .forEach(n -> {
@@ -87,10 +88,20 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
     protected boolean getBreakerProperty(PNODE node1, PNODE node2) {
         // Если соединяются нагрузка и ПС, то устанавливаем breaker
         // Если ПС является порождающей нагрузку нодой, то этот метод не должен быть вызван
-        //todo переделать, чтобы breaker устанавливался только в том случае, когда соединяются две LOAD, принадлежащие к разным фидерам
-        return node1.getNodeType().equals(PowerNodeType.SUBSTATION) && node2.getNodeType().equals(PowerNodeType.LOAD) ||
-            node2.getNodeType().equals(PowerNodeType.SUBSTATION) && node1.getNodeType()
-                .equals(PowerNodeType.LOAD); // Breaker устанавливается в том случае, когда нагрузка соединяется с ПС, с которой ещё не был соединён фидер
+//        return node1.getNodeType().equals(PowerNodeType.SUBSTATION) && node2.getNodeType().equals(PowerNodeType.LOAD) ||
+//            node2.getNodeType().equals(PowerNodeType.SUBSTATION) && node1.getNodeType()
+//                .equals(PowerNodeType.LOAD); // Breaker устанавливается в том случае, когда нагрузка соединяется с ПС, с которой ещё не был соединён фидер
+
+        // todo удалить всё, что выше
+        // breaker устанавливался в следующих случаях:
+        // 1) Когда соединяются две LOAD, принадлежащие к разным фидерам (эта логика реализована в методе nodeTypeMatchCondition -> loadsBelongDifferentFeeders)
+        // 2) Когда LOAD с chainLinkNumber = 1 соединяется с другой SUBSTATION
+        return nodesAreLoads(node1, node2);
+
+    }
+
+    protected boolean nodesAreLoads(PNODE node1, PNODE node2) {
+        return node1.getNodeType().equals(PowerNodeType.LOAD) && node2.getNodeType().equals(PowerNodeType.LOAD);
     }
 
     protected abstract LINE getLine(PNODE node1, PNODE node2, VoltageLevel voltageLevel, boolean breaker);
@@ -99,28 +110,13 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
     protected double getMaxLineLength(PNODE node, VoltageLevel voltageLevel) {
         switch (node.getNodeType()) {
             case SUBSTATION -> {
-                return baseConfiguration.getTransformerConfigurations()
-                    .stream()
-                    .filter(cfg -> cfg.getLevel().equals(voltageLevel))
-                    .findFirst()
-                    .map(TransformerConfiguration::getMaxLineLength)
-                    .orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel));
+                return baseConfiguration.getTransformerConfiguration(voltageLevel).getMaxLineLength();
             }
             case LOAD -> {
-                return baseConfiguration.getLoadConfigurations()
-                    .stream()
-                    .filter(cfg -> cfg.getLevel().equals(voltageLevel))
-                    .findFirst()
-                    .map(LoadConfiguration::getMaxLineLength)
-                    .orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel));
+                return baseConfiguration.getLoadConfiguration(voltageLevel).getMaxLineLength();
             }
             case GENERATOR -> {
-                return baseConfiguration.getGeneratorConfigurations()
-                    .stream()
-                    .filter(cfg -> cfg.getLevel().equals(voltageLevel))
-                    .findFirst()
-                    .map(GeneratorConfiguration::getMaxLineLength)
-                    .orElseThrow(() -> new UnsupportedOperationException("There is no transformer configuration with voltage level " + voltageLevel));
+                return baseConfiguration.getGeneratorConfiguration(voltageLevel).getMaxLineLength();
             }
             default -> {
                 return 0;
@@ -134,7 +130,13 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
                 return PowerNodeType.SUBSTATION.equals(freeNode.getNodeType()); // ПС соединяется только с ПС, поскольку на этапе расстановки ПС нет никаких альтернативных нод
             }
             case LOAD -> {
-                return PowerNodeType.LOAD.equals(freeNode.getNodeType()) && additionalLoadCondition(mainNode, freeNode);
+                return PowerNodeType.LOAD.equals(freeNode.getNodeType())
+                    && loadsBelongDifferentFeeders(mainNode, freeNode)
+                    && feedersAreNotConnected(mainNode, freeNode)
+                    && limitCondition(mainNode, freeNode)
+//                    || PowerNodeType.SUBSTATION.equals(freeNode.getNodeType())
+//                    && substationBelongDifferentFeeder(mainNode, freeNode)
+                    ;
             }
             default -> {
                 return false;
@@ -142,7 +144,84 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
         }
     }
 
-    protected boolean additionalLoadCondition(PNODE mainNode, PNODE freeNode) {
-        return true;
+    // Данные метод проверяет, что фидеры ещё не были друг с другом соединены
+//    private boolean feedersAreNotConnected(PNODE mainNode, PNODE freeNode) {
+//        List<String> connectedFeedersToMain = new ArrayList<>();
+//        topologyService.getConnectedFeeders(mainNode, connectedFeedersToMain, new ArrayList<>());
+//
+//        List<String> connectedFeedersToFree = new ArrayList<>();
+//        topologyService.getConnectedFeeders(freeNode, connectedFeedersToFree, new ArrayList<>());
+//
+//        PNODE sourceConnectedSubstationMain = topologyService.getSourceConnectedSubstation(mainNode)
+//            .orElseThrow(() -> new UnsupportedOperationException("Unable to find SourceConnectedSubstation for node : " + mainNode));
+//
+//        PNODE sourceConnectedSubstationFree = topologyService.getSourceConnectedSubstation(freeNode)
+//            .orElseThrow(() -> new UnsupportedOperationException("Unable to find SourceConnectedSubstation for node : " + freeNode));
+//
+//        return !connectedFeedersToMain.contains(sourceConnectedSubstationFree.getUuid()) && !connectedFeedersToFree.contains(sourceConnectedSubstationMain.getUuid());
+//    }
+
+    // Данный метод проверяет, что питающие ПС каждой нагрузки ещё не соединены
+    private boolean feedersAreNotConnected(PNODE mainNode, PNODE freeNode) {
+        PNODE sourceConnectedSubstationMain = topologyService.getSourceConnectedSubstation(mainNode)
+            .orElseThrow(() -> new UnsupportedOperationException("Unable to find SourceConnectedSubstation for load : " + mainNode));
+        PNODE sourceConnectedSubstationFree = topologyService.getSourceConnectedSubstation(freeNode)
+            .orElseThrow(() -> new UnsupportedOperationException("Unable to find SourceConnectedSubstation for load : " + freeNode));
+
+        List<String> connectedSubstationsViaFeedersMain = new ArrayList<>();
+        getConnectedSubstationsViaFeeders(sourceConnectedSubstationMain, connectedSubstationsViaFeedersMain);
+
+        List<String> connectedSubstationsViaFeedersFree = new ArrayList<>();
+        getConnectedSubstationsViaFeeders(sourceConnectedSubstationFree, connectedSubstationsViaFeedersFree);
+
+        return !connectedSubstationsViaFeedersMain.contains(sourceConnectedSubstationFree.getUuid())
+            && !connectedSubstationsViaFeedersFree.contains(sourceConnectedSubstationMain.getUuid());
+
+    }
+
+    private void getConnectedSubstationsViaFeeders(PNODE substation, List<String> connectedSubstationsViaFeeders) {
+        for (BaseConnection connection : substation.getConnections().values()) {
+            for (NodeLineDto dto : connection.getNodeLineDtos()) {
+                PNODE node = elementService.getNode(dto.getNodeUuid());
+                LINE line = elementService.getLine(dto.getLineUuid());
+                if (PowerNodeType.LOAD.equals(node.getNodeType()) && !line.isBreaker()) {
+                    List<String> ignoreUuids = new ArrayList<>();
+                    ignoreUuids.add(substation.getUuid()); // todo скорее всего не надо
+                    topologyService.getConnectedFeeders(node, connectedSubstationsViaFeeders, ignoreUuids);
+                }
+
+
+            }
+        }
+    }
+
+    /**
+     * @param mainNode нода типа LOAD, которая принадлежит проверяемому фидеру
+     * @return Проверяем, что для данного фидера не достигнуто ограничение по количеству соединений с другими фидерами
+     */
+    private boolean limitCondition(PNODE mainNode, PNODE freeNode) {
+        return limitCondition(mainNode) && limitCondition(freeNode);
+    }
+    private boolean limitCondition(PNODE mainNode) {
+        List<String> connectedFeeders = new ArrayList<>();
+        topologyService.getConnectedFeeders(mainNode, connectedFeeders, new ArrayList<>());
+        return connectedFeeders.size() <
+            baseConfiguration.getLoadConfiguration(mainNode.getVoltageLevels().get(0)).getMaxConnectedFeeders();
+    }
+
+    private boolean substationBelongDifferentFeeder(PNODE mainLoad, PNODE freeNode) {
+        PNODE sourceConnectedSubstationMain = topologyService.getSourceConnectedSubstation(mainLoad)
+            .orElseThrow(() -> new UnsupportedOperationException("Unable to find SourceConnectedSubstation for node : " + mainLoad));
+        return !sourceConnectedSubstationMain.getUuid().equals(freeNode.getUuid());
+    }
+
+    protected boolean loadsBelongDifferentFeeders(PNODE mainLoad, PNODE freeLoad) {
+        // Проверка условия, что две соединяемые нагрузки принадлежат к разным фидерам
+        // todo вызвать для каждой нагрузки getSourceConnectedSubstation, если эти ноды не равны, то соединить
+        PNODE sourceConnectedSubstationMain = topologyService.getSourceConnectedSubstation(mainLoad)
+            .orElseThrow(() -> new UnsupportedOperationException("Unable to find SourceConnectedSubstation for node : " + mainLoad));
+        PNODE sourceConnectedSubstationFree = topologyService.getSourceConnectedSubstation(freeLoad)
+            .orElseThrow(() -> new UnsupportedOperationException("Unable to find SourceConnectedSubstation for node : " + freeLoad));
+        return !sourceConnectedSubstationMain.getUuid().equals(sourceConnectedSubstationFree.getUuid());
     }
 }

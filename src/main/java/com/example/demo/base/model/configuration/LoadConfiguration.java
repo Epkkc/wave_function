@@ -24,5 +24,6 @@ public class LoadConfiguration {
     private int generationRate; // Шанс генерации ноды от 0 до 100 %
     private double maxLineLength; // Максимальная длина линии, которой будет соединён генератор с трансформатором и другими нагрузками
     private int maxChainLength; // Максимальная длина цепочки нагрузок
+    private int maxConnectedFeeders; // Максимальное число присоединённых фидеров
 
 }

@@ -16,8 +16,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import static java.lang.Math.pow;
@@ -70,20 +68,19 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
             }
 
             // Установка SHOULD_LOAD статусов
-            baseConfiguration.getLoadConfigurations()
-                .stream()
-                .filter(cfg -> configuration.getLevel().equals(cfg.getLevel()))
-                .findFirst()
-                .ifPresent(loadConfiguration -> {
-                    addRingStatusArea(
-                        powerNode.getX(), powerNode.getY(),
-                        loadConfiguration.getBoundingAreaFrom(),
-                        loadConfiguration.getBoundingAreaTo(),
-                        StatusType.SHOULD_LOAD,
-                        loadConfiguration.getLevel(),
-                        true, 1,
-                        powerNode.getUuid());
-                });
+            LoadConfiguration loadConfiguration = baseConfiguration.getLoadConfiguration(configuration.getLevel());
+            if (loadConfiguration != null) {
+                addRingStatusArea(
+                    powerNode.getX(), powerNode.getY(),
+                    loadConfiguration.getBoundingAreaFrom(),
+                    loadConfiguration.getBoundingAreaTo(),
+                    StatusType.SHOULD_LOAD,
+                    loadConfiguration.getLevel(),
+                    true, 1,
+                    powerNode.getUuid()
+                );
+            }
+
         }
 
         addBaseBlockingStatus(powerNode.getX(), powerNode.getY(), powerNode.getUuid());

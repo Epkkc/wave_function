@@ -19,6 +19,7 @@ import com.example.demo.base.model.status.BlockType;
 import com.example.demo.base.model.status.StatusMetaDto;
 import com.example.demo.base.model.status.StatusType;
 import com.example.demo.base.service.BaseConfiguration;
+import com.example.demo.base.service.TopologyService;
 import com.example.demo.base.service.connection.ConnectionService;
 import com.example.demo.base.service.element.ElementService;
 import com.example.demo.base.service.status.StatusService;
@@ -26,7 +27,6 @@ import com.example.demo.export.cim.CimExportService;
 import com.example.demo.export.service.ExportService;
 import com.example.demo.utils.RandomUtils;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,13 +45,11 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     protected final ElementService<PNODE, LINE> elementService;
     protected final StatusService<PNODE> statusService;
     protected final ConnectionService<PNODE> connectionService;
+    protected final TopologyService<PNODE, LINE> topologyService;
     protected final CFG configurationService;
-    protected final List<TransformerConfiguration> transformerConfigurations;
-    protected final List<LoadConfiguration> loadConfigurations;
-    protected final List<GeneratorConfiguration> generatorConfigurations;
     protected final PowerNodeFactory<PNODE> nodeFactory;
     protected final ExportService<PNODE, LINE> exportService;
-    protected final CimExportService<PNODE, LINE> cimExportService;
+    protected final CimExportService<PNODE, LINE> cimExportService; // todo доделать CimExportService и сделать для него интерфейс
     protected final Random random = new Random();
     protected final boolean randomFirst;
     private static final int NEGATIVE_LOAD_POWER = -1;
@@ -72,10 +70,11 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         // Расстановка нагрузок и генераторов
         fillLoadsAndGenerators();
 
+        System.out.println("Export json");
         String generatedFileName = exportService.saveAsFile();
 
-//        String cimFileName = cimExportService.exportIntoCim();
-        String cimFileName = "cimFile"; // todo проверить
+        System.out.println("Export cim");
+        String cimFileName = cimExportService.exportIntoCim();
 
         printSchemeMetaInformation("Before validation and optimizing");
 
@@ -87,6 +86,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
         validateScheme();
 
+        // todo вынести в отдельный метод для формирования результата
         List<NodeTypeResult> nodeTypeResults = new ArrayList<>();
         for (PowerNodeType type : PowerNodeType.values()) {
             if (PowerNodeType.EMPTY.equals(type)) {
@@ -115,6 +115,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         System.out.println("Total generation = " + elementService.getSumPower());
     }
 
+    // todo вынести в отдельный класс Validator
     private List<String> validateScheme() {
 
         List<String> errorMessage = new ArrayList<>();
@@ -183,12 +184,10 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     }
 
     private void finalizeGenerators() {
-        List<PNODE> generators = elementService.getMatrix().toNodeList().stream()
-            .filter(node -> PowerNodeType.GENERATOR.equals(node.getNodeType()))
-            .collect(Collectors.toList());
+        List<PNODE> generators = elementService.getAllGenerators();
         while (elementService.getSumPower() < elementService.getSumLoad() && !generators.isEmpty()) {
             PNODE generator = generators.get(generators.size() - 1);
-            GeneratorConfiguration configuration = getGenerationCfg(generator.getVoltageLevels().get(0));
+            GeneratorConfiguration configuration = configurationService.getGeneratorConfiguration(generator.getVoltageLevels().get(0));
             int maxGeneratorPower = configuration.getMaxNumberOfBlocks() * configuration.getBlockPower();
             if (generator.getPower() < maxGeneratorPower) {
                 generator.setPower(maxGeneratorPower);
@@ -202,14 +201,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                 checkGeneratorNeed();
             }
         }
-    }
-
-    private GeneratorConfiguration getGenerationCfg(VoltageLevel voltageLevel) {
-        return configurationService.getGeneratorConfigurations()
-            .stream()
-            .filter(cfg -> cfg.getLevel().equals(voltageLevel))
-            .findFirst()
-            .orElseThrow(() -> new UnsupportedOperationException("Unable to find generation configuration with voltage level = " + voltageLevel));
     }
 
     private void deleteExcessLoads() {
@@ -279,18 +270,16 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
                     // Обновляем статусы вокруг unconnectedNode
                     statusService.setTransformerStatusToArea(unconnectedNode,
-                        transformerConfigurations.stream().filter(cfg -> unconnectedNode.getVoltageLevels().contains(cfg.getLevel())).collect(
-                            Collectors.toList()));
+                        configurationService.getTransformerConfigurationList().stream()
+                            .filter(cfg -> unconnectedNode.getVoltageLevels().contains(cfg.getLevel()))
+                            .collect(Collectors.toList()));
 
                     Optional<PNODE> resultNode = matrix.toNodeList().stream()
                         .filter(node -> hasShouldStatus(node, connection.getVoltageLevel(), PowerNodeType.LOAD, unconnectedNode.getUuid()))
                         .findFirst();
 
                     resultNode.ifPresent(node -> {
-                        LoadConfiguration loadConfiguration = loadConfigurations.stream()
-                            .filter(cfg -> cfg.getLevel().equals(connection.getVoltageLevel()))
-                            .findFirst()
-                            .orElseThrow(() -> new UnsupportedOperationException("Unable to find load configuration with voltage level = " + connection.getVoltageLevel()));
+                        LoadConfiguration loadConfiguration = configurationService.getLoadConfiguration(connection.getVoltageLevel());
 
                         StatusMetaDto shouldStatus = getShouldStatus(node, connection.getVoltageLevel(), PowerNodeType.LOAD);
 
@@ -314,6 +303,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
     protected abstract PNODE getBaseNode(int x, int y);
 
+    // todo вынести в TopologyService
     protected Optional<LINE> getExcessLine() {
         // Линия является лишней, если она соединяет две ноды, которые имеют минимум два соединения в этом connection-е
         return elementService.getLines().stream()
@@ -321,15 +311,18 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
             .findFirst();
     }
 
+    // todo вынести в TopologyService
     protected boolean excessLineCondition(LINE line) {
         return line.isBreaker() || pointsHaveExtraConnections(line) && substationsCheck(line);
     }
 
+    // todo вынести в TopologyService
     protected boolean pointsHaveExtraConnections(LINE line) {
         return connectionPointHasMoreThanOneConnection(line.getPoint1(), line.getVoltageLevel())
             && connectionPointHasMoreThanOneConnection(line.getPoint2(), line.getVoltageLevel());
     }
 
+    // todo вынести в TopologyService
     protected boolean substationsCheck(LINE line) {
         PNODE point1 = line.getPoint1();
         PNODE point2 = line.getPoint2();
@@ -343,10 +336,12 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         return false;
     }
 
+    // todo вынести в TopologyService
     private boolean substationsHaveEqualChainLinkOrder(LINE line) {
         return getChainLinkOrder(line.getPoint1(), line.getVoltageLevel()) == getChainLinkOrder(line.getPoint2(), line.getVoltageLevel());
     }
 
+    // todo вынести в TopologyService
     protected boolean pointConnectedWithAnotherSubstationWithLessChainLinkOrder(PNODE point, LINE line) {
         boolean connectedWithAnotherSubstation = false;
 
@@ -360,7 +355,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
             .collect(Collectors.toSet());
 
         for (String connectedNodeUuid : extraNodeUuids) {
-            PNODE connectedNode = elementService.getNodeByUuid(connectedNodeUuid);
+            PNODE connectedNode = elementService.getNode(connectedNodeUuid);
             if (PowerNodeType.SUBSTATION.equals(connectedNode.getNodeType()) &&
                 getChainLinkOrder(connectedNode, line.getVoltageLevel()) < getChainLinkOrder(point, line.getVoltageLevel())
             ) {
@@ -388,6 +383,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         return node.getConnections().get(voltageLevel).getConnectedNodes() > 1;
     }
 
+    // todo вынести в TopologyService
     protected Optional<PNODE> getExcessLoad() {
         // Сортируем по chainLinkOrder DESC и по общему количеству присоединений ASC
         List<PNODE> loads = matrix.toNodeList().stream()
@@ -403,7 +399,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                 // Необходимо убедиться, что выбранная нода является не единственным присоединением трансформатора
                 // (среди нагрузок и генераторов)
                 // (присоединения с breaker=true не учитываются)
-                PNODE substation = getConnectedSubstation(node).orElseThrow(() -> new UnsupportedOperationException("Unable to find connected substation to load " + node));
+                PNODE substation = topologyService.getConnectedSubstation(node).orElseThrow(() -> new UnsupportedOperationException("Unable to find connected substation to load " + node));
                 int connectionsCount = getUnsubstationConnectionsCount(substation, node.getVoltageLevels().get(0));
                 if (connectionsCount > 1) {
                     // Нода является не единственным присоединением обмотки трансформатора
@@ -415,69 +411,20 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         return Optional.empty();
     }
 
-    protected Optional<PNODE> getConnectedSubstation(PNODE load) {
-        for (BaseConnection value : load.getConnections().values()) {
-            for (NodeLineDto dto : value.getNodeLineDtos()) {
-                PNODE node = elementService.getNodeByUuid(dto.getNodeUuid());
-                if (node != null && PowerNodeType.SUBSTATION.equals(node.getNodeType())) {
-                    return Optional.of(node);
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
-    protected Optional<PNODE> getSourceConnectedSubstation(PNODE load) {
-        int loadChainLinkOrder = getLoadChainLinkOrder(load);
-        if (loadChainLinkOrder > 1) {
-            // Если chainLinkNumber > 1, то нужно вызвать этот же метод для соединённой нагрузки с chainLinkNumber - 1
-            for (BaseConnection value : load.getConnections().values()) {
-                for (NodeLineDto dto : value.getNodeLineDtos()) {
-                    PNODE node = elementService.getNodeByUuid(dto.getNodeUuid());
-                    if (node != null && PowerNodeType.LOAD.equals(node.getNodeType()) && getLoadChainLinkOrder(node) == (loadChainLinkOrder - 1)) {
-                        return getSourceConnectedSubstation(node);
-                    }
-                }
-            }
-        } else {
-            // Иначе (chainLinkNumber == 1) вернуть результат метода getConnectedSubstation(load)
-            return getConnectedSubstation(load);
-        }
-
-
-        return Optional.empty();
-    }
-
-    private int getLoadChainLinkOrder(PNODE load) {
-        if (PowerNodeType.LOAD.equals(load.getNodeType())) {
-            return load.getConnections().get(load.getVoltageLevels().get(0)).getChainLinkOrder();
-        } else {
-            throw new UnsupportedOperationException("Wrong parameter \"load\" : " + load);
-        }
-    }
-
 
     // Возвращает количество присоединённых к обмотке (voltageLevel) трансформатора нод, являющихся генераторами и нагрузками
     // Ноды, соединённые через breaker=true не учитываются, т.к. в негативном сценарии соединяющие линии будут удалены.
     protected int getUnsubstationConnectionsCount(PNODE substation, VoltageLevel voltageLevel) {
-        boolean b = substation.getConnections()
-            .get(voltageLevel)
-            .getNodeLineDtos()
-            .stream()
-            .anyMatch(dto -> elementService.getLine(dto.getLineUuid()).map(line -> line.isBreaker()).orElse(false)); // todo for delete
-
-        int a = (int) substation.getConnections().values().stream()
+        return (int) substation.getConnections().values().stream()
             .filter(connection -> connection.getVoltageLevel().equals(voltageLevel))
             .map(BaseConnection::getNodeLineDtos)
             .flatMap(List::stream)
-            .filter(
-                dto -> !elementService.getLine(dto.getLineUuid()).orElseThrow(() -> new UnsupportedOperationException("Unable to find line with uuid : " + dto.getLineUuid())).isBreaker())
+            .filter(dto -> !elementService.getLine(dto.getLineUuid()).isBreaker())
             .map(NodeLineDto::getNodeUuid)
             .distinct()
-            .map(elementService::getNodeByUuid)
+            .map(elementService::getNode)
             .filter(node -> PowerNodeType.LOAD.equals(node.getNodeType()) || PowerNodeType.GENERATOR.equals(node.getNodeType()))
             .count();
-        return a;
     }
 
     protected List<PNODE> getUnconnectedNodes() {
@@ -499,17 +446,14 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
     protected void fillLoadToGrid(PNODE load, LoadConfiguration loadCfg, StatusMetaDto shouldStatus) {
         elementService.addPowerNodeToGrid(load);
-        getSourceSubstation(loadCfg, shouldStatus).decreaseAvailablePower(load.getPower());
-        PNODE parentNode = elementService.getNodeByUuid(shouldStatus.getNodeUuid());
+        topologyService.getSourceSubstation(shouldStatus.getNodeUuid()).decreaseAvailablePower(load.getPower());
+        PNODE parentNode = elementService.getNode(shouldStatus.getNodeUuid());
         // Соединяем новую ноду с нодой, установившей SHOULD статус.
         connectionService.connectNodes(load, parentNode, loadCfg.getLevel(), false);
 
-        Set<String> ignoreUuids = new HashSet<>();
-        Set<String> processedUuids = new HashSet<>();
-        ignoreConnectedSubstation(parentNode, loadCfg.getLevel(), ignoreUuids, processedUuids);
-
         // Здесь все ноды фидера, включая подстанции с которыми уже есть связь
-        Set<String> collect = CollectionUtils.union(ignoreUuids, processedUuids).stream().collect(Collectors.toSet());
+        Set<String> ignoreUuids = new HashSet<>();
+        ignoreConnectedSubstationAndLoadsOfSameFeeder(parentNode, loadCfg.getLevel(), ignoreUuids);
 
         // Соединяем сгенерированную ноду с соседями
         connectionService.connectNode(load, ignoreUuids);
@@ -517,16 +461,16 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         statusService.setLoadStatusToArea(load, loadCfg);
     }
 
-    protected void ignoreConnectedSubstation(PNODE node, VoltageLevel voltageLevel, Set<String> ignoreUuids, Set<String> processedUuids) {
-        processedUuids.add(node.getUuid());
+    protected void ignoreConnectedSubstationAndLoadsOfSameFeeder(PNODE node, VoltageLevel voltageLevel, Set<String> ignoreUuids) {
+        ignoreUuids.add(node.getUuid());
         if (node.getNodeType().equals(PowerNodeType.SUBSTATION)) {
             ignoreUuids.add(node.getUuid());
         } else {
             BaseConnection baseConnection = node.getConnections().get(voltageLevel);
             if (baseConnection != null) {
                 for (NodeLineDto dto : baseConnection.getNodeLineDtos()) {
-                    if (!processedUuids.contains(dto.getNodeUuid())) {
-                        ignoreConnectedSubstation(elementService.getNodeByUuid(dto.getNodeUuid()), voltageLevel, ignoreUuids, processedUuids);
+                    if (!ignoreUuids.contains(dto.getNodeUuid())) {
+                        ignoreConnectedSubstationAndLoadsOfSameFeeder(elementService.getNode(dto.getNodeUuid()), voltageLevel, ignoreUuids);
                     }
                 }
             }
@@ -544,6 +488,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     protected void fillTransformers() {
         List<PNODE> nodes = matrix.toNodeList();
         boolean first = true;
+        List<TransformerConfiguration> transformerConfigurations = configurationService.getTransformerConfigurationList();
         for (int i = 0; i < transformerConfigurations.size() - 1; i++) {
             TransformerConfiguration currentConfiguration = transformerConfigurations.get(i);
             boolean firstInCfg = true;
@@ -580,12 +525,12 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
                 List<VoltageLevel> voltageLevels = getSubstationVoltageLevels(currentConfiguration, firstInCfg, i);
 
-                List<TransformerConfiguration> nodeTransformerConfigurations = voltageLevels.stream().map(voltageLevel ->
-                    transformerConfigurations.stream()
+                List<TransformerConfiguration> nodeTransformerConfigurations = voltageLevels.stream()
+                    .map(voltageLevel -> configurationService.getTransformerConfigurationList().stream()
                         .filter(cfg -> cfg.getLevel().equals(voltageLevel))
                         .findFirst()
                         .orElseThrow(() -> new UnsupportedOperationException("Unable to find transformer configuration with voltage level = " + voltageLevel))
-                ).toList();
+                    ).toList();
 
                 PNODE resultNode = nodeFactory.createNode(
                     PowerNodeType.SUBSTATION,
@@ -632,7 +577,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     protected List<VoltageLevel> getSubstationVoltageLevels(TransformerConfiguration configuration, boolean firstInCfg, int iter) {
         // Определяем будет ли трансформатор трёхобмоточным
         boolean three = configuration.getLevel().isThreeWindings() && random.nextBoolean();
-
+        List<TransformerConfiguration> transformerConfigurations = configurationService.getTransformerConfigurationList();
         if (three) {
             return List.of(configuration.getLevel(), transformerConfigurations.get(iter + 1).getLevel(), transformerConfigurations.get(iter + 2).getLevel());
         } else {
@@ -643,21 +588,22 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     }
 
     protected void fillLoadsAndGenerators() {
+        // todo продебажить, тут есть какая-то ошибка, НЕТ ЭТО НЕ ОШИБКА, ПРОСТО НЕ ХВАТАЛО availablePower для расстановки новой ноды
         List<PNODE> nodes = matrix.getAll(
             node -> node.getStatuses().stream()
                 .anyMatch(status -> status.getType().getBlockType().equals(BlockType.SHOULD)
                     && status.getType().getNodeType().equals(PowerNodeType.LOAD)));
 
         // Расставляем ноды до тех пор, пока есть SHOULD_LOAD статусы и не достигнут предел по количеству нод
-        while (!nodes.isEmpty() && isThereLimitOfNodes()) {
-
-            for (LoadConfiguration loadConfiguration : loadConfigurations) {
-                // todo Будущая доработка: нужна проверка, что есть хотя бы одна enable конфигурация
+        boolean setAnyLoad = true;
+        while (!nodes.isEmpty() && isThereLimitOfNodes() && setAnyLoad) {
+            setAnyLoad = false;
+            for (LoadConfiguration loadConfiguration : configurationService.getLoadConfigurationList()) {
                 if (!loadConfiguration.isEnabled()) {
                     continue;
                 }
 
-                int rate = loadConfiguration.getGenerationRate() - random.nextInt(100);
+                int rate = loadConfiguration.getGenerationRate() - random.nextInt(99);
                 if (rate < 0) {
                     continue;
                 }
@@ -701,6 +647,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                 }
 
                 fillLoadToGrid(resultNode, loadConfiguration, shouldStatus);
+                setAnyLoad = true;
                 afterLoadSet(loadConfiguration);
             }
 
@@ -721,12 +668,13 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         // Расчёт мощности нагрузки
 
         // TODO При расстановке нагрузки уменьшать availablePower трансформатора
-        PNODE parentNode = elementService.getNodeByUuid(shouldStatus.getNodeUuid());
+        PNODE parentNode = elementService.getNode(shouldStatus.getNodeUuid());
         PNODE sourceSubstation;
         if (PowerNodeType.SUBSTATION.equals(parentNode.getNodeType())) {
             sourceSubstation = parentNode;
         } else {
-            sourceSubstation = getSourceConnectedSubstation(parentNode).orElseThrow(() -> new UnsupportedOperationException("Unable to find source substation of load :" + parentNode));
+            sourceSubstation = topologyService.getSourceConnectedSubstation(parentNode)
+                .orElseThrow(() -> new UnsupportedOperationException("Unable to find source substation of load :" + parentNode));
         }
 
         int availablePower = sourceSubstation.getAvailablePower();
@@ -739,21 +687,11 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         }
     }
 
-    protected PNODE getSourceSubstation(LoadConfiguration loadConfiguration, StatusMetaDto shouldStatus) {
-        // TODO При расстановке нагрузки уменьшать availablePower трансформатора
-        PNODE parentNode = elementService.getNodeByUuid(shouldStatus.getNodeUuid());
-        if (PowerNodeType.SUBSTATION.equals(parentNode.getNodeType())) {
-            return parentNode;
-        } else {
-            return getSourceConnectedSubstation(parentNode).orElseThrow(() -> new UnsupportedOperationException("Unable to find source substation of load :" + parentNode));
-        }
-    }
-
     protected void checkGeneratorNeed() {
         // Если суммарная нагрузка больше или равна суммарной генерации, то необходимо поставить генератор
         while (elementService.getSumPower() <= elementService.getSumLoad()) {
 
-            ArrayList<GeneratorConfiguration> shuffledConfigurations = new ArrayList<>(generatorConfigurations);
+            ArrayList<GeneratorConfiguration> shuffledConfigurations = new ArrayList<>(configurationService.getGeneratorConfigurationList());
             Collections.shuffle(shuffledConfigurations);
 
             PNODE resultNode = null;
@@ -814,6 +752,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         afterGeneratorSet(configuration);
     }
 
+    // todo вынести в новый PowerCalculationService
     protected int getGeneratorPower(GeneratorConfiguration configuration) {
 
         int numberOfBlocks = random.nextInt(configuration.getMaxNumberOfBlocks() + 1 - configuration.getMinNumberOfBlocks()) + configuration.getMinNumberOfBlocks();
@@ -830,6 +769,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         return resPower;
     }
 
+    // todo вынести в StatusService
     protected StatusMetaDto getShouldStatus(PNODE powerNode, VoltageLevel voltageLevel, PowerNodeType powerNodeType, String uuid) {
         return powerNode.getStatuses()
             .stream()
@@ -882,6 +822,5 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
     protected void afterGeneratorSet(GeneratorConfiguration configuration) {
     }
-
 
 }

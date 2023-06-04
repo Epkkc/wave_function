@@ -22,7 +22,7 @@ public interface ElementService<PNODE extends AbstractPowerNode<? extends BaseSt
 
     List<LINE> getLines();
 
-    Optional<LINE> getLine(String uuid);
+    LINE getLine(String uuid);
 
     Matrix<PNODE> getMatrix();
 
@@ -34,7 +34,9 @@ public interface ElementService<PNODE extends AbstractPowerNode<? extends BaseSt
 
     int getSumPower();
 
-    PNODE getNodeByUuid(String uuid);
+    PNODE getNode(String uuid);
 
     List<PNODE> getNodes();
+
+    List<PNODE> getAllGenerators();
 }

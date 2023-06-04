@@ -1,6 +1,7 @@
 package com.example.demo.java.fx.service;
 
 import com.example.demo.base.model.enums.VoltageLevel;
+import com.example.demo.base.service.TopologyService;
 import com.example.demo.base.service.connection.AbstractConnectionService;
 import com.example.demo.java.fx.model.grid.ConnectionPoint;
 import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
@@ -29,8 +30,8 @@ public class FxConnectionService extends AbstractConnectionService<FxAbstractPow
     protected final FxConfiguration configuration;
     protected final FxElementService elementService;
 
-    public FxConnectionService(FxElementService elementService, FxConfiguration configuration) {
-        super(elementService, configuration);
+    public FxConnectionService(FxElementService elementService, FxConfiguration configuration, TopologyService<FxAbstractPowerNode, FxPowerLine> topologyService) {
+        super(elementService, configuration, topologyService);
         this.elementService = elementService;
         this.configuration = configuration;
     }

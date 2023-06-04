@@ -3,6 +3,8 @@ package com.example.demo.deserealisation;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.LevelChainNumberDto;
+import com.example.demo.base.service.BaseTopologyService;
+import com.example.demo.base.service.TopologyService;
 import com.example.demo.deserealisation.service.DeserializationService;
 import com.example.demo.export.dto.PowerLineDto;
 import com.example.demo.export.dto.PowerNodeDto;
@@ -10,6 +12,7 @@ import com.example.demo.export.dto.SaveDto;
 import com.example.demo.java.fx.factories.FxPowerNodeAbstractFactory;
 import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.java.fx.model.power.FxBaseNode;
+import com.example.demo.java.fx.model.power.FxPowerLine;
 import com.example.demo.java.fx.service.FxConfiguration;
 import com.example.demo.java.fx.service.FxConnectionService;
 import com.example.demo.java.fx.service.FxElementService;
@@ -59,11 +62,13 @@ public class DeserializeMain extends Application {
         fillGraphElements(stage, configuration);
         fillMatrix(rows, columns, elementService);
 
-        FxConnectionService connectionService = new FxConnectionService(elementService, configuration);
+        TopologyService<FxAbstractPowerNode, FxPowerLine> topologyService = new BaseTopologyService<>(elementService);
+
+        FxConnectionService connectionService = new FxConnectionService(elementService, configuration, topologyService);
+
         FxPowerNodeAbstractFactory fabric = new FxPowerNodeAbstractFactory(elementService);
 
         stage.show();
-
 
         // Расстановка node-ов по карте
         for (PowerNodeDto nodeDto : saveDto.getMatrix()) {

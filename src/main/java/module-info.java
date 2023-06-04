@@ -21,6 +21,7 @@ module com.example.demo {
     exports com.example.demo.base.model.status;
     exports com.example.demo.base.model.grid;
     exports com.example.demo.base.model.enums;
+//    exports com.example.demo.base.model.dto;
     exports com.example.demo.java.fx.model.status;
     exports com.example.demo.java.fx.model.visual;
     exports com.example.demo.java.fx.algorithm;

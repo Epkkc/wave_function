@@ -94,12 +94,12 @@ public class CimExportService<PNODE extends AbstractPowerNode<? extends BaseStat
                         ConnectivityNode connectivityNode1 = powerTransformer1End.getTerminal().getConnectivityNode();
                         ConnectivityNode connectivityNode2 = powerTransformer2End.getTerminal().getConnectivityNode();
 
-                        String acLineId = getACLineId(transformer, elementService.getNodeByUuid(dto.getNodeUuid()));
+                        String acLineId = getACLineId(transformer, elementService.getNode(dto.getNodeUuid()));
 
                         Terminal terminal1 = createTerminal(acLineId, connectivityNode1);
                         Terminal terminal2 = createTerminal(acLineId, connectivityNode2);
 
-                        ACLine acLine = createACLine(acLineId, connection.getVoltageLevel(), calculateLength(transformer, elementService.getNodeByUuid(dto.getNodeUuid())),
+                        ACLine acLine = createACLine(acLineId, connection.getVoltageLevel(), calculateLength(transformer, elementService.getNode(dto.getNodeUuid())),
                             List.of(terminal1, terminal2));
 
                         connectivityNode1.addTerminal(terminal1);
@@ -128,11 +128,13 @@ public class CimExportService<PNODE extends AbstractPowerNode<? extends BaseStat
         } catch (Exception e) {
             System.out.println("Exception : " + e);
         }
-        return fileName;
+
+//        return fileName;
+        return "cimFile"; // TODO раскомментить, когда будет готова логика экспорта сим файла
     }
 
     private boolean nodeIsTransformer(String nodeUuid) {
-        return PowerNodeType.SUBSTATION.equals(elementService.getNodeByUuid(nodeUuid).getNodeType());
+        return PowerNodeType.SUBSTATION.equals(elementService.getNode(nodeUuid).getNodeType());
     }
 
     private boolean transformerWasCreated(String nodeUuid) {

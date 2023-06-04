@@ -71,7 +71,6 @@ public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? e
             .flatMap(List::stream)
             .map(NodeLineDto::getLineUuid)
             .map(this::getLine)
-            .map(opt -> opt.orElseThrow(() -> new UnsupportedOperationException("Unable to find one of lines for node : " + node)))
             .toList();
 
         beforeRemovingLines(linesForRemove);
@@ -83,8 +82,8 @@ public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? e
     protected abstract void beforeRemovingLines(List<LINE> linesForRemove);
 
     @Override
-    public Optional<LINE> getLine(String uuid) {
-        return Optional.ofNullable(uuidToLineMap.get(uuid));
+    public LINE getLine(String uuid) {
+        return uuidToLineMap.get(uuid);
     }
 
     @Override
@@ -98,7 +97,7 @@ public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? e
     }
 
     @Override
-    public PNODE getNodeByUuid(String uuid) {
+    public PNODE getNode(String uuid) {
         return uuidToNodeMap.get(uuid);
     }
 
@@ -110,5 +109,12 @@ public abstract class AbstractElementService<PNODE extends AbstractPowerNode<? e
     @Override
     public List<PNODE> getNodes() {
         return uuidToNodeMap.values().stream().collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PNODE> getAllGenerators() {
+        return matrix.toNodeList().stream()
+            .filter(node -> PowerNodeType.GENERATOR.equals(node.getNodeType()))
+            .collect(Collectors.toList());
     }
 }

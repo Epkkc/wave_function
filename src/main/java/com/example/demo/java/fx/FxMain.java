@@ -20,7 +20,7 @@ import java.util.concurrent.FutureTask;
 
 public class FxMain extends Application {
 
-    static int rows = 22;
+    static int rows = 16;
     static int columns = 30;
     static int numberOfNodes = 90;
     static int numberOfEdges = 70;

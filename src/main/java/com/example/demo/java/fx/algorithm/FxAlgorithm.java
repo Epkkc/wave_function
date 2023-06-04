@@ -2,6 +2,7 @@ package com.example.demo.java.fx.algorithm;
 
 import com.example.demo.base.algorithm.AbstractAlgorithm;
 import com.example.demo.base.factories.PowerNodeFactory;
+import com.example.demo.base.service.TopologyService;
 import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
@@ -21,11 +22,23 @@ import java.util.List;
 
 public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerLine, FxConfiguration> {
 
-    public FxAlgorithm(Matrix<FxAbstractPowerNode> matrix, ElementService<FxAbstractPowerNode, FxPowerLine> elementService, StatusService<FxAbstractPowerNode> statusService,
-                       ConnectionService<FxAbstractPowerNode> connectionService, FxConfiguration configuration, List<TransformerConfiguration> transformerConfigurations,
-                       List<LoadConfiguration> loadConfigurations, List<GeneratorConfiguration> generatorConfigurations, PowerNodeFactory<FxAbstractPowerNode> nodeFactory,
+    public FxAlgorithm(Matrix<FxAbstractPowerNode> matrix,
+                       ElementService<FxAbstractPowerNode, FxPowerLine> elementService,
+                       StatusService<FxAbstractPowerNode> statusService,
+                       ConnectionService<FxAbstractPowerNode> connectionService,
+                       TopologyService<FxAbstractPowerNode, FxPowerLine> topologyService,
+                       FxConfiguration configuration,
+                       PowerNodeFactory<FxAbstractPowerNode> nodeFactory,
                        ExportService<FxAbstractPowerNode, FxPowerLine> exportService, CimExportService<FxAbstractPowerNode, FxPowerLine> cimExportService, boolean randomFirst) {
-        super(matrix, elementService, statusService, connectionService, configuration, transformerConfigurations, loadConfigurations, generatorConfigurations, nodeFactory, exportService, cimExportService,
+        super(matrix,
+            elementService,
+            statusService,
+            connectionService,
+            topologyService,
+            configuration,
+            nodeFactory,
+            exportService,
+            cimExportService,
             randomFirst);
     }
 
