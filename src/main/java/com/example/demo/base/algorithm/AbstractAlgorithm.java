@@ -70,21 +70,22 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         // Расстановка нагрузок и генераторов
         fillLoadsAndGenerators();
 
-        System.out.println("Export json");
-        String generatedFileName = exportService.saveAsFile();
-
-        System.out.println("Export cim");
-        String cimFileName = cimExportService.exportIntoCim();
-
         printSchemeMetaInformation("Before validation and optimizing");
-
-        System.out.println("Finish");
 
         validateScheme();
 
         finalizeScheme();
 
         validateScheme();
+
+
+        System.out.println("Export json");
+        String generatedFileName = exportService.saveAsFile();
+
+        System.out.println("Export cim");
+        String cimFileName = cimExportService.exportIntoCim();
+
+        System.out.println("Finish");
 
         // todo вынести в отдельный метод для формирования результата
         List<NodeTypeResult> nodeTypeResults = new ArrayList<>();

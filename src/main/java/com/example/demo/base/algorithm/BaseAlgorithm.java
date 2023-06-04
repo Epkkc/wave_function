@@ -10,6 +10,7 @@ import com.example.demo.base.service.TopologyService;
 import com.example.demo.base.service.connection.ConnectionService;
 import com.example.demo.base.service.element.ElementService;
 import com.example.demo.base.service.status.StatusService;
+import com.example.demo.export.cim.BaseCimExportService;
 import com.example.demo.export.cim.CimExportService;
 import com.example.demo.export.service.ExportService;
 

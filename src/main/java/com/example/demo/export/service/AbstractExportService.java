@@ -7,7 +7,6 @@ import com.example.demo.base.model.power.BaseConnection;
 import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.service.BaseConfiguration;
 import com.example.demo.base.service.element.ElementService;
-import com.example.demo.export.cim.CimExportService;
 import com.example.demo.export.dto.PowerLineDto;
 import com.example.demo.export.dto.PowerNodeDto;
 import com.example.demo.export.dto.SaveDto;
@@ -40,7 +39,7 @@ public class AbstractExportService<PNODE extends AbstractPowerNode<? extends Bas
             .build();
 
         final String PREFIX = "scheme_";
-        String date = LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("dd_MM_yyyy__hh_mm_ss"));
+        String date = LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("dd_MM_yyyy'T'hh_mm_ss_SSS"));
         String fileName = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\" + PREFIX + date;
         File file = new File(fileName);
         System.out.println("File name: " + PREFIX + date);
@@ -59,6 +58,7 @@ public class AbstractExportService<PNODE extends AbstractPowerNode<? extends Bas
             .point2(mapNodeToDto(line.getPoint2()))
             .uuid(line.getUuid())
             .voltageLevel(line.getVoltageLevel())
+            .breaker(line.isBreaker())
             .build();
     }
 

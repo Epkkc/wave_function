@@ -17,6 +17,8 @@ import com.example.demo.java.fx.service.FxConfiguration;
 import com.example.demo.java.fx.service.FxConnectionService;
 import com.example.demo.java.fx.service.FxElementService;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -43,7 +45,7 @@ public class DeserializeMain extends Application {
     static DeserializationService deserializationService = new DeserializationService();
 
     static String path = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\";
-    static String fileName = "scheme_27_05_2023__01_17_56";
+    static String fileName = "scheme_04_06_2023T11_33_06_998";
 
     public static void main(String[] args) {
         saveDto = deserializationService.extractSaveDto(path + fileName);
@@ -70,26 +72,44 @@ public class DeserializeMain extends Application {
 
         stage.show();
 
-        // Расстановка node-ов по карте
-        for (PowerNodeDto nodeDto : saveDto.getMatrix()) {
-            if (PowerNodeType.EMPTY.equals(nodeDto.getNodeType())) {
-                continue;
+        Thread thread = new Thread(() -> {
+            // Расстановка node-ов по карте
+            for (PowerNodeDto nodeDto : saveDto.getMatrix()) {
+                if (PowerNodeType.EMPTY.equals(nodeDto.getNodeType())) {
+                    continue;
+                }
+
+                FxAbstractPowerNode node = fabric.createNode(nodeDto.getNodeType(), nodeDto.getX(), nodeDto.getY(), nodeDto.getPower(),
+                    nodeDto.getVoltageLevels().stream().map(level -> new LevelChainNumberDto(level, 0)).collect(
+                        Collectors.toList()));
+                node.setUuid(nodeDto.getUuid());
+
+                elementService.addPowerNodeToGrid(node);
+//            Task<Void> sleeper = new Task<Void>() {
+//                @Override
+//                protected Void call() throws Exception {
+//                    try { Thread.sleep(300); }
+//                    catch (InterruptedException e) { }
+//                    return null;
+//                }
+//            };
+//            sleeper.
+                node.getStackPane().requestLayout();
             }
 
-            FxAbstractPowerNode node = fabric.createNode(nodeDto.getNodeType(), nodeDto.getX(), nodeDto.getY(), nodeDto.getPower(),
-                nodeDto.getVoltageLevels().stream().map(level -> new LevelChainNumberDto(level, 0)).collect(
-                    Collectors.toList()));
-            node.setUuid(nodeDto.getUuid());
+            System.out.println("Before wait");
+//            Thread.sleep(10_000);
+            System.out.println("After wait");
 
-            elementService.addPowerNodeToGrid(node);
-        }
+            // Нанесение линий электропередачи на карту
+            for (PowerLineDto line : saveDto.getLines()) {
+                Optional<FxAbstractPowerNode> point1 = matrix.getNode(line.getPoint1().getX(), line.getPoint1().getY());
+                Optional<FxAbstractPowerNode> point2 = matrix.getNode(line.getPoint2().getX(), line.getPoint2().getY());
+                connectionService.connectNodes(point1.get(), point2.get(), line.getVoltageLevel(), line.getBreaker() != null && line.getBreaker());
+            }
+        });
+        thread.start();
 
-        // Нанесение линий электропередачи на карту
-        for (PowerLineDto line : saveDto.getLines()) {
-            Optional<FxAbstractPowerNode> point1 = matrix.getNode(line.getPoint1().getX(), line.getPoint1().getY());
-            Optional<FxAbstractPowerNode> point2 = matrix.getNode(line.getPoint2().getX(), line.getPoint2().getY());
-            connectionService.connectNodes(point1.get(), point2.get(), line.getVoltageLevel(), line.getBreaker() != null && line.getBreaker());
-        }
 
     }
 

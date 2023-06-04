@@ -10,6 +10,7 @@ import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.service.connection.ConnectionService;
 import com.example.demo.base.service.element.ElementService;
 import com.example.demo.base.service.status.StatusService;
+import com.example.demo.export.cim.BaseCimExportService;
 import com.example.demo.export.cim.CimExportService;
 import com.example.demo.export.service.ExportService;
 import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
@@ -17,8 +18,6 @@ import com.example.demo.java.fx.model.power.FxBaseNode;
 import com.example.demo.java.fx.model.power.FxPowerLine;
 import com.example.demo.java.fx.service.FxConfiguration;
 import com.example.demo.thread.StoppableThread;
-
-import java.util.List;
 
 public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerLine, FxConfiguration> {
 
@@ -29,7 +28,9 @@ public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerL
                        TopologyService<FxAbstractPowerNode, FxPowerLine> topologyService,
                        FxConfiguration configuration,
                        PowerNodeFactory<FxAbstractPowerNode> nodeFactory,
-                       ExportService<FxAbstractPowerNode, FxPowerLine> exportService, CimExportService<FxAbstractPowerNode, FxPowerLine> cimExportService, boolean randomFirst) {
+                       ExportService<FxAbstractPowerNode, FxPowerLine> exportService,
+                       CimExportService<FxAbstractPowerNode, FxPowerLine> cimExportService,
+                       boolean randomFirst) {
         super(matrix,
             elementService,
             statusService,

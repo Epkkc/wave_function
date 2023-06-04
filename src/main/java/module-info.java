@@ -10,7 +10,6 @@ module com.example.demo {
     requires com.fasterxml.jackson.databind;
     requires java.xml.bind;
 
-    exports com.example.demo.java.fx.factories;
     exports com.example.demo.utils;
     exports com.example.demo.thread;
     exports com.example.demo.export.dto;
@@ -21,7 +20,6 @@ module com.example.demo {
     exports com.example.demo.base.model.status;
     exports com.example.demo.base.model.grid;
     exports com.example.demo.base.model.enums;
-//    exports com.example.demo.base.model.dto;
     exports com.example.demo.java.fx.model.status;
     exports com.example.demo.java.fx.model.visual;
     exports com.example.demo.java.fx.algorithm;
@@ -56,5 +54,6 @@ module com.example.demo {
     exports com.example.demo.base.service.connection;
     opens com.example.demo.base.service.connection to javafx.fxml;
     opens com.example.demo.base.model.status to javafx.fxml, javafx.graphics;
+    opens com.example.demo.export.cim.model;
 
 }

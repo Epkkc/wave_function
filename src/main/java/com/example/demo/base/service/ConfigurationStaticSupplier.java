@@ -61,7 +61,7 @@ public class ConfigurationStaticSupplier {
             .boundingAreaTo(LEVEL_35.getBoundingArea() + 1)
             .maxLineLength(LEVEL_35.getBoundingArea() + 1)
             .transformerPowerSet(List.of(1000))
-            .numberOfNodes(11)
+            .numberOfNodes(4)
             .maxChainLength(3)
             .build());
         transformerConfigurations.put(LEVEL_10, TransformerConfiguration.builder()
@@ -85,7 +85,7 @@ public class ConfigurationStaticSupplier {
             .maxLineLength(4)
             .maxChainLength(5)
             .generationRate(100)
-            .maxConnectedFeeders(1)
+            .maxConnectedFeeders(3)
             .build());
         loadConfigurations.put(LEVEL_35, LoadConfiguration.builder()
             .level(LEVEL_35)

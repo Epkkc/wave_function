@@ -2,16 +2,20 @@ package com.example.demo.export.cim.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Getter
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@XmlRootElement(name = "cim:PowerTransformerEnd")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class PowerTransformerEnd extends ServicedElement {
 
 
@@ -40,30 +44,30 @@ public class PowerTransformerEnd extends ServicedElement {
         this.powerTransformer = powerTransformer;
     }
 
-    @XmlElement(name = "cim:TransformerEnd.Terminal", required = true)
-    private final RdfResource terminalRdfResource;
+    @XmlElement(name = "TransformerEnd.Terminal", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
+    private RdfResource terminalRdfResource;
 
-    @XmlElement(name = "cim:PowerTransformerEnd.PowerTransformer", required = true)
-    private final RdfResource powerTransformerRdfResource;
+    @XmlElement(name = "PowerTransformerEnd.PowerTransformer", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
+    private RdfResource powerTransformerRdfResource;
 
-    @XmlElement(name = "cim:TransformerEnd.endNumber", required = true)
-    private final Integer endNumber;
+    @XmlElement(name = "TransformerEnd.endNumber", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
+    private Integer endNumber;
 
-    @XmlElement(name = "cim:TransformerEnd.b", required = true)
+    @XmlElement(name = "TransformerEnd.b", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
     private final Double b = 0.0001;
 
-    @XmlElement(name = "cim:TransformerEnd.r", required = true)
+    @XmlElement(name = "TransformerEnd.r", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
     private final Double r = 0.0001;
 
-    @XmlElement(name = "cim:TransformerEnd.x", required = true)
+    @XmlElement(name = "TransformerEnd.x", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
     private final Double x = 276.2604;
 
-    @XmlElement(name = "cim:PowerTransformerEnd.ratedS", required = true)
+    @XmlElement(name = "PowerTransformerEnd.ratedS", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
     private final Double ratedS = 33.51005;
 
     @XmlTransient
-    private final Terminal terminal;
+    private Terminal terminal;
 
     @XmlTransient
-    private final PowerTransformer powerTransformer;
+    private PowerTransformer powerTransformer;
 }

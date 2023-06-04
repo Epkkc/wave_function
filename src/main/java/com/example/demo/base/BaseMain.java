@@ -12,7 +12,7 @@ public class BaseMain {
 
     public static void main(String[] args) {
 
-        int iters = 500;
+        int iters = 10;
         int failedCount = 0;
         boolean totalValid = true;
         for (int i = 0; i < iters; i++) {

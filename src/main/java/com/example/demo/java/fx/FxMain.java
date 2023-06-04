@@ -22,8 +22,8 @@ public class FxMain extends Application {
 
     static int rows = 16;
     static int columns = 30;
-    static int numberOfNodes = 90;
-    static int numberOfEdges = 70;
+    static int numberOfNodes = 20;
+    static int numberOfEdges = 200;
 
     public static boolean CONTROL_PRESSED = false;
 

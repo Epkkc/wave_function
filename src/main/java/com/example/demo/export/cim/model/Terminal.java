@@ -2,17 +2,20 @@ package com.example.demo.export.cim.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Getter
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@XmlRootElement(name = "cim:Terminal")
-public class Terminal extends BaseElement{
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Terminal extends BaseElement {
 
 //      <cim:Terminal rdf:ID = "_T_CLoad_8">
 //        <cim:Terminal.ConductingEquipment rdf:resource="#_CLoad_8"/>
@@ -29,13 +32,13 @@ public class Terminal extends BaseElement{
         this.connectivityNode = connectivityNode;
     }
 
-    @XmlElement(name = "cim:Terminal.ConductingEquipment")
-    private final RdfResource conductingEquipmentRdfResource;
+    @XmlElement(name = "Terminal.ConductingEquipment", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#")
+    private RdfResource conductingEquipmentRdfResource;
 
-    @XmlElement(name = "cim:Terminal.ConnectivityNode")
-    private final RdfResource connectivityNodeRdfResource;
+    @XmlElement(name = "Terminal.ConnectivityNode", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#")
+    private RdfResource connectivityNodeRdfResource;
 
     @XmlTransient
-    private final ConnectivityNode connectivityNode;
+    private ConnectivityNode connectivityNode;
 
 }

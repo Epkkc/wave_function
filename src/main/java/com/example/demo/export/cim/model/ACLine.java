@@ -2,17 +2,24 @@ package com.example.demo.export.cim.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@XmlRootElement(name = "cim:ACLineSegment")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ACLine extends ServicedElement {
 
 //      <cim:ACLineSegment rdf:ID = "_3_19">
@@ -39,35 +46,43 @@ public class ACLine extends ServicedElement {
         this.length = length;
         this.r = length * rPerLength;
         this.x = length * xPerLength;
-        this.terminals = terminals;
+        addTerminals(terminals);
     }
 
-    @XmlElement(name = "cim:ConductingEquipment.technicalReequipmentCost", required = true)
+    @XmlElement(name = "ConductingEquipment.technicalReequipmentCost", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
     private final Integer technicalReequipmentCost = 10000000;
-    @XmlElement(name = "cim:ConductingEquipment.capitalRepairCost", required = true)
+    @XmlElement(name = "ConductingEquipment.capitalRepairCost", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
     private final Integer capitalRepairCost = 4750000;
-    @XmlElement(name = "cim:ConductingEquipment.currentRepairCost", required = true)
+    @XmlElement(name = "ConductingEquipment.currentRepairCost",namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
     private final Integer currentRepairCost = 300000;
 
-    @XmlElement(name = "cim:Conductor.length", required = true)
-    private final Double length;
+    @XmlElement(name = "Conductor.length", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
+    private Double length;
 
-    @XmlElement(name = "cim:ACLineSegment.bch", required = true)
+    @XmlElement(name = "ACLineSegment.bch", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
     private final Double bch = -24.2;
 
-    @XmlElement(name = "cim:ACLineSegment.r", required = true)
-    private final Double r;
+    @XmlElement(name = "ACLineSegment.r", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
+    private Double r;
 
-    @XmlElement(name = "cim:ACLineSegment.x", required = true)
-    private final Double x;
+    @XmlElement(name = "ACLineSegment.x", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
+    private Double x;
 
-    @XmlElement(name = "cim:ACLineSegment.rPerLength", required = true)
+    @XmlElement(name = "ACLineSegment.rPerLength", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
     private final Double rPerLength = 0.165;
 
-    @XmlElement(name = "cim:ACLineSegment.xPerLength", required = true)
+    @XmlElement(name = "ACLineSegment.xPerLength", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#", required = true)
     private final Double xPerLength = 0.42;
 
     @XmlTransient
-    private final List<Terminal> terminals;
+    private final List<Terminal> terminals = new ArrayList<>();
+
+    public void addTerminal(Terminal terminal){
+        terminals.add(terminal);
+    }
+
+    public void addTerminals(Collection<Terminal> terminals){
+        this.terminals.addAll(terminals);
+    }
 
 }

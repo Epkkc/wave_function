@@ -5,9 +5,6 @@ import com.example.demo.base.algorithm.BaseAlgorithm;
 import com.example.demo.base.factories.BasePowerNodeFactory;
 import com.example.demo.base.factories.PowerNodeFactory;
 import com.example.demo.base.model.configuration.GeneralResult;
-import com.example.demo.base.model.configuration.GeneratorConfiguration;
-import com.example.demo.base.model.configuration.LoadConfiguration;
-import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.BaseLine;
@@ -17,18 +14,12 @@ import com.example.demo.base.service.connection.ConnectionService;
 import com.example.demo.base.service.element.BaseElementService;
 import com.example.demo.base.service.status.BaseStatusService;
 import com.example.demo.base.service.status.StatusService;
+import com.example.demo.export.cim.BaseCimExportService;
 import com.example.demo.export.cim.CimExportService;
 import com.example.demo.export.service.BaseExportService;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_10;
-import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_110;
-import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_220;
-import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_35;
-import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_500;
 
 @RequiredArgsConstructor
 public class BaseAlgorithmService {
@@ -56,7 +47,7 @@ public class BaseAlgorithmService {
 
         BaseExportService exportService = new BaseExportService(configuration, elementService, matrix);
 
-        CimExportService<BasePowerNode, BaseLine> cimExportService = new CimExportService<>(configuration, elementService);
+        CimExportService<BasePowerNode, BaseLine> cimExportService = new BaseCimExportService<>(configuration, elementService);
 
         configuration.setTransformerConfigurations(ConfigurationStaticSupplier.getTransformerConfigurations());
         configuration.setLoadConfigurations(ConfigurationStaticSupplier.getLoadConfigurations());

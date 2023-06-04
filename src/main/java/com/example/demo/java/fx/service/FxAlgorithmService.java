@@ -1,14 +1,15 @@
 package com.example.demo.java.fx.service;
 
 import com.example.demo.base.algorithm.Algorithm;
+import com.example.demo.base.factories.PowerNodeFactory;
 import com.example.demo.base.model.configuration.GeneralResult;
-import com.example.demo.base.model.configuration.GeneratorConfiguration;
-import com.example.demo.base.model.configuration.LoadConfiguration;
-import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.service.BaseTopologyService;
 import com.example.demo.base.service.ConfigurationStaticSupplier;
 import com.example.demo.base.service.TopologyService;
+import com.example.demo.base.service.connection.ConnectionService;
+import com.example.demo.base.service.status.StatusService;
+import com.example.demo.export.cim.BaseCimExportService;
 import com.example.demo.export.cim.CimExportService;
 import com.example.demo.export.service.AbstractExportService;
 import com.example.demo.export.service.ExportService;
@@ -29,15 +30,7 @@ import javafx.scene.paint.Color;
 import lombok.RequiredArgsConstructor;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_10;
-import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_110;
-import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_220;
-import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_35;
-import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_500;
 
 
 @RequiredArgsConstructor
@@ -58,17 +51,17 @@ public class FxAlgorithmService {
 
         fillMatrix(matrix, elementService);
 
-        FxStatusService statusService = new FxStatusService(matrix, configuration, true);
+        StatusService<FxAbstractPowerNode> statusService = new FxStatusService(matrix, configuration, true);
 
         TopologyService<FxAbstractPowerNode, FxPowerLine> topologyService = new BaseTopologyService<>(elementService);
 
-        FxConnectionService connectionService = new FxConnectionService(elementService, configuration, topologyService);
+        ConnectionService<FxAbstractPowerNode> connectionService = new FxConnectionService(elementService, configuration, topologyService);
 
-        FxPowerNodeAbstractFactory fabric = new FxPowerNodeAbstractFactory(elementService);
+        PowerNodeFactory<FxAbstractPowerNode> fabric = new FxPowerNodeAbstractFactory(elementService);
 
         ExportService<FxAbstractPowerNode, FxPowerLine> exportService = new AbstractExportService<>(configuration, elementService, matrix);
 
-        CimExportService<FxAbstractPowerNode, FxPowerLine> cimExportService = new CimExportService<>(configuration, elementService);
+        CimExportService<FxAbstractPowerNode, FxPowerLine> cimExportService = new BaseCimExportService<>(configuration, elementService);
 
         configuration.setTransformerConfigurations(ConfigurationStaticSupplier.getTransformerConfigurations());
         configuration.setLoadConfigurations(ConfigurationStaticSupplier.getLoadConfigurations());

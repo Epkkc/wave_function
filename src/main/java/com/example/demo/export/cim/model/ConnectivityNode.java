@@ -2,18 +2,21 @@ package com.example.demo.export.cim.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@XmlRootElement(name = "cim:ConnectivityNode")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ConnectivityNode extends BaseElement {
 
 //      <cim:ConnectivityNode rdf:ID = "_CN_8">
@@ -30,13 +33,11 @@ public class ConnectivityNode extends BaseElement {
         this.initialVoltage = initialVoltage;
     }
 
-    // todo Эти поля скорее всего не нужны
+    @XmlElement(name = "ConnectivityNode.rastrV", namespace = "http://nti.mpei.ru/#", required = true)
+    private Double rastrV;
 
-    @XmlElement(name = "nti:ConnectivityNode.rastrV", required = true)
-    private final Double rastrV;
-
-    @XmlElement(name = "ti:ConnectivityNode.initialVoltage", required = true)
-    private final Double initialVoltage;
+    @XmlElement(name = "ConnectivityNode.initialVoltage", namespace = "http://nti.mpei.ru/#", required = true)
+    private Double initialVoltage;
 
     @XmlTransient
     private List<Terminal> terminals = new ArrayList<>();

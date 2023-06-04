@@ -2,15 +2,19 @@ package com.example.demo.export.cim.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Getter
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@XmlRootElement(name = "cim:BusbarSection")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class BusBarSection extends ServicedElement {
 
 //      <cim:BusbarSection rdf:ID = "_BS_CN_1">
@@ -27,6 +31,7 @@ public class BusBarSection extends ServicedElement {
     }
 
     @XmlTransient
-    private final Terminal terminal;
+    private Terminal terminal;
+
 
 }
