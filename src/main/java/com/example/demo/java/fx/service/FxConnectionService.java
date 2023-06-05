@@ -25,7 +25,7 @@ import java.util.StringJoiner;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
-public class FxConnectionService extends AbstractConnectionService<FxAbstractPowerNode, FxPowerLine, FxElementService> {
+public class FxConnectionService extends AbstractConnectionService<FxAbstractPowerNode, FxPowerLine> {
 
     protected final FxConfiguration configuration;
     protected final FxElementService elementService;

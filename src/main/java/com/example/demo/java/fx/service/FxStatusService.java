@@ -7,8 +7,8 @@ import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 
 public class FxStatusService extends AbstractStatusService<FxAbstractPowerNode> {
 
-    public FxStatusService(Matrix<FxAbstractPowerNode> matrix, BaseConfiguration baseConfiguration, boolean roundedArea) {
-        super(matrix, baseConfiguration, roundedArea);
+    public FxStatusService(Matrix<FxAbstractPowerNode> matrix, BaseConfiguration baseConfiguration) {
+        super(matrix, baseConfiguration);
     }
 
 }

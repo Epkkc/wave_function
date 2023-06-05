@@ -7,7 +7,7 @@ import com.example.demo.base.service.BaseConfiguration;
 import com.example.demo.base.service.TopologyService;
 import com.example.demo.base.service.element.BaseElementService;
 
-public class BaseConnectionService extends AbstractConnectionService<BasePowerNode, BaseLine, BaseElementService> {
+public class BaseConnectionService extends AbstractConnectionService<BasePowerNode, BaseLine> {
 
     public BaseConnectionService(BaseElementService elementService, BaseConfiguration baseConfiguration, TopologyService<BasePowerNode, BaseLine> topologyService) {
         super(elementService, baseConfiguration, topologyService);

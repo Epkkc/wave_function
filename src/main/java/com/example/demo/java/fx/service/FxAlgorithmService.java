@@ -51,7 +51,7 @@ public class FxAlgorithmService {
 
         fillMatrix(matrix, elementService);
 
-        StatusService<FxAbstractPowerNode> statusService = new FxStatusService(matrix, configuration, true);
+        StatusService<FxAbstractPowerNode> statusService = new FxStatusService(matrix, configuration);
 
         TopologyService<FxAbstractPowerNode, FxPowerLine> topologyService = new BaseTopologyService<>(elementService);
 

@@ -1,0 +1,161 @@
+{
+  "rows": 16,
+  "columns": 16,
+  "matrix": [
+    {
+      "nodeType": "SUBSTATION",
+      "x": 7,
+      "y": 7,
+      "power": 1000,
+      "uuid": "4e7bd127-193e-45ed-8417-91c468abaa8c",
+      "voltageLevels": [
+        "LEVEL_35",
+        "LEVEL_10"
+      ]
+    }
+  ],
+  "lines": [],
+  "transformerConfigurations": {
+    "LEVEL_500": {
+      "level": "LEVEL_500",
+      "boundingAreaFrom": 60,
+      "boundingAreaTo": 64,
+      "roundedBoundingArea": true,
+      "enabled": false,
+      "transformerPowerSet": [
+        10000
+      ],
+      "numberOfNodes": 2,
+      "maxLineLength": 64.0,
+      "maxChainLength": 3
+    },
+    "LEVEL_10": {
+      "level": "LEVEL_10",
+      "boundingAreaFrom": 2,
+      "boundingAreaTo": 3,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "transformerPowerSet": [
+        500
+      ],
+      "numberOfNodes": 1000,
+      "maxLineLength": 3.0,
+      "maxChainLength": 3
+    },
+    "LEVEL_110": {
+      "level": "LEVEL_110",
+      "boundingAreaFrom": 18,
+      "boundingAreaTo": 20,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "transformerPowerSet": [
+        2500
+      ],
+      "numberOfNodes": 2,
+      "maxLineLength": 20.0,
+      "maxChainLength": 3
+    },
+    "LEVEL_35": {
+      "level": "LEVEL_35",
+      "boundingAreaFrom": 6,
+      "boundingAreaTo": 7,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "transformerPowerSet": [
+        1000
+      ],
+      "numberOfNodes": 4,
+      "maxLineLength": 7.0,
+      "maxChainLength": 3
+    },
+    "LEVEL_220": {
+      "level": "LEVEL_220",
+      "boundingAreaFrom": 35,
+      "boundingAreaTo": 38,
+      "roundedBoundingArea": true,
+      "enabled": false,
+      "transformerPowerSet": [
+        5000
+      ],
+      "numberOfNodes": 3,
+      "maxLineLength": 38.0,
+      "maxChainLength": 3
+    }
+  },
+  "loadConfigurations": {
+    "LEVEL_10": {
+      "level": "LEVEL_10",
+      "minLoad": 50,
+      "maxLoad": 100,
+      "boundingAreaFrom": 2,
+      "boundingAreaTo": 4,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "maxChainLinks": 0,
+      "generationRate": 100,
+      "maxLineLength": 4.0,
+      "maxChainLength": 5,
+      "maxConnectedFeeders": 3
+    },
+    "LEVEL_35": {
+      "level": "LEVEL_35",
+      "minLoad": 300,
+      "maxLoad": 400,
+      "boundingAreaFrom": 2,
+      "boundingAreaTo": 4,
+      "roundedBoundingArea": true,
+      "enabled": false,
+      "maxChainLinks": 0,
+      "generationRate": 40,
+      "maxLineLength": 4.0,
+      "maxChainLength": 1,
+      "maxConnectedFeeders": 2
+    }
+  },
+  "generatorConfigurations": {
+    "LEVEL_500": {
+      "level": "LEVEL_500",
+      "minNumberOfBlocks": 3,
+      "maxNumberOfBlocks": 6,
+      "blockPower": 600,
+      "boundingArea": 58,
+      "transformerArea": 3,
+      "roundedBoundingArea": true,
+      "enabled": false,
+      "maxLineLength": 0.0
+    },
+    "LEVEL_110": {
+      "level": "LEVEL_110",
+      "minNumberOfBlocks": 3,
+      "maxNumberOfBlocks": 6,
+      "blockPower": 2400,
+      "boundingArea": 14,
+      "transformerArea": 3,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "maxLineLength": 0.0
+    },
+    "LEVEL_35": {
+      "level": "LEVEL_35",
+      "minNumberOfBlocks": 2,
+      "maxNumberOfBlocks": 4,
+      "blockPower": 1500,
+      "boundingArea": 2,
+      "transformerArea": 2,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "maxLineLength": 0.0
+    },
+    "LEVEL_220": {
+      "level": "LEVEL_220",
+      "minNumberOfBlocks": 3,
+      "maxNumberOfBlocks": 6,
+      "blockPower": 400,
+      "boundingArea": 33,
+      "transformerArea": 3,
+      "roundedBoundingArea": false,
+      "enabled": false,
+      "maxLineLength": 0.0
+    }
+  }
+}

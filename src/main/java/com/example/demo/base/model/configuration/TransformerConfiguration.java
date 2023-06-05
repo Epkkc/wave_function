@@ -21,6 +21,7 @@ public class TransformerConfiguration {
     private VoltageLevel level;
     private int boundingAreaFrom;
     private int boundingAreaTo;
+    private boolean roundedBoundingArea; // Является ли форма boundingArea круглой или квадратной
     private boolean enabled;
     private List<Integer> transformerPowerSet;
     private int numberOfNodes;

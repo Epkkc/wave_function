@@ -1,9 +1,13 @@
 package com.example.demo.deserealisation;
 
+import com.example.demo.base.model.configuration.GeneratorConfiguration;
+import com.example.demo.base.model.configuration.LoadConfiguration;
+import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.LevelChainNumberDto;
 import com.example.demo.base.service.BaseTopologyService;
+import com.example.demo.base.service.ConfigurationStaticSupplier;
 import com.example.demo.base.service.TopologyService;
 import com.example.demo.deserealisation.service.DeserializationService;
 import com.example.demo.export.dto.PowerLineDto;
@@ -16,9 +20,8 @@ import com.example.demo.java.fx.model.power.FxPowerLine;
 import com.example.demo.java.fx.service.FxConfiguration;
 import com.example.demo.java.fx.service.FxConnectionService;
 import com.example.demo.java.fx.service.FxElementService;
+import com.example.demo.java.fx.service.FxStatusService;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -32,6 +35,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,10 +46,12 @@ public class DeserializeMain extends Application {
     static Matrix<FxAbstractPowerNode> matrix;
     static GridPane gridPane;
     static FxElementService elementService;
+    static FxStatusService statusService;
     static DeserializationService deserializationService = new DeserializationService();
 
     static String path = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\";
-    static String fileName = "scheme_04_06_2023T11_33_06_998";
+    static String fileName = "scheme_test_transformer_110_35_10_1.json";
+    static boolean SET_STATUSES = ConfigurationStaticSupplier.deserializationAlgorithmSetStatuses;
 
     public static void main(String[] args) {
         saveDto = deserializationService.extractSaveDto(path + fileName);
@@ -59,6 +65,10 @@ public class DeserializeMain extends Application {
 
         // -1 - заглушечные данные
         configuration = new FxConfiguration(rows, columns, -1, -1, 2d, 4d, 4d, 50);
+        configuration.setTransformerConfigurations(saveDto.getTransformerConfigurations());
+        configuration.setLoadConfigurations(saveDto.getLoadConfigurations());
+        configuration.setGeneratorConfigurations(saveDto.getGeneratorConfigurations());
+
         matrix = new Matrix<>(rows, columns);
 
         fillGraphElements(stage, configuration);
@@ -69,6 +79,8 @@ public class DeserializeMain extends Application {
         FxConnectionService connectionService = new FxConnectionService(elementService, configuration, topologyService);
 
         FxPowerNodeAbstractFactory fabric = new FxPowerNodeAbstractFactory(elementService);
+
+        statusService = new FxStatusService(matrix, configuration);
 
         stage.show();
 
@@ -85,23 +97,15 @@ public class DeserializeMain extends Application {
                 node.setUuid(nodeDto.getUuid());
 
                 elementService.addPowerNodeToGrid(node);
-//            Task<Void> sleeper = new Task<Void>() {
-//                @Override
-//                protected Void call() throws Exception {
-//                    try { Thread.sleep(300); }
-//                    catch (InterruptedException e) { }
-//                    return null;
-//                }
-//            };
-//            sleeper.
+
+                if (SET_STATUSES) {
+                    addStatuses(node);
+                }
+
                 node.getStackPane().requestLayout();
             }
 
-            System.out.println("Before wait");
-//            Thread.sleep(10_000);
-            System.out.println("After wait");
-
-            // Нанесение линий электропередачи на карту
+            // Нанесение линий электропередачи на схему
             for (PowerLineDto line : saveDto.getLines()) {
                 Optional<FxAbstractPowerNode> point1 = matrix.getNode(line.getPoint1().getX(), line.getPoint1().getY());
                 Optional<FxAbstractPowerNode> point2 = matrix.getNode(line.getPoint2().getX(), line.getPoint2().getY());
@@ -111,6 +115,26 @@ public class DeserializeMain extends Application {
         thread.start();
 
 
+    }
+
+    private void addStatuses(FxAbstractPowerNode node) {
+        switch (node.getNodeType()) {
+            case SUBSTATION -> statusService.setTransformerStatusToArea(node, getTransformerConfigurations(node));
+            case LOAD -> statusService.setLoadStatusToArea(node, getLoadConfiguration(node));
+            case GENERATOR -> statusService.setGeneratorStatusToArea(node, getGeneratorConfiguration(node));
+        }
+    }
+
+    private List<TransformerConfiguration> getTransformerConfigurations(FxAbstractPowerNode node) {
+        return node.getVoltageLevels().stream().map(level -> configuration.getTransformerConfiguration(level)).toList();
+    }
+
+    private LoadConfiguration getLoadConfiguration(FxAbstractPowerNode node) {
+        return configuration.getLoadConfiguration(node.getVoltageLevels().get(0));
+    }
+
+    private GeneratorConfiguration getGeneratorConfiguration(FxAbstractPowerNode node) {
+        return configuration.getGeneratorConfiguration(node.getVoltageLevels().get(0));
     }
 
     private static void fillMatrix(int rows, int columns, FxElementService elementService) {

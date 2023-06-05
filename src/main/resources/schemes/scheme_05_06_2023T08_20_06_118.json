@@ -1,0 +1,4535 @@
+{
+  "rows": 16,
+  "columns": 30,
+  "matrix": [
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 0,
+      "power": 0,
+      "uuid": "6919cbaa-e03c-4763-a82f-8838af5c6d66",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 1,
+      "power": 0,
+      "uuid": "8e0a78b7-a2af-4398-ad85-34293205c761",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 2,
+      "power": 0,
+      "uuid": "11fa6244-2ced-444a-ab3d-fa726e23290f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 3,
+      "power": 0,
+      "uuid": "54a9657c-ecca-4299-a4d8-1ba96ffc48f3",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 4,
+      "power": 0,
+      "uuid": "ffaab663-ffbd-4f8b-98c6-bd5dd713f643",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 5,
+      "power": 0,
+      "uuid": "4f6df8f5-c4f0-43c3-9127-610746ab0ba1",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 6,
+      "power": 0,
+      "uuid": "0e7ae945-12a8-48ac-a733-53eb63227f0b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 7,
+      "power": 0,
+      "uuid": "d5cce383-8c2b-424b-ba6e-399120d6137e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 8,
+      "power": 0,
+      "uuid": "2ccbae0b-f4b7-4829-9c39-3ff9910f8df0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 9,
+      "power": 0,
+      "uuid": "bb65a113-593f-43b7-b4be-4304a940edff",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 10,
+      "power": 0,
+      "uuid": "7eab4e00-e654-4764-ae10-4f249557e932",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 11,
+      "power": 0,
+      "uuid": "9bfa5d90-d898-4127-b27d-a14af280fd30",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 12,
+      "power": 0,
+      "uuid": "e0a553cf-b986-436f-a1a5-1a2edd22bc8b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 13,
+      "power": 0,
+      "uuid": "2cc53e2d-a815-44e1-b2ed-de6463c11634",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 14,
+      "power": 0,
+      "uuid": "061eb6be-330e-4c66-b9a2-a679a70a88a4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 15,
+      "power": 0,
+      "uuid": "c579f118-55e3-4a54-8f90-8d920798728f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 16,
+      "power": 0,
+      "uuid": "533e4d18-a4bc-40b9-a6ca-7dec2a5c5a18",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 17,
+      "power": 0,
+      "uuid": "fb10e88a-278c-4f28-951e-5712494dc186",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 18,
+      "power": 0,
+      "uuid": "4488ecfd-57b2-4b67-9d03-e78c27190013",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 19,
+      "power": 0,
+      "uuid": "4e223302-0fd7-4279-9982-658a5a3acbd4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 20,
+      "power": 0,
+      "uuid": "0acc896a-1264-4408-ade3-f111c25d457e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 21,
+      "power": 0,
+      "uuid": "f2fc50a2-8516-449a-b03d-2ee04d9e82c9",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 22,
+      "power": 0,
+      "uuid": "23c3fe1b-9143-4063-812d-2aced82c1651",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 23,
+      "power": 0,
+      "uuid": "29a5f78e-9516-44e3-907c-71ac98013117",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 24,
+      "power": 0,
+      "uuid": "c27327e1-9a8f-4bb7-888a-68b674fc8234",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 25,
+      "power": 0,
+      "uuid": "d816586b-afc1-4b7c-b7bc-ec49a9c4e61d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 26,
+      "power": 0,
+      "uuid": "38eb9842-d316-4187-aa35-396d87a042c3",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 27,
+      "power": 0,
+      "uuid": "3f67df2d-970e-47d8-bb1b-04a0df07843e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 28,
+      "power": 0,
+      "uuid": "38b0220b-c73c-4258-8a02-8dcaf8fc517b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 0,
+      "y": 29,
+      "power": 0,
+      "uuid": "4b24227a-81e1-405f-9454-c8c4d914c706",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 0,
+      "power": 0,
+      "uuid": "8aeb6adc-314f-49f2-9579-aff605793f52",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 1,
+      "power": 0,
+      "uuid": "20d5b562-30c9-4f61-9676-f7ebdca00eb1",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 2,
+      "power": 0,
+      "uuid": "9422b3cd-d4b4-45f1-9629-f31aa3fbd6a9",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 3,
+      "power": 0,
+      "uuid": "d3b26f2d-6735-4c32-8f91-d05eceb7080e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 4,
+      "power": 0,
+      "uuid": "db3dc0ce-7130-48cf-a80a-7154d5da4414",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 5,
+      "power": 0,
+      "uuid": "b236d52f-3b32-40d2-b558-c869734965f2",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 6,
+      "power": 0,
+      "uuid": "4365bce8-e6ca-4b0c-9c58-590033d6fc19",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 7,
+      "power": 0,
+      "uuid": "f38d88af-486d-45dd-bf20-5a2694e3fbec",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 8,
+      "power": 0,
+      "uuid": "b515ee29-1332-4186-a281-a7381f83f6c4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 9,
+      "power": 0,
+      "uuid": "8666c55a-249a-4101-aa98-d9d22fc65eba",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 10,
+      "power": 0,
+      "uuid": "0f17848f-5922-4ee3-8d36-c43971d61b66",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 11,
+      "power": 0,
+      "uuid": "f8339af4-6faa-4113-a453-4689f3c8ca3b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 12,
+      "power": 0,
+      "uuid": "28f39bab-a117-4967-bc34-bdadf6de2638",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 13,
+      "power": 0,
+      "uuid": "c98ec305-2c02-477d-835f-850587b43677",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 14,
+      "power": 0,
+      "uuid": "8d1c7471-d9be-42c5-9bb0-d13e39fb6a84",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 15,
+      "power": 0,
+      "uuid": "d07c7a9e-d6a9-414f-a982-ffd2f30ccac5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 16,
+      "power": 0,
+      "uuid": "ef1af031-1a3b-466d-9d3e-044c0cd72735",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 17,
+      "power": 0,
+      "uuid": "4af57ed7-1c32-4f5d-ae7d-3c81bee4d60f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 18,
+      "power": 0,
+      "uuid": "40501ad4-2742-416d-bdd8-e938881a3d03",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 19,
+      "power": 0,
+      "uuid": "302e905b-0011-406a-8051-678c11bf45f2",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 20,
+      "power": 0,
+      "uuid": "d133c33b-4be4-41ba-9320-81b7cf7690cf",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 21,
+      "power": 0,
+      "uuid": "07dc6ae0-a5d0-488e-be79-f7f3d5ef4108",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 22,
+      "power": 0,
+      "uuid": "76f20b69-6353-4dee-ad00-3919b6e2522f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 23,
+      "power": 0,
+      "uuid": "1a456419-ad3e-4b4b-9cc8-432dd4db97a4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 24,
+      "power": 0,
+      "uuid": "c39eb272-58f0-4b82-bdc2-12c52529e961",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 25,
+      "power": 0,
+      "uuid": "7b3291d6-711d-4f30-b179-3bfbcf8c9882",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 26,
+      "power": 0,
+      "uuid": "d4801895-16c9-452d-8301-ce0615165e58",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 27,
+      "power": 0,
+      "uuid": "e1896e81-be72-4d20-b578-bde3fef8e2ed",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 28,
+      "power": 0,
+      "uuid": "e1b1a015-566f-49c1-b707-2cea6f790c8c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 1,
+      "y": 29,
+      "power": 0,
+      "uuid": "6a0fc90e-2749-417c-8781-8c0a170f5ec6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 0,
+      "power": 0,
+      "uuid": "2acab00d-585c-4b88-8ed0-2ae464b98ef4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 1,
+      "power": 0,
+      "uuid": "aa6bece3-2a05-4f48-a982-de4c28fa02a0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 2,
+      "power": 0,
+      "uuid": "559451ab-341b-4fc3-9dc0-8ecc841f56e5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 3,
+      "power": 0,
+      "uuid": "efd1a152-825a-4d2e-82e5-0b76bf606c58",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 4,
+      "power": 0,
+      "uuid": "0d7ee1d4-e348-4ad5-a055-0d73fcaa6c8f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 5,
+      "power": 0,
+      "uuid": "5e7804bc-5a26-4c2f-a8ba-ff16590a4bdc",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 6,
+      "power": 0,
+      "uuid": "ab048825-34e1-4967-affb-a846ee537732",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 7,
+      "power": 0,
+      "uuid": "c4f24d50-f2da-43b5-8c3f-4a914274a0f8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 8,
+      "power": 0,
+      "uuid": "bdd5b233-5ea1-45d0-badd-6af377781966",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 9,
+      "power": 0,
+      "uuid": "297e81d4-a9a4-4602-bce1-1b18b2a75a39",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 10,
+      "power": 0,
+      "uuid": "febfceeb-ff79-4e97-a050-ba8a4fdc1afd",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 11,
+      "power": 0,
+      "uuid": "272d684e-4157-44ac-b452-434e7f227941",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 12,
+      "power": 0,
+      "uuid": "41413d99-0461-4010-8261-fff78ec6e776",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 13,
+      "power": 0,
+      "uuid": "1dfe386c-5ed3-4616-ac97-9e6435382601",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 14,
+      "power": 0,
+      "uuid": "3154ef35-901f-4c94-817c-3fa30374ef42",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 15,
+      "power": 0,
+      "uuid": "a616e6ba-1a4a-4b52-8e9b-e585560684ba",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 16,
+      "power": 0,
+      "uuid": "d2c6ca57-989a-4bc2-b0aa-448286e5c0d5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 17,
+      "power": 0,
+      "uuid": "f7a7cea2-ce83-4d79-afce-d9a39043df27",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 18,
+      "power": 0,
+      "uuid": "3a701f75-612b-4399-a716-053b91597c09",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 19,
+      "power": 0,
+      "uuid": "e0959e1d-f682-4508-ab69-833a54dca56e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 20,
+      "power": 0,
+      "uuid": "e2da819a-03f7-41bb-b8b0-e410b0ae9ae2",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 21,
+      "power": 0,
+      "uuid": "45cc7f1a-fdd6-489c-8aed-92ee634b8e32",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 22,
+      "power": 0,
+      "uuid": "c6ee8877-4dee-401c-8083-49cc11532232",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 23,
+      "power": 0,
+      "uuid": "7cf6b379-087e-4933-913b-bf2a87e6f94f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 24,
+      "power": 0,
+      "uuid": "3f6e0510-d0c4-4358-b9bb-884c00f96d1a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 25,
+      "power": 0,
+      "uuid": "a15fb7b7-b0fc-4a73-a7ac-eb6184e0f273",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 26,
+      "power": 0,
+      "uuid": "cb293b14-80a0-4445-96a7-d3bc9d3c96b4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 27,
+      "power": 0,
+      "uuid": "9666d212-6bdf-47b2-aaad-af1b8d6372f8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 28,
+      "power": 0,
+      "uuid": "28405ee7-4b38-47f9-a4ca-fcb3a3b1618a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 2,
+      "y": 29,
+      "power": 0,
+      "uuid": "7acea80c-d8e0-4c5d-a12e-9320e6da4663",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 0,
+      "power": 0,
+      "uuid": "18a8c5ed-f7bb-4e32-b5e7-bf74c7a49758",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 1,
+      "power": 0,
+      "uuid": "b02e7c96-2ac6-42ef-adaa-a565a1281f7d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 2,
+      "power": 0,
+      "uuid": "4be90872-a9d1-4fa8-a119-6f02eefb6966",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 3,
+      "power": 0,
+      "uuid": "ef46ef91-e487-4a64-a741-0dcd4e7e0551",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 4,
+      "power": 0,
+      "uuid": "0bf9a108-8fd7-4d55-b429-71b4f528f666",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 3,
+      "y": 5,
+      "power": 54,
+      "uuid": "2606966e-5cd1-4fde-a2a4-e33f527f3bbc",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 6,
+      "power": 0,
+      "uuid": "2d29dcc7-0492-45ee-895c-7876e04c7394",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 7,
+      "power": 0,
+      "uuid": "eaeb06fd-14bc-47da-be0d-85e281269336",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 8,
+      "power": 0,
+      "uuid": "453e8bbe-0e4b-4f14-88ad-d859dfe4796a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 9,
+      "power": 0,
+      "uuid": "381b36d5-e105-4d53-b4dc-a69cc829c776",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 10,
+      "power": 0,
+      "uuid": "c87da0a3-3337-425d-8c2f-fef038bd6380",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 11,
+      "power": 0,
+      "uuid": "49709b20-5399-465b-913c-a475c8f114d6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 12,
+      "power": 0,
+      "uuid": "279bff87-f072-4708-8489-bc942256465e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 13,
+      "power": 0,
+      "uuid": "7a14569d-d770-4371-b381-8bea8a534bab",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 14,
+      "power": 0,
+      "uuid": "e84462f1-26a1-431d-a11d-afb381d0f2bb",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 15,
+      "power": 0,
+      "uuid": "2e860005-07fa-4125-a4db-43d159829a3d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 16,
+      "power": 0,
+      "uuid": "7ca8bdcd-6be3-4e95-8673-d009c7f725de",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 17,
+      "power": 0,
+      "uuid": "ea6aff1b-5672-4474-99b9-0d4908853fc2",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 18,
+      "power": 0,
+      "uuid": "56a51106-e939-46b9-85f8-ea3517f9272e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 19,
+      "power": 0,
+      "uuid": "35824279-d2f7-4e6e-b9af-e20514fa7434",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 20,
+      "power": 0,
+      "uuid": "805f7773-2e39-48d5-9cb7-1f167dba9a72",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 21,
+      "power": 0,
+      "uuid": "434ed979-185a-456d-9996-958dce5ac4a9",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 22,
+      "power": 0,
+      "uuid": "00844648-3f4d-4889-a22a-5efb77a5b77b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 23,
+      "power": 0,
+      "uuid": "c1abfb7f-4732-4e5e-b12e-1332b974f309",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 24,
+      "power": 0,
+      "uuid": "fad8488c-2791-423b-95ec-68e391b7bc34",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 25,
+      "power": 0,
+      "uuid": "3f8a71a2-66f0-41d3-baaa-045b9a491b9a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 26,
+      "power": 0,
+      "uuid": "357c9d7f-a8eb-4a28-afe4-6b8510c0b08c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 27,
+      "power": 0,
+      "uuid": "c6bc26ec-20ff-4878-a937-42768d7b5904",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 28,
+      "power": 0,
+      "uuid": "e1184c74-d8fd-4f34-9a38-d91bbeaeb92f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 3,
+      "y": 29,
+      "power": 0,
+      "uuid": "deee49ae-b1b4-4f10-973d-5a375a74ecbe",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 0,
+      "power": 0,
+      "uuid": "25867e72-28c6-471a-844b-b65779a949bb",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 1,
+      "power": 0,
+      "uuid": "2cf5c78e-161b-4f25-9529-18ca601c23e7",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 2,
+      "power": 0,
+      "uuid": "717a5a22-3b5b-451f-af9b-75510a3de932",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 3,
+      "power": 0,
+      "uuid": "3223116e-4f6b-4d09-bbfb-69cf7edf83df",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 4,
+      "power": 0,
+      "uuid": "87436da4-77fb-4593-bd0e-1e97e55df7e8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 5,
+      "power": 0,
+      "uuid": "8a1e0d94-2bb7-40b0-bc0e-a078f1271b29",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 6,
+      "power": 0,
+      "uuid": "80b04c71-350b-410d-a765-38194c1c05b5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "SUBSTATION",
+      "x": 4,
+      "y": 7,
+      "power": 1000,
+      "uuid": "4e7bd127-193e-45ed-8417-91c468abaa8c",
+      "voltageLevels": [
+        "LEVEL_35",
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 8,
+      "power": 0,
+      "uuid": "492f5f7c-b3ba-4405-ae2b-908871e5de61",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 9,
+      "power": 0,
+      "uuid": "347d722a-9ded-4561-a3d3-e3434df1bd00",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 10,
+      "power": 0,
+      "uuid": "731041f9-c30f-48ba-803b-83b6d43bf384",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 11,
+      "power": 0,
+      "uuid": "fb11f7e7-8c0c-4594-8451-3578f0e3f0c7",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 12,
+      "power": 0,
+      "uuid": "1236fa8f-9714-48d2-b376-aa4027b69350",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 13,
+      "power": 0,
+      "uuid": "17d5e26d-4a50-4c61-b714-958880fff5c3",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 14,
+      "power": 0,
+      "uuid": "6e5081df-dcbe-4586-a2ae-c86d6d47f726",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 4,
+      "y": 15,
+      "power": 78,
+      "uuid": "fe91d399-f41d-48c7-a8cf-d37321d96e7b",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 16,
+      "power": 0,
+      "uuid": "5b17799a-b9d3-40a1-8400-98aaf3c08c1d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 17,
+      "power": 0,
+      "uuid": "9abe390a-025f-4e4a-9c0e-62e135c89fc0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 18,
+      "power": 0,
+      "uuid": "6494aef5-2e5c-4396-8d86-e6c6553df9de",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 19,
+      "power": 0,
+      "uuid": "c0b10d6a-b576-4b6e-a819-b2aee11c9219",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 20,
+      "power": 0,
+      "uuid": "543dc9ea-59c7-4dcc-b59c-94ce4434e45f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 21,
+      "power": 0,
+      "uuid": "9051ea94-7c3c-49d4-8808-7035b0a6686e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 22,
+      "power": 0,
+      "uuid": "2f5a934e-229e-4fd9-8345-fad587430a73",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 23,
+      "power": 0,
+      "uuid": "11b5f35d-e0b5-47d4-87a8-07c1399be9d6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 4,
+      "y": 24,
+      "power": 98,
+      "uuid": "07c6a4a1-e526-46f0-8bb4-56ce6a279c63",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 25,
+      "power": 0,
+      "uuid": "c7ddce0b-e7f2-482a-b28e-791a47209c47",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 26,
+      "power": 0,
+      "uuid": "ada78ddc-83de-464a-a629-139928680118",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 27,
+      "power": 0,
+      "uuid": "bfc9f7a2-d4f3-478b-8217-212ca4a60c66",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 28,
+      "power": 0,
+      "uuid": "27420a21-d527-4bc2-8c1d-c471dc0a81fa",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 4,
+      "y": 29,
+      "power": 0,
+      "uuid": "7a9ef860-dec7-4bd8-b57b-3f31fe845012",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 0,
+      "power": 0,
+      "uuid": "35d89e21-b0b2-4164-b0ce-0d4b10fd6bc0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 1,
+      "power": 0,
+      "uuid": "15ec0a20-0ef6-4b0e-bb60-db4146566593",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 5,
+      "y": 2,
+      "power": 93,
+      "uuid": "94f1be8d-490e-458b-ae4d-4b9246220be5",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 3,
+      "power": 0,
+      "uuid": "40c32faa-c066-4916-aa55-49df45e870dd",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 4,
+      "power": 0,
+      "uuid": "30fff094-b091-4901-a163-ca1d600dd0b6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 5,
+      "power": 0,
+      "uuid": "13f1fc4b-cf1f-4fdb-82f8-e699a236616f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 6,
+      "power": 0,
+      "uuid": "1d7787c8-94b7-4154-85b0-f56e2642cd6f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 7,
+      "power": 0,
+      "uuid": "7e703279-fd87-47f8-9d1a-b8ca4ba9ad37",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 8,
+      "power": 0,
+      "uuid": "24d994b9-a736-444f-9d9a-9acdc01075bd",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 9,
+      "power": 0,
+      "uuid": "c15163d8-b064-4c95-b88e-7784f583cf64",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 10,
+      "power": 0,
+      "uuid": "d7099db8-a3d4-4748-a7f3-91732bb86c8f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 11,
+      "power": 0,
+      "uuid": "d1d386ff-5bbe-4ee1-b95c-775ab0de1340",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 12,
+      "power": 0,
+      "uuid": "380e51b1-68a8-4a20-8dab-1543c7fefcdc",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 13,
+      "power": 0,
+      "uuid": "41eee516-b65e-4860-8546-81c191c813a1",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 14,
+      "power": 0,
+      "uuid": "183226d0-391d-4f46-952c-6f2297e111ac",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 15,
+      "power": 0,
+      "uuid": "3372a3de-b313-49a7-895f-517008d756e6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 16,
+      "power": 0,
+      "uuid": "729ea404-b42c-4f8a-8855-5391266c56df",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 17,
+      "power": 0,
+      "uuid": "879b47c4-35be-4e3d-a5ae-563b637840b6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 18,
+      "power": 0,
+      "uuid": "37426588-9710-47f6-9d80-ee7b53881c79",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 19,
+      "power": 0,
+      "uuid": "6adafdaf-c7b6-4b57-a1c5-4b7dc60faa5c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 20,
+      "power": 0,
+      "uuid": "41ff8810-f6d7-4710-b886-26d320949eca",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 5,
+      "y": 21,
+      "power": 89,
+      "uuid": "ce9df379-76ea-4ad6-97d3-9cd4dee87f5f",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 22,
+      "power": 0,
+      "uuid": "9c4a6315-b32d-4fa4-b959-d6299eda550b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 23,
+      "power": 0,
+      "uuid": "8b249301-61d0-4458-a051-47bc8bbc3a4f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 24,
+      "power": 0,
+      "uuid": "e178f3ea-8c67-482b-8b3f-30589892209a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 25,
+      "power": 0,
+      "uuid": "0add94c7-1512-4823-9c5e-9b44c36e6d67",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 26,
+      "power": 0,
+      "uuid": "e119847f-3852-4e32-9bc5-061fe5e43766",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 27,
+      "power": 0,
+      "uuid": "829bd610-df1b-4cb1-ab2f-a303ded39cb8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 28,
+      "power": 0,
+      "uuid": "f68b00da-2a39-4847-b96b-b347f1f7a36f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 5,
+      "y": 29,
+      "power": 0,
+      "uuid": "932028bb-547c-4c62-9643-0cd038c40d69",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 0,
+      "power": 0,
+      "uuid": "76442a2f-b511-45ba-a8e8-9def97fff770",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 1,
+      "power": 0,
+      "uuid": "9c48e109-fa73-4334-9fe6-e15b29129f4d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 2,
+      "power": 0,
+      "uuid": "28de8d51-9b70-41b4-8229-1cf6aeaef4ce",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 3,
+      "power": 0,
+      "uuid": "a53d4c22-8e2c-4546-a5de-110173be482d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 4,
+      "power": 0,
+      "uuid": "ee8b7955-0274-42cc-a5cb-09105da3631b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 5,
+      "power": 0,
+      "uuid": "a6ab66d0-2de3-4eb9-9d46-d2c2324d9426",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 6,
+      "power": 0,
+      "uuid": "568789f4-b19e-413c-83ae-4740f06602e5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 7,
+      "power": 0,
+      "uuid": "3d515735-9b55-4285-bff4-3f8673425370",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 8,
+      "power": 0,
+      "uuid": "2c6d181b-d97b-431b-84ce-1186f0ad7063",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 9,
+      "power": 0,
+      "uuid": "ab386e7c-d153-4ff6-963a-a60a687697aa",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 10,
+      "power": 0,
+      "uuid": "b3ece6f9-8b24-454b-81dd-060e42e686c5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 11,
+      "power": 0,
+      "uuid": "5c580331-74bc-48f8-aac7-9074fad8edbe",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 12,
+      "power": 0,
+      "uuid": "21b8be2d-2009-43ec-b474-c9023e24cf0f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 13,
+      "power": 0,
+      "uuid": "3b8fc392-28ec-46e9-86f2-140f572c99d1",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 14,
+      "power": 0,
+      "uuid": "6524f29f-df69-4988-8dd9-18db4a6f68aa",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 15,
+      "power": 0,
+      "uuid": "a34bc5f5-f240-4ec2-9e44-e5e2c87562d6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 16,
+      "power": 0,
+      "uuid": "8619d222-6c94-4bd1-933b-eef2775a7c03",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 17,
+      "power": 0,
+      "uuid": "1b35c747-11a4-474b-a08d-4e2712230f43",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 18,
+      "power": 0,
+      "uuid": "768116c7-9c1d-48a3-9c87-a9d1ea002335",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 19,
+      "power": 0,
+      "uuid": "a632d0d0-1b22-4c4f-80e9-c680cbebe4bd",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 20,
+      "power": 0,
+      "uuid": "015d91c2-4161-40cf-aeff-a5d03d3059b6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 21,
+      "power": 0,
+      "uuid": "f1ca3ac9-234e-4ad7-aad3-0ee223461ba3",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 22,
+      "power": 0,
+      "uuid": "a6f09815-dad2-4c4b-88a3-295bf51cb0f5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 23,
+      "power": 0,
+      "uuid": "6cc869a7-1053-487f-b0e8-df74ffcb7a18",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 24,
+      "power": 0,
+      "uuid": "01abf15d-112a-4b3a-a3b0-5f4b2ceef91f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 25,
+      "power": 0,
+      "uuid": "46994e35-dbba-4544-9f34-d21011d869d9",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 26,
+      "power": 0,
+      "uuid": "2b688081-9ee6-4566-b9d1-900840866bc2",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 27,
+      "power": 0,
+      "uuid": "9c4fb862-d5f0-44ae-b699-8ca246631e09",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 28,
+      "power": 0,
+      "uuid": "3a697dbf-17ff-469d-b043-6541333c08e0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 6,
+      "y": 29,
+      "power": 0,
+      "uuid": "0191ad41-0ae4-4a49-8167-fc96fc7e6dfa",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 0,
+      "power": 0,
+      "uuid": "ffbda8b9-acf4-422d-ae6a-2faefa5b1230",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 1,
+      "power": 0,
+      "uuid": "ee0cf6cb-16d1-4ae2-889e-8fbd75975aad",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 2,
+      "power": 0,
+      "uuid": "7d604225-3b48-4d8b-b4c4-5de8df10247b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 3,
+      "power": 0,
+      "uuid": "e8e12f13-9dbd-43a3-b09b-4e00a01cffd9",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 4,
+      "power": 0,
+      "uuid": "0433ef53-d193-4d63-983c-d723063d5db0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 5,
+      "power": 0,
+      "uuid": "658084ed-3a02-4713-88fc-de1f5a127fd5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 6,
+      "power": 0,
+      "uuid": "d637b942-250e-48f8-bd5d-99c9cb603da0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 7,
+      "power": 0,
+      "uuid": "80a22216-daa8-4e43-bbc1-650d2b6259b7",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 8,
+      "power": 0,
+      "uuid": "14ee6b8e-3651-480b-b591-26d28378d1ee",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 9,
+      "power": 0,
+      "uuid": "17ef69a6-8458-4ce9-aad8-4ccfdfb783d3",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 10,
+      "power": 0,
+      "uuid": "335f7e78-0596-42b3-b115-cb3db13022e6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 11,
+      "power": 0,
+      "uuid": "4408d3b3-660f-46c0-b70e-8954e3796f93",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 12,
+      "power": 0,
+      "uuid": "6a498f67-039a-47d5-a2a3-f2aff90991ee",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 13,
+      "power": 0,
+      "uuid": "0d9ca89d-bd75-4581-937c-78848ebea8de",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 14,
+      "power": 0,
+      "uuid": "22d671e1-c7e8-4eaa-afe4-f0c1f07d196e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 15,
+      "power": 0,
+      "uuid": "a7506d39-57e4-4283-9598-c696414502b1",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 16,
+      "power": 0,
+      "uuid": "0fe344d1-420d-4279-9e2d-88e0fb884d24",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 17,
+      "power": 0,
+      "uuid": "df8ce2ee-ef14-4f4d-b9e6-8c517797ac11",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 18,
+      "power": 0,
+      "uuid": "c9f41efb-3a3b-4d7b-8798-149acb877c65",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 19,
+      "power": 0,
+      "uuid": "6440ac30-6bd6-459b-ba05-be05bca90823",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 20,
+      "power": 0,
+      "uuid": "6ee1142e-ee96-40fe-8b25-16e247847baf",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 21,
+      "power": 0,
+      "uuid": "444889cb-b66d-456e-b535-886311824c40",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 7,
+      "y": 22,
+      "power": 88,
+      "uuid": "72c9d41b-c9c2-43f5-b1fc-fc85c8777e4d",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 23,
+      "power": 0,
+      "uuid": "8847fc9a-9004-4c80-8808-d85e3d71ec4b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 24,
+      "power": 0,
+      "uuid": "7aabba7a-39ce-4332-9131-1d61cf3e15e2",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 25,
+      "power": 0,
+      "uuid": "3dea66a5-1b7f-461e-a801-b579b85f0dd8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 26,
+      "power": 0,
+      "uuid": "a6d0d623-7ecf-4e48-8da5-da7cb2730fae",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 27,
+      "power": 0,
+      "uuid": "439d4ad2-4c36-4937-a0d7-26fb9b7cfb2b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 28,
+      "power": 0,
+      "uuid": "a7f753ec-097e-4494-ab11-f788396a07c8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 7,
+      "y": 29,
+      "power": 0,
+      "uuid": "5f583a35-c842-4124-b168-ab4ebd1e21cd",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 0,
+      "power": 0,
+      "uuid": "82a7ea2f-f25b-42d5-84b5-7a78389e2f1d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 1,
+      "power": 0,
+      "uuid": "dd02835a-587e-4a81-b596-88ecd29bada8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 2,
+      "power": 0,
+      "uuid": "00d9e1ff-1def-45c2-8331-603af09d9e9d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 3,
+      "power": 0,
+      "uuid": "3d23f4fc-929d-4ca1-83df-2bab0588ff60",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 4,
+      "power": 0,
+      "uuid": "7557a087-90e4-4489-ad8a-606e3dee84d5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 5,
+      "power": 0,
+      "uuid": "2314866a-1896-44e0-b0f3-cc9fd919587e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 6,
+      "power": 0,
+      "uuid": "28280fa4-e12e-4a69-b994-3894a4d4049e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 7,
+      "power": 0,
+      "uuid": "68f04afb-901e-4a47-a562-2573c94b6a5a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 8,
+      "power": 0,
+      "uuid": "1dd4b97a-2e3b-4130-b59e-14f811f1b752",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 9,
+      "power": 0,
+      "uuid": "4e02b162-e5e4-4b57-b40a-285a4c19d1df",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 10,
+      "power": 0,
+      "uuid": "c7fac4d8-c6c6-4430-89a3-61a8349e1b9b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 11,
+      "power": 0,
+      "uuid": "a039af4b-f9d4-4b5e-a0df-99dc0d243bdd",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 12,
+      "power": 0,
+      "uuid": "e660060b-e181-488c-9f77-7ade2e46e97f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 13,
+      "power": 0,
+      "uuid": "0b6be277-0122-4807-89b8-16e9d162b81e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 14,
+      "power": 0,
+      "uuid": "2b5fb2e3-0389-454b-a0cc-a48a37901197",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "SUBSTATION",
+      "x": 8,
+      "y": 15,
+      "power": 2500,
+      "uuid": "2ca72e05-9154-418b-a491-60bc92dd1fac",
+      "voltageLevels": [
+        "LEVEL_110",
+        "LEVEL_35",
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 16,
+      "power": 0,
+      "uuid": "9751a162-df59-4faf-9c39-fb650a123aec",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 17,
+      "power": 0,
+      "uuid": "bddd19b9-a898-4a9f-9bb4-0a48eff780c3",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 18,
+      "power": 0,
+      "uuid": "45ce7200-d9a7-46cc-9617-c4f7a3575510",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 19,
+      "power": 0,
+      "uuid": "6c4270a6-4ebe-40c4-8b46-9ed18662dc93",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 20,
+      "power": 0,
+      "uuid": "eb43ebdf-1b33-47a4-a94c-078708c26a9f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 21,
+      "power": 0,
+      "uuid": "7a7059eb-9eea-4deb-bca2-e0aaaa9e2093",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 22,
+      "power": 0,
+      "uuid": "bef52ad0-02ec-41ef-9634-6671b6a27f7a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 23,
+      "power": 0,
+      "uuid": "ef0328f5-adc6-49e4-adc0-bfb6673095a7",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 24,
+      "power": 0,
+      "uuid": "de4a492a-a0b8-4ee8-b1e8-09ca118a5964",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 25,
+      "power": 0,
+      "uuid": "c76c700f-c69c-48b2-b0d7-c01017906c6f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 26,
+      "power": 0,
+      "uuid": "68cdec47-eaaa-423d-87c3-5e5b52267cea",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 27,
+      "power": 0,
+      "uuid": "a7eb72dc-d68e-41f8-bd53-c1f397441d55",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 28,
+      "power": 0,
+      "uuid": "647985a5-1ed4-40be-a7c2-045c8ebdffb0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 8,
+      "y": 29,
+      "power": 0,
+      "uuid": "05d677bc-9365-48fe-8d63-76b6173829fe",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 0,
+      "power": 0,
+      "uuid": "39c8236e-d765-45db-a6eb-757e91ed5839",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 1,
+      "power": 0,
+      "uuid": "e0e75ce1-2c79-4b2c-b3dc-0e01023f1615",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 2,
+      "power": 0,
+      "uuid": "3883f113-cba3-4bea-9d73-7cc0b87d9abc",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 3,
+      "power": 0,
+      "uuid": "2c4c6989-f5d1-4104-9590-184def04a51c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 4,
+      "power": 0,
+      "uuid": "927307ff-99f8-44a7-ab54-7a3841695d83",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 5,
+      "power": 0,
+      "uuid": "d2b9e49c-18d7-4dd4-af6a-78902b932ffc",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 6,
+      "power": 0,
+      "uuid": "03e97886-a128-4063-961a-2c3f497ea719",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 7,
+      "power": 0,
+      "uuid": "959721b9-4a6d-431d-a545-efebe8d999c0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 8,
+      "power": 0,
+      "uuid": "393f3f2f-e5a4-4b47-a18a-ede93762c33f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 9,
+      "power": 0,
+      "uuid": "c175cb6b-f82e-427b-8c44-df823da1e883",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 10,
+      "power": 0,
+      "uuid": "5dd2da9f-929b-4d92-8fea-fa66b1807250",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 11,
+      "power": 0,
+      "uuid": "ab4d4f5e-acc1-4f15-af37-35faad449497",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 12,
+      "power": 0,
+      "uuid": "67d8959a-0e04-433b-add5-9e613a969f82",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 13,
+      "power": 0,
+      "uuid": "23a0445b-7bd2-46ef-92e1-cdd4baa1e956",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 14,
+      "power": 0,
+      "uuid": "f4731a7c-9293-4f65-b3a0-25e7dd736bae",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 15,
+      "power": 0,
+      "uuid": "a3d8098e-f749-4db2-b18e-8f15600f7d44",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 16,
+      "power": 0,
+      "uuid": "2a21aa8b-1934-43cf-853c-5fac31fc7711",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 17,
+      "power": 0,
+      "uuid": "bea5ac58-1f86-496a-aee7-f2136bcf2afe",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 18,
+      "power": 0,
+      "uuid": "8f1ea489-1529-4c10-9fce-435af976c734",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 19,
+      "power": 0,
+      "uuid": "76a78873-3143-4c0d-a5cb-7632865afabc",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 20,
+      "power": 0,
+      "uuid": "4040ca4a-2fa1-4044-957b-48f58847f591",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 21,
+      "power": 0,
+      "uuid": "3c1ca6ab-17ae-466f-8155-a0834126ceee",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 22,
+      "power": 0,
+      "uuid": "1fd2f6cb-b19c-448f-83b5-cafa67a4751c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 23,
+      "power": 0,
+      "uuid": "bb0d4ff0-2201-4cb9-be4a-aebcf9e1398c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 9,
+      "y": 24,
+      "power": 62,
+      "uuid": "48a6ef6c-ffbc-4eb0-8650-315c024abc5d",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 25,
+      "power": 0,
+      "uuid": "338ed15b-d02e-4322-8a7b-6ad4d3e53929",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 26,
+      "power": 0,
+      "uuid": "4cc70c19-b869-4168-8f38-01f57357cbf4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 27,
+      "power": 0,
+      "uuid": "be109650-cf68-46c8-93d9-bfa2169eb9c8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 28,
+      "power": 0,
+      "uuid": "df67a1c2-6af6-4abb-ae7f-3017cd1515b0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 9,
+      "y": 29,
+      "power": 0,
+      "uuid": "a8c5de4a-8628-41d5-a5a4-93d07179e172",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 0,
+      "power": 0,
+      "uuid": "4396fde7-e14e-4ec5-9832-2c76f9b18a19",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 1,
+      "power": 0,
+      "uuid": "260507cc-6183-48c9-ab03-5623fae8486d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 2,
+      "power": 0,
+      "uuid": "465c2d6a-d826-4819-91b8-fe12905650de",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 3,
+      "power": 0,
+      "uuid": "9723628a-c1da-4a74-af26-fc93e2c63ea6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 4,
+      "power": 0,
+      "uuid": "4aea0122-1576-4117-9910-914343796cf1",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 5,
+      "power": 0,
+      "uuid": "4c88e8d5-84d0-4c8a-8d6b-c8d81c7137f4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 6,
+      "power": 0,
+      "uuid": "f5d0f6a5-1ecb-4da8-b805-f8c275b10a9b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 7,
+      "power": 0,
+      "uuid": "b65c8dac-1445-4ad3-9f9e-78d468ec65b0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 8,
+      "power": 0,
+      "uuid": "93d97736-6165-427e-8059-068717d7a48c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "SUBSTATION",
+      "x": 10,
+      "y": 9,
+      "power": 1000,
+      "uuid": "100d0cbe-42ef-41b3-acd5-f92c8277bc2f",
+      "voltageLevels": [
+        "LEVEL_35",
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 10,
+      "power": 0,
+      "uuid": "1be6fa57-9451-4942-a89f-9da9f40e41b0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 11,
+      "power": 0,
+      "uuid": "a21b01f0-4add-4d85-bbdf-4329fab9354c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 12,
+      "power": 0,
+      "uuid": "e962be65-4149-4b3d-97e6-1b0bd0d4d6bb",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 13,
+      "power": 0,
+      "uuid": "5fdf7ecc-bb27-471a-b76a-80a983cd029e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 14,
+      "power": 0,
+      "uuid": "2232b3aa-50e2-4dbd-9dc3-c7bdad614044",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 15,
+      "power": 0,
+      "uuid": "1b85f082-d11c-4c55-b564-946696f44992",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 16,
+      "power": 0,
+      "uuid": "c3a2740b-8a69-4b1a-844f-e528c330044a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 17,
+      "power": 0,
+      "uuid": "3db8d9c0-4ef4-4fb5-bb43-1dd0553e7200",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 18,
+      "power": 0,
+      "uuid": "bfd9d4b1-ce21-4479-b1e2-2d900b834a1a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 19,
+      "power": 0,
+      "uuid": "b341f4dd-6c1e-4da7-b2d0-b0b90aeecd45",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 20,
+      "power": 0,
+      "uuid": "60935075-2875-41f4-bab6-5de6607b3e86",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "SUBSTATION",
+      "x": 10,
+      "y": 21,
+      "power": 1000,
+      "uuid": "10401dca-1437-4714-b938-3900cea322de",
+      "voltageLevels": [
+        "LEVEL_35",
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 22,
+      "power": 0,
+      "uuid": "52783cee-4ed9-40bc-889c-685c9dc10851",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 23,
+      "power": 0,
+      "uuid": "a3d4069d-fa89-4525-9635-a86ba31340be",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 24,
+      "power": 0,
+      "uuid": "f015367a-e7d2-4eba-bc17-b3bcf127a24a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 25,
+      "power": 0,
+      "uuid": "df25fff9-c42e-4097-80bb-1b625d4344e0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 26,
+      "power": 0,
+      "uuid": "4a47f0ad-d443-4629-9ba3-d583757f3d82",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 27,
+      "power": 0,
+      "uuid": "839181ac-3382-495a-a46c-b31898cdf1ab",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 28,
+      "power": 0,
+      "uuid": "ecadeed2-d607-4661-bfe6-0660b53bd2f8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 10,
+      "y": 29,
+      "power": 0,
+      "uuid": "a9929eec-02fe-413a-9001-148d2ada5a2e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 0,
+      "power": 0,
+      "uuid": "c264312f-a52e-42e2-85fd-70e4a95dd964",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 1,
+      "power": 0,
+      "uuid": "c23c4018-62c0-462b-81e3-24e02dd52add",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 2,
+      "power": 0,
+      "uuid": "a9d4ea1c-b9fb-4672-ada8-59a91ba922e6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 3,
+      "power": 0,
+      "uuid": "f30d3d83-a3d0-4139-8f80-9d86413b6870",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 4,
+      "power": 0,
+      "uuid": "327d8a9e-fb6f-488b-8488-70d3258a654b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 5,
+      "power": 0,
+      "uuid": "62c196b3-37d0-4cb2-b727-97dab88a3bce",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 6,
+      "power": 0,
+      "uuid": "72540745-bea6-49de-99f0-4d1eb7e59e00",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 7,
+      "power": 0,
+      "uuid": "b1c0be2d-33d8-4815-94e4-e7d2137575c4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 8,
+      "power": 0,
+      "uuid": "d804e66f-c55a-4079-832b-4b474b1ff8be",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 9,
+      "power": 0,
+      "uuid": "36b35ffa-cb74-49f7-ba76-88a83aa14f20",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 10,
+      "power": 0,
+      "uuid": "285c7598-4d99-4b08-ab1f-4bc077d57665",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 11,
+      "power": 0,
+      "uuid": "52b0ef67-1ee6-4bd0-8a3c-3929ffed94c8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 12,
+      "power": 0,
+      "uuid": "94224f39-ea25-49aa-93c1-f274dd098c37",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 13,
+      "power": 0,
+      "uuid": "f55749f9-06c7-4e86-9410-657afe22bf8a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 14,
+      "power": 0,
+      "uuid": "cf517f61-fdd5-4f18-8d05-0cf99ace071d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 15,
+      "power": 0,
+      "uuid": "cbde0b85-3c04-4727-a7e2-4dbf430cca22",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 16,
+      "power": 0,
+      "uuid": "54b0ce77-f566-46d6-9017-d415798a0bbc",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "GENERATOR",
+      "x": 11,
+      "y": 17,
+      "power": 7200,
+      "uuid": "fd31ca6b-e062-4d09-99ef-173c02cabdc0",
+      "voltageLevels": [
+        "LEVEL_110"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 18,
+      "power": 0,
+      "uuid": "003cb9dd-d518-4b4d-a806-4ef227bfa65f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 19,
+      "power": 0,
+      "uuid": "1ffe3a98-51ad-4aaa-aa8d-70d661fb5e31",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 20,
+      "power": 0,
+      "uuid": "b996b509-5d5e-4503-8775-61cda9a901f2",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 21,
+      "power": 0,
+      "uuid": "f5dfa5cf-5380-4fa1-a290-ee9a7a8d948e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 22,
+      "power": 0,
+      "uuid": "01d10bca-d2a1-49fd-8c71-e06d4ed4532f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 23,
+      "power": 0,
+      "uuid": "c2cf858f-fde5-44bc-8f91-3b2fda74e2b8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 24,
+      "power": 0,
+      "uuid": "29c661ee-13e4-4bc4-9ba0-acba44897380",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 25,
+      "power": 0,
+      "uuid": "9fa7fa7d-74b5-47fa-8dd6-cdab17f84358",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 26,
+      "power": 0,
+      "uuid": "7c1054d6-bc07-4e7b-88c0-d2059c4cef90",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 11,
+      "y": 27,
+      "power": 92,
+      "uuid": "716e53bb-c3f6-4ca9-938f-71fc05c3abba",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 28,
+      "power": 0,
+      "uuid": "74281b15-8c33-4015-9479-e02b81f5f9f5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 11,
+      "y": 29,
+      "power": 0,
+      "uuid": "6559cf20-b9db-4ce2-a5ce-e162bd316065",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 0,
+      "power": 0,
+      "uuid": "820ae811-130b-42d5-a2fb-17757d2fda68",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 1,
+      "power": 0,
+      "uuid": "b4b70e21-b65e-43ac-9378-09c8d7bf0acf",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 2,
+      "power": 0,
+      "uuid": "a9f640a2-2234-4069-849a-30fc75b954ac",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 3,
+      "power": 0,
+      "uuid": "fa9fd532-0156-40f9-b4ab-a49e51604303",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 4,
+      "power": 0,
+      "uuid": "04ba4c31-1c8c-49af-abe2-7351e538c7e6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 5,
+      "power": 0,
+      "uuid": "aa94ba95-2341-436b-8454-5318a22cd7e3",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 6,
+      "power": 0,
+      "uuid": "2d06dd3d-4c88-4f20-91e0-804b14d3d179",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 7,
+      "power": 0,
+      "uuid": "8fb368c1-00d5-4693-b57e-79be4fa57545",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 12,
+      "y": 8,
+      "power": 61,
+      "uuid": "1eeefbee-e104-46ad-a77d-1eeef4f28850",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 9,
+      "power": 0,
+      "uuid": "3492ba84-d364-451c-9d90-eccac4cdd19b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 10,
+      "power": 0,
+      "uuid": "a766b04a-30aa-4b32-87ad-3d6ca54fd815",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 11,
+      "power": 0,
+      "uuid": "e3eff668-0483-4279-8816-98a3b7b7d456",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 12,
+      "power": 0,
+      "uuid": "02e731b1-1a6e-47f7-a12e-99f10a78a3c6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 13,
+      "power": 0,
+      "uuid": "e416eb29-7fb1-4b8b-acd5-806c9d7d28a0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 14,
+      "power": 0,
+      "uuid": "66fdd703-7f53-4b24-98a7-51ca09e5fc27",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 12,
+      "y": 15,
+      "power": 71,
+      "uuid": "023cdcd4-012f-4ef3-a940-f2b982ea4e00",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 16,
+      "power": 0,
+      "uuid": "b31d944a-2552-4d20-b678-bbd2b20eea4e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 17,
+      "power": 0,
+      "uuid": "310a18d7-3794-4fe9-923c-7db986e758cc",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 18,
+      "power": 0,
+      "uuid": "640d9371-5c50-4edf-a7f4-2f995774290e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 19,
+      "power": 0,
+      "uuid": "87c758aa-0aa2-4dc8-a30c-c0c0c08e6cc9",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 20,
+      "power": 0,
+      "uuid": "71585899-4f16-4610-a57e-a78ee941d6ff",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 21,
+      "power": 0,
+      "uuid": "e96d18c9-b8f6-4ec5-bbfb-f96aefa2274c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 12,
+      "y": 22,
+      "power": 55,
+      "uuid": "08c176b9-4361-488d-84b3-377d94544540",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 23,
+      "power": 0,
+      "uuid": "5282d28f-94c5-4c7b-885a-423842be766c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 24,
+      "power": 0,
+      "uuid": "619830ca-fb4e-4c8c-9ce9-c3a59c11384b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 25,
+      "power": 0,
+      "uuid": "18b8ccdd-ed50-43b8-8db3-1d0d6addcb10",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 26,
+      "power": 0,
+      "uuid": "1ed684db-e2ff-4718-8c09-1135ab835202",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 27,
+      "power": 0,
+      "uuid": "189d44d7-3a79-43d9-98f6-5d78865a0402",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 28,
+      "power": 0,
+      "uuid": "50bcdba6-585d-456e-bffe-3c5101f1d4d2",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 12,
+      "y": 29,
+      "power": 0,
+      "uuid": "6c4d2c6f-9ec3-4cb8-a3fc-4815bc3fb5a1",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 0,
+      "power": 0,
+      "uuid": "c9c0e4fe-a417-438c-9d83-8aa6551f5c46",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 1,
+      "power": 0,
+      "uuid": "4850338e-1a91-463b-b5c9-0662f1cf4a33",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 2,
+      "power": 0,
+      "uuid": "3313a142-c854-4625-bf0e-341fbfa860cf",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 3,
+      "power": 0,
+      "uuid": "bf7deb8e-bf92-4eca-9d21-b42481cca155",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 4,
+      "power": 0,
+      "uuid": "6d9408fe-9c58-4cb8-9e23-b6e28bd1ab31",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 5,
+      "power": 0,
+      "uuid": "067f4215-4ce8-4cd4-9a03-c6a41959f702",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 6,
+      "power": 0,
+      "uuid": "27719ce1-a4df-414f-b592-5e310ca95195",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 7,
+      "power": 0,
+      "uuid": "113c2030-6565-4f4b-bdf6-c69a86681fb5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 8,
+      "power": 0,
+      "uuid": "35ebb9f2-8d8e-4c46-91b3-72b3abdc1753",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 9,
+      "power": 0,
+      "uuid": "95dada01-0099-4363-9ae3-9d8c4d8e8b2d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 10,
+      "power": 0,
+      "uuid": "c52fb7d4-3245-4330-a025-96257c826c06",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 11,
+      "power": 0,
+      "uuid": "8bbe15c5-0a93-4e60-a6a1-a9917ab42048",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 12,
+      "power": 0,
+      "uuid": "44f8bf71-b9de-4203-93a4-20dcae2edd2e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 13,
+      "power": 0,
+      "uuid": "a8419105-178a-4133-b76d-c6d5b78454d3",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 14,
+      "power": 0,
+      "uuid": "4376bc58-b0a9-43b3-b9af-67bc46791c4e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 15,
+      "power": 0,
+      "uuid": "fa73d061-32a8-4c68-865c-1b6c3f49250c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 16,
+      "power": 0,
+      "uuid": "9c48eebb-e226-4176-9f28-302df3af011c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 17,
+      "power": 0,
+      "uuid": "18e0e2ec-2cae-4113-a1eb-a0259ccb74b7",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 18,
+      "power": 0,
+      "uuid": "bdc7847d-2934-4c91-9dbd-38602ff2e5bb",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 19,
+      "power": 0,
+      "uuid": "ae0a797a-41d5-4c31-82ee-6b3e4e0a69c7",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 20,
+      "power": 0,
+      "uuid": "47ccf4ae-e953-4f80-b54b-ecde21adc36a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 21,
+      "power": 0,
+      "uuid": "1bada58b-4b7f-4c42-b506-97ed0e3337df",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 22,
+      "power": 0,
+      "uuid": "85d66bbd-eef1-44a3-93e9-3e9de26fcbb7",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 23,
+      "power": 0,
+      "uuid": "f1e496bf-780b-4a30-9c1d-ecf33e43c333",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 13,
+      "y": 24,
+      "power": 67,
+      "uuid": "6cc88171-5d42-49fa-99e1-6022c692bf67",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 25,
+      "power": 0,
+      "uuid": "90fd0497-ec3a-449c-8c93-84e99ff17113",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 26,
+      "power": 0,
+      "uuid": "c4c88981-8bb9-4cc0-81df-a61f013a02d1",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 27,
+      "power": 0,
+      "uuid": "8ffa51d0-6b87-4b23-b18e-70f0201d3425",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 28,
+      "power": 0,
+      "uuid": "3139fbe4-d901-4a27-8271-be2bc866f3e1",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 13,
+      "y": 29,
+      "power": 0,
+      "uuid": "6325f810-420f-4560-972d-cebb3b0151c1",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 0,
+      "power": 0,
+      "uuid": "f9e3ae06-4297-4609-adf3-29f17b60f23b",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 1,
+      "power": 0,
+      "uuid": "928becca-f881-4902-84ab-f29879b4feb2",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 2,
+      "power": 0,
+      "uuid": "f71ba260-2f32-4eb5-8349-62e92095c345",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 3,
+      "power": 0,
+      "uuid": "ee0c1e60-c59c-43db-9c73-650f9f46c807",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 4,
+      "power": 0,
+      "uuid": "9f94b9cf-cfc5-4bf4-b8c4-34d4734f7ce4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 5,
+      "power": 0,
+      "uuid": "bb1a598b-4288-40cc-9049-4a9da999e994",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 6,
+      "power": 0,
+      "uuid": "3f61e829-1d5f-4797-8729-514013aa1426",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 7,
+      "power": 0,
+      "uuid": "88ae09c3-05da-4d9a-8441-c1538c54e240",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 8,
+      "power": 0,
+      "uuid": "fe76d28f-4c0c-45a3-9699-0a4844e5a8d7",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 14,
+      "y": 9,
+      "power": 94,
+      "uuid": "13a98c18-54ff-42f9-9737-812bd0d6f3ea",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 10,
+      "power": 0,
+      "uuid": "fe596d5e-6535-4aec-852d-41aef69d6f81",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 11,
+      "power": 0,
+      "uuid": "4b758c89-884d-4f8d-8cc0-ac6d49dac14a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 12,
+      "power": 0,
+      "uuid": "e5104519-465e-4dde-b71b-a39435e776c9",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 13,
+      "power": 0,
+      "uuid": "2bf0b616-dd5b-4a24-9ec3-3bbf7e220592",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "SUBSTATION",
+      "x": 14,
+      "y": 14,
+      "power": 1000,
+      "uuid": "5670bb7e-e129-4c61-9c89-65070a7160b1",
+      "voltageLevels": [
+        "LEVEL_35",
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 15,
+      "power": 0,
+      "uuid": "46f6bdfb-5a59-44cf-ad6c-fb4558d84e73",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 16,
+      "power": 0,
+      "uuid": "b763e10b-afa1-45e9-a302-f2ffcae546f4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 17,
+      "power": 0,
+      "uuid": "9fef5475-bd20-41ec-9aad-c58af55faeaa",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 18,
+      "power": 0,
+      "uuid": "b0ce0031-1292-4653-88f7-0c51fc05717a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 19,
+      "power": 0,
+      "uuid": "b587150e-9094-4d44-bde9-a454f9c40c62",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 20,
+      "power": 0,
+      "uuid": "fa1d30c0-b942-4d92-8616-bccb93f98ddb",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "LOAD",
+      "x": 14,
+      "y": 21,
+      "power": 85,
+      "uuid": "b80d1652-ac60-4bef-85f7-247fe36352d7",
+      "voltageLevels": [
+        "LEVEL_10"
+      ]
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 22,
+      "power": 0,
+      "uuid": "5fc5f1b4-0021-4cdd-b133-1c03149c39a6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 23,
+      "power": 0,
+      "uuid": "841dcf1d-5321-4e19-8455-af1ce42d5b9d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 24,
+      "power": 0,
+      "uuid": "3de79c6c-e509-4c8a-aec1-770e9a31f4c9",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 25,
+      "power": 0,
+      "uuid": "8396e8f6-9a2d-4115-943e-c402bbe7a59c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 26,
+      "power": 0,
+      "uuid": "debb8676-f625-4eb9-8cf5-44e43de9347f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 27,
+      "power": 0,
+      "uuid": "fba73636-9106-4fa4-8131-782359d769f8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 28,
+      "power": 0,
+      "uuid": "51cdd9d9-ff61-4f59-ac8f-d348d4756f47",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 14,
+      "y": 29,
+      "power": 0,
+      "uuid": "00c37d97-6125-4dcf-a8b1-8a4c1771e0bc",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 0,
+      "power": 0,
+      "uuid": "4af799ec-cf78-4bca-b09b-dd5cfba1e9bb",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 1,
+      "power": 0,
+      "uuid": "cb73a868-1bd4-4dd7-8073-529b698e5fba",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 2,
+      "power": 0,
+      "uuid": "34d498b2-6a22-4d4d-9d60-0f2817f63dd4",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 3,
+      "power": 0,
+      "uuid": "93905952-ff9e-4938-8ca2-cc21ef21b0e5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 4,
+      "power": 0,
+      "uuid": "7204271c-ad10-47fe-9bc2-82a7bcf9b562",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 5,
+      "power": 0,
+      "uuid": "1b1932b6-01e2-48e6-b7a7-5b187fd79640",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 6,
+      "power": 0,
+      "uuid": "59cd5974-af53-4703-8dc4-9e9ee83eec62",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 7,
+      "power": 0,
+      "uuid": "fbcb1910-d7a4-4185-9c34-728eccdff2a9",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 8,
+      "power": 0,
+      "uuid": "2d20373c-76bd-4bb0-8419-614b695c684e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 9,
+      "power": 0,
+      "uuid": "90a87729-5b4d-4fc1-9dee-1de96c732e60",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 10,
+      "power": 0,
+      "uuid": "6aaca06b-f9ad-44a9-b8ee-cb750c49cf3f",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 11,
+      "power": 0,
+      "uuid": "3ea75de3-5f15-456c-b394-3894b36a4441",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 12,
+      "power": 0,
+      "uuid": "c47ae095-7d3d-4c95-b338-fd97e1c6f2ca",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 13,
+      "power": 0,
+      "uuid": "1923432e-95b1-4d39-9147-66d678e45403",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 14,
+      "power": 0,
+      "uuid": "dc9d710c-0a71-4696-a0f1-d24511c6b35d",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 15,
+      "power": 0,
+      "uuid": "e7f18b12-e1fd-48a3-906b-a4c24cd2cea5",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 16,
+      "power": 0,
+      "uuid": "361dfe33-a513-4ec2-a15e-36e255ac04a6",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 17,
+      "power": 0,
+      "uuid": "073ac9df-482c-4f60-bd7d-2a25ca061ff8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 18,
+      "power": 0,
+      "uuid": "960c9d1f-a3f0-4716-a9c7-8985a6a516d8",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 19,
+      "power": 0,
+      "uuid": "ed9593a6-3ea9-43c8-b62f-28062bfdf818",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 20,
+      "power": 0,
+      "uuid": "c24c6ad9-1d16-440a-9a7e-88e9f99d8a0e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 21,
+      "power": 0,
+      "uuid": "36cd6cde-007a-49d5-a16a-d7083fd4229e",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 22,
+      "power": 0,
+      "uuid": "b5ddf216-3dd4-495f-b28c-dca53c035cd0",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 23,
+      "power": 0,
+      "uuid": "b5f58b7a-ccd9-4640-976d-524ac1e29ee7",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 24,
+      "power": 0,
+      "uuid": "a15e3135-4839-4f3d-8e3e-8599ef9b364c",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 25,
+      "power": 0,
+      "uuid": "fe355ad4-c3fb-4a58-b2b6-5e2c4ee31f4a",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 26,
+      "power": 0,
+      "uuid": "7e51778b-9ccc-4b37-8f62-1f07697fd213",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 27,
+      "power": 0,
+      "uuid": "053758d6-160a-4f82-8b5d-0a2f5b0e1e10",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 28,
+      "power": 0,
+      "uuid": "94e1ed3b-08e5-47f3-978a-fd197dbdd7b2",
+      "voltageLevels": []
+    },
+    {
+      "nodeType": "EMPTY",
+      "x": 15,
+      "y": 29,
+      "power": 0,
+      "uuid": "c57a5add-550d-40bc-ba53-ebeb867c3e8f",
+      "voltageLevels": []
+    }
+  ],
+  "lines": [
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 4,
+        "y": 15,
+        "power": 78,
+        "uuid": "fe91d399-f41d-48c7-a8cf-d37321d96e7b",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 8,
+        "y": 15,
+        "power": 2500,
+        "uuid": "2ca72e05-9154-418b-a491-60bc92dd1fac",
+        "voltageLevels": [
+          "LEVEL_110",
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "39af563f-dab8-437b-bb8c-e101f8a22542",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "SUBSTATION",
+        "x": 8,
+        "y": 15,
+        "power": 2500,
+        "uuid": "2ca72e05-9154-418b-a491-60bc92dd1fac",
+        "voltageLevels": [
+          "LEVEL_110",
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 14,
+        "y": 14,
+        "power": 1000,
+        "uuid": "5670bb7e-e129-4c61-9c89-65070a7160b1",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_35",
+      "uuid": "533c04ac-33e2-4ed9-95d1-61f8dd483404",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 12,
+        "y": 22,
+        "power": 55,
+        "uuid": "08c176b9-4361-488d-84b3-377d94544540",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 10,
+        "y": 21,
+        "power": 1000,
+        "uuid": "10401dca-1437-4714-b938-3900cea322de",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "fc320a8c-9294-4418-a4cf-833d446d0549",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 7,
+        "y": 22,
+        "power": 88,
+        "uuid": "72c9d41b-c9c2-43f5-b1fc-fc85c8777e4d",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 10,
+        "y": 21,
+        "power": 1000,
+        "uuid": "10401dca-1437-4714-b938-3900cea322de",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "acd05bf0-c991-4bf9-9abd-1e71f24f29bd",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "SUBSTATION",
+        "x": 8,
+        "y": 15,
+        "power": 2500,
+        "uuid": "2ca72e05-9154-418b-a491-60bc92dd1fac",
+        "voltageLevels": [
+          "LEVEL_110",
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 10,
+        "y": 9,
+        "power": 1000,
+        "uuid": "100d0cbe-42ef-41b3-acd5-f92c8277bc2f",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_35",
+      "uuid": "03b80baa-b67b-46ed-b6cc-c8b2373f45da",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "GENERATOR",
+        "x": 11,
+        "y": 17,
+        "power": 7200,
+        "uuid": "fd31ca6b-e062-4d09-99ef-173c02cabdc0",
+        "voltageLevels": [
+          "LEVEL_110"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 8,
+        "y": 15,
+        "power": 2500,
+        "uuid": "2ca72e05-9154-418b-a491-60bc92dd1fac",
+        "voltageLevels": [
+          "LEVEL_110",
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_110",
+      "uuid": "ac94bb33-6ec0-4ebd-a708-e392b92c51a9",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 13,
+        "y": 24,
+        "power": 67,
+        "uuid": "6cc88171-5d42-49fa-99e1-6022c692bf67",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "LOAD",
+        "x": 9,
+        "y": 24,
+        "power": 62,
+        "uuid": "48a6ef6c-ffbc-4eb0-8650-315c024abc5d",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "5ca3f447-a933-4a79-90b7-93545bc2a9d8",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 3,
+        "y": 5,
+        "power": 54,
+        "uuid": "2606966e-5cd1-4fde-a2a4-e33f527f3bbc",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 4,
+        "y": 7,
+        "power": 1000,
+        "uuid": "4e7bd127-193e-45ed-8417-91c468abaa8c",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "b81c5cf6-67b5-4794-acd0-0a9d71001096",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 5,
+        "y": 2,
+        "power": 93,
+        "uuid": "94f1be8d-490e-458b-ae4d-4b9246220be5",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "LOAD",
+        "x": 3,
+        "y": 5,
+        "power": 54,
+        "uuid": "2606966e-5cd1-4fde-a2a4-e33f527f3bbc",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "409e4f44-8b9f-4eae-9a90-baa0594c7010",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "SUBSTATION",
+        "x": 8,
+        "y": 15,
+        "power": 2500,
+        "uuid": "2ca72e05-9154-418b-a491-60bc92dd1fac",
+        "voltageLevels": [
+          "LEVEL_110",
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 10,
+        "y": 21,
+        "power": 1000,
+        "uuid": "10401dca-1437-4714-b938-3900cea322de",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_35",
+      "uuid": "7a808ee5-1d39-464f-92b6-42c241a68cfd",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 9,
+        "y": 24,
+        "power": 62,
+        "uuid": "48a6ef6c-ffbc-4eb0-8650-315c024abc5d",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 10,
+        "y": 21,
+        "power": 1000,
+        "uuid": "10401dca-1437-4714-b938-3900cea322de",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "cef500c6-240e-4bd0-b8e9-47748f9da2be",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 12,
+        "y": 15,
+        "power": 71,
+        "uuid": "023cdcd4-012f-4ef3-a940-f2b982ea4e00",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 14,
+        "y": 14,
+        "power": 1000,
+        "uuid": "5670bb7e-e129-4c61-9c89-65070a7160b1",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "0bb9c01a-ffcf-462c-b80f-9eaa9996582d",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 5,
+        "y": 21,
+        "power": 89,
+        "uuid": "ce9df379-76ea-4ad6-97d3-9cd4dee87f5f",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "LOAD",
+        "x": 7,
+        "y": 22,
+        "power": 88,
+        "uuid": "72c9d41b-c9c2-43f5-b1fc-fc85c8777e4d",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "62e7de94-36d3-49aa-9d46-cdb0bb992e8d",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "SUBSTATION",
+        "x": 10,
+        "y": 9,
+        "power": 1000,
+        "uuid": "100d0cbe-42ef-41b3-acd5-f92c8277bc2f",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 4,
+        "y": 7,
+        "power": 1000,
+        "uuid": "4e7bd127-193e-45ed-8417-91c468abaa8c",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_35",
+      "uuid": "348eb857-f4f0-4199-b63d-74270a1b7c29",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 11,
+        "y": 27,
+        "power": 92,
+        "uuid": "716e53bb-c3f6-4ca9-938f-71fc05c3abba",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "LOAD",
+        "x": 9,
+        "y": 24,
+        "power": 62,
+        "uuid": "48a6ef6c-ffbc-4eb0-8650-315c024abc5d",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "47c49388-a3c1-4f4e-9b8e-158190beeffc",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 14,
+        "y": 21,
+        "power": 85,
+        "uuid": "b80d1652-ac60-4bef-85f7-247fe36352d7",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 10,
+        "y": 21,
+        "power": 1000,
+        "uuid": "10401dca-1437-4714-b938-3900cea322de",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "533f0f73-cfb0-43d2-9600-fd0de81e6fa4",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 14,
+        "y": 9,
+        "power": 94,
+        "uuid": "13a98c18-54ff-42f9-9737-812bd0d6f3ea",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 10,
+        "y": 9,
+        "power": 1000,
+        "uuid": "100d0cbe-42ef-41b3-acd5-f92c8277bc2f",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "5721cd18-df8b-443a-a9b3-db4cf72c32f2",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 4,
+        "y": 24,
+        "power": 98,
+        "uuid": "07c6a4a1-e526-46f0-8bb4-56ce6a279c63",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "LOAD",
+        "x": 7,
+        "y": 22,
+        "power": 88,
+        "uuid": "72c9d41b-c9c2-43f5-b1fc-fc85c8777e4d",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "e6a1b020-1718-4370-a2dd-783ea3c4510c",
+      "breaker": false
+    },
+    {
+      "point1": {
+        "nodeType": "LOAD",
+        "x": 12,
+        "y": 8,
+        "power": 61,
+        "uuid": "1eeefbee-e104-46ad-a77d-1eeef4f28850",
+        "voltageLevels": [
+          "LEVEL_10"
+        ]
+      },
+      "point2": {
+        "nodeType": "SUBSTATION",
+        "x": 10,
+        "y": 9,
+        "power": 1000,
+        "uuid": "100d0cbe-42ef-41b3-acd5-f92c8277bc2f",
+        "voltageLevels": [
+          "LEVEL_35",
+          "LEVEL_10"
+        ]
+      },
+      "voltageLevel": "LEVEL_10",
+      "uuid": "acf95228-792a-4ed6-875b-bcc8b1b62b12",
+      "breaker": false
+    }
+  ],
+  "transformerConfigurations": {
+    "LEVEL_500": {
+      "level": "LEVEL_500",
+      "boundingAreaFrom": 60,
+      "boundingAreaTo": 64,
+      "roundedBoundingArea": true,
+      "enabled": false,
+      "transformerPowerSet": [
+        10000
+      ],
+      "numberOfNodes": 2,
+      "maxLineLength": 64.0,
+      "maxChainLength": 3
+    },
+    "LEVEL_10": {
+      "level": "LEVEL_10",
+      "boundingAreaFrom": 2,
+      "boundingAreaTo": 3,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "transformerPowerSet": [
+        500
+      ],
+      "numberOfNodes": 1000,
+      "maxLineLength": 3.0,
+      "maxChainLength": 3
+    },
+    "LEVEL_110": {
+      "level": "LEVEL_110",
+      "boundingAreaFrom": 18,
+      "boundingAreaTo": 20,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "transformerPowerSet": [
+        2500
+      ],
+      "numberOfNodes": 2,
+      "maxLineLength": 20.0,
+      "maxChainLength": 3
+    },
+    "LEVEL_35": {
+      "level": "LEVEL_35",
+      "boundingAreaFrom": 6,
+      "boundingAreaTo": 7,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "transformerPowerSet": [
+        1000
+      ],
+      "numberOfNodes": 4,
+      "maxLineLength": 7.0,
+      "maxChainLength": 3
+    },
+    "LEVEL_220": {
+      "level": "LEVEL_220",
+      "boundingAreaFrom": 35,
+      "boundingAreaTo": 38,
+      "roundedBoundingArea": true,
+      "enabled": false,
+      "transformerPowerSet": [
+        5000
+      ],
+      "numberOfNodes": 3,
+      "maxLineLength": 38.0,
+      "maxChainLength": 3
+    }
+  },
+  "loadConfigurations": {
+    "LEVEL_10": {
+      "level": "LEVEL_10",
+      "minLoad": 50,
+      "maxLoad": 100,
+      "boundingAreaFrom": 2,
+      "boundingAreaTo": 4,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "maxChainLinks": 0,
+      "generationRate": 100,
+      "maxLineLength": 4.0,
+      "maxChainLength": 5,
+      "maxConnectedFeeders": 3
+    },
+    "LEVEL_35": {
+      "level": "LEVEL_35",
+      "minLoad": 300,
+      "maxLoad": 400,
+      "boundingAreaFrom": 2,
+      "boundingAreaTo": 4,
+      "roundedBoundingArea": true,
+      "enabled": false,
+      "maxChainLinks": 0,
+      "generationRate": 40,
+      "maxLineLength": 4.0,
+      "maxChainLength": 1,
+      "maxConnectedFeeders": 2
+    }
+  },
+  "generatorConfigurations": {
+    "LEVEL_500": {
+      "level": "LEVEL_500",
+      "minNumberOfBlocks": 3,
+      "maxNumberOfBlocks": 6,
+      "blockPower": 600,
+      "boundingArea": 58,
+      "transformerArea": 3,
+      "roundedBoundingArea": true,
+      "enabled": false,
+      "maxLineLength": 0.0
+    },
+    "LEVEL_110": {
+      "level": "LEVEL_110",
+      "minNumberOfBlocks": 3,
+      "maxNumberOfBlocks": 6,
+      "blockPower": 2400,
+      "boundingArea": 14,
+      "transformerArea": 3,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "maxLineLength": 0.0
+    },
+    "LEVEL_35": {
+      "level": "LEVEL_35",
+      "minNumberOfBlocks": 2,
+      "maxNumberOfBlocks": 4,
+      "blockPower": 1500,
+      "boundingArea": 2,
+      "transformerArea": 2,
+      "roundedBoundingArea": true,
+      "enabled": true,
+      "maxLineLength": 0.0
+    },
+    "LEVEL_220": {
+      "level": "LEVEL_220",
+      "minNumberOfBlocks": 3,
+      "maxNumberOfBlocks": 6,
+      "blockPower": 400,
+      "boundingArea": 33,
+      "transformerArea": 3,
+      "roundedBoundingArea": false,
+      "enabled": false,
+      "maxLineLength": 0.0
+    }
+  }
+}

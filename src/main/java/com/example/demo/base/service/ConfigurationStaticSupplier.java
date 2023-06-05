@@ -17,13 +17,13 @@ import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_500;
 
 public class ConfigurationStaticSupplier {
 
-    public static int rows = 40;
-    public static int columns = 40;
+    public static int rows = 16;
+    public static int columns = 30;
     public static int numberOfNodes = 20;
     public static int numberOfEdges = 19;
-    public static boolean baseExport = false;
+    public static boolean baseExport = true;
     public static boolean cimExport = false;
-    public static int baseAlgorithmIterations = 100;
+    public static int baseAlgorithmIterations = 1;
     public static double fxGridPadding = 2d;
     public static double fxGridVGap = 4d;
     public static double fxGridHGap = 4d;
@@ -34,6 +34,7 @@ public class ConfigurationStaticSupplier {
     public static int cimExportInitialYOffset = 0;
     // todo добавить настройки для СИМ-а, такие как сопротивление линий (может быть добавить их в LoadConfiguration)
     public static int fxAlgorithmAfterAllTransformersSetTimeout = 2_000;
+    public static boolean deserializationAlgorithmSetStatuses = false;
 
 
     public static final Map<VoltageLevel, TransformerConfiguration> transformerConfigurations = new HashMap<>();
@@ -49,6 +50,7 @@ public class ConfigurationStaticSupplier {
             .enabled(false)
             .boundingAreaFrom(LEVEL_500.getBoundingArea())
             .boundingAreaTo(LEVEL_500.getBoundingArea() + 4)
+            .roundedBoundingArea(true)
             .maxLineLength(LEVEL_500.getBoundingArea() + 4)
             .transformerPowerSet(List.of(10000))
             .numberOfNodes(2)
@@ -59,6 +61,7 @@ public class ConfigurationStaticSupplier {
             .enabled(false)
             .boundingAreaFrom(LEVEL_220.getBoundingArea())
             .boundingAreaTo(LEVEL_220.getBoundingArea() + 3)
+            .roundedBoundingArea(true)
             .maxLineLength(LEVEL_220.getBoundingArea() + 3)
             .transformerPowerSet(List.of(5000))
             .numberOfNodes(3)
@@ -69,6 +72,7 @@ public class ConfigurationStaticSupplier {
             .enabled(true)
             .boundingAreaFrom(LEVEL_110.getBoundingArea())
             .boundingAreaTo(LEVEL_110.getBoundingArea() + 2)
+            .roundedBoundingArea(true)
             .maxLineLength(LEVEL_110.getBoundingArea() + 2)
             .transformerPowerSet(List.of(2500))
             .numberOfNodes(2)
@@ -79,6 +83,7 @@ public class ConfigurationStaticSupplier {
             .enabled(true)
             .boundingAreaFrom(LEVEL_35.getBoundingArea())
             .boundingAreaTo(LEVEL_35.getBoundingArea() + 1)
+            .roundedBoundingArea(true)
             .maxLineLength(LEVEL_35.getBoundingArea() + 1)
             .transformerPowerSet(List.of(1000))
             .numberOfNodes(4)
@@ -89,6 +94,7 @@ public class ConfigurationStaticSupplier {
             .enabled(true)
             .boundingAreaFrom(LEVEL_10.getBoundingArea())
             .boundingAreaTo(LEVEL_10.getBoundingArea() + 1)
+            .roundedBoundingArea(true)
             .maxLineLength(LEVEL_10.getBoundingArea() + 1)
             .transformerPowerSet(List.of(500))
             .numberOfNodes(1000)
@@ -102,6 +108,7 @@ public class ConfigurationStaticSupplier {
             .maxLoad(100)
             .boundingAreaFrom(2)
             .boundingAreaTo(4)
+            .roundedBoundingArea(true)
             .maxLineLength(4)
             .maxChainLength(5)
             .generationRate(100)
@@ -114,6 +121,7 @@ public class ConfigurationStaticSupplier {
             .maxLoad(400)
             .boundingAreaFrom(2)
             .boundingAreaTo(4)
+            .roundedBoundingArea(true)
             .maxLineLength(4)
             .maxChainLength(1)
             .generationRate(40)
@@ -128,6 +136,7 @@ public class ConfigurationStaticSupplier {
             .blockPower(1500)
             .boundingArea(LEVEL_35.getBoundingArea() - 4)
             .transformerArea(2)
+            .roundedBoundingArea(true)
             .build());
         generatorConfigurations.put(LEVEL_110, GeneratorConfiguration.builder()
             .level(LEVEL_110)
@@ -137,6 +146,7 @@ public class ConfigurationStaticSupplier {
             .blockPower(2400)
             .boundingArea(LEVEL_110.getBoundingArea() - 4)
             .transformerArea(3)
+            .roundedBoundingArea(true)
             .build());
         generatorConfigurations.put(LEVEL_220, GeneratorConfiguration.builder()
             .level(LEVEL_220)
@@ -154,6 +164,7 @@ public class ConfigurationStaticSupplier {
             .blockPower(600)
             .boundingArea(LEVEL_500.getBoundingArea() - 2)
             .transformerArea(3)
+            .roundedBoundingArea(true)
             .build());
     }
 }

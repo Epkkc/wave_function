@@ -22,9 +22,9 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 @RequiredArgsConstructor
-public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>, ELEMENTSERVICE extends ElementService<PNODE, LINE>> implements ConnectionService<PNODE> {
+public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ConnectionService<PNODE> {
 
-    protected final ELEMENTSERVICE elementService; // todo убрать потом параметризацию заменив на интерфейс
+    protected final ElementService<PNODE, LINE> elementService; // todo убрать потом параметризацию заменив на интерфейс
     protected final BaseConfiguration baseConfiguration;
     protected final TopologyService<PNODE, LINE> topologyService;
 

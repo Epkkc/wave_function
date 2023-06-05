@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @Builder
@@ -21,6 +23,7 @@ public class GeneratorConfiguration {
     private int blockPower;
     private int boundingArea;
     private int transformerArea;
+    private boolean roundedBoundingArea; // Является ли форма boundingArea круглой или квадратной
     private boolean enabled;
     private double maxLineLength; // Максимальная длина линии, которой будет соединён генератор с трансформатором
 

@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class AbstractExportService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements ExportService<PNODE, LINE> {
 
     protected final ObjectMapper objectMapper = new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-
     protected final BaseConfiguration configuration;
     protected final ElementService<PNODE, LINE> elementService;
     protected final Matrix<PNODE> matrix;
@@ -36,11 +35,15 @@ public class AbstractExportService<PNODE extends AbstractPowerNode<? extends Bas
             .columns(configuration.getColumns())
             .matrix(matrix.toNodeList().stream().map(this::mapNodeToDto).collect(Collectors.toList()))
             .lines(elementService.getLines().stream().map(this::mapLineToDto).collect(Collectors.toList()))
+            .transformerConfigurations(configuration.getTransformerConfigurations())
+            .loadConfigurations(configuration.getLoadConfigurations())
+            .generatorConfigurations(configuration.getGeneratorConfigurations())
             .build();
 
         final String PREFIX = "scheme_";
+        final String JSON = ".json";
         String date = LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("dd_MM_yyyy'T'hh_mm_ss_SSS"));
-        String fileName = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\" + PREFIX + date;
+        String fileName = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\" + PREFIX + date + JSON;
         File file = new File(fileName);
         System.out.println("File name: " + PREFIX + date);
         try (FileWriter writer = new FileWriter(file)) {

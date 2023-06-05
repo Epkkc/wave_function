@@ -37,7 +37,7 @@ public class BaseAlgorithmService {
 
         BaseElementService elementService = new BaseElementService(matrix);
 
-        StatusService<BasePowerNode> statusService = new BaseStatusService(matrix, configuration, true);
+        StatusService<BasePowerNode> statusService = new BaseStatusService(matrix, configuration);
 
         TopologyService<BasePowerNode, BaseLine> topologyService = new BaseTopologyService<>(elementService);
 

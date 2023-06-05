@@ -27,26 +27,17 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
 
     protected final Matrix<PNODE> matrix;
     protected final BaseConfiguration baseConfiguration;
-    protected final boolean roundedArea;
 
     @Override
     public void setTransformerStatusToArea(PNODE powerNode, List<TransformerConfiguration> transformerConfigurations) {
-        int maxLevel = transformerConfigurations.stream()
-            .map(TransformerConfiguration::getLevel)
-            .map(VoltageLevel::getVoltageLevel)
-            .reduce(Integer::max)
-            .orElseThrow(
-                () -> new UnsupportedOperationException(String.format("Unable to find max voltage level among transformer configurations=%s", transformerConfigurations))
-            );
-
         for (TransformerConfiguration configuration : transformerConfigurations) {
-            // Установка blocking статусов
+            // Установка BLOCK_TRANSFORMER статусов
             addStatusAreaTo(
                 powerNode.getX(), powerNode.getY(),
                 configuration.getBoundingAreaFrom(),
                 powerNode.getNodeType().getBlockingStatus(),
                 configuration.getLevel(),
-                true, 0,
+                configuration.isRoundedBoundingArea(), 0,
                 powerNode.getUuid()
             );
 
@@ -62,21 +53,21 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                     configuration.getBoundingAreaTo(),
                     powerNode.getNodeType().getShouldStatus(),
                     configuration.getLevel(),
-                    true, chainLinkOrder,
+                    configuration.isRoundedBoundingArea(), chainLinkOrder,
                     powerNode.getUuid()
                 );
             }
 
             // Установка SHOULD_LOAD статусов
             LoadConfiguration loadConfiguration = baseConfiguration.getLoadConfiguration(configuration.getLevel());
-            if (loadConfiguration != null) {
+            if (loadConfiguration != null && loadConfiguration.isEnabled()) {
                 addRingStatusArea(
                     powerNode.getX(), powerNode.getY(),
                     loadConfiguration.getBoundingAreaFrom(),
                     loadConfiguration.getBoundingAreaTo(),
                     StatusType.SHOULD_LOAD,
                     loadConfiguration.getLevel(),
-                    true, 1,
+                    loadConfiguration.isRoundedBoundingArea(), 1,
                     powerNode.getUuid()
                 );
             }
@@ -95,7 +86,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
             configuration.getBoundingAreaFrom(),
             powerNode.getNodeType().getBlockingStatus(),
             configuration.getLevel(),
-            true, 0,
+            configuration.isRoundedBoundingArea(), 0,
             powerNode.getUuid()
         );
 
@@ -107,7 +98,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                 configuration.getBoundingAreaTo(),
                 powerNode.getNodeType().getShouldStatus(),
                 configuration.getLevel(),
-                true, getChainLinkOrder(powerNode, configuration.getLevel()) + 1,
+                configuration.isRoundedBoundingArea(), getChainLinkOrder(powerNode, configuration.getLevel()) + 1,
                 powerNode.getUuid()
             );
         }
@@ -123,7 +114,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
             configuration.getBoundingArea(),
             powerNode.getNodeType().getBlockingStatus(),
             configuration.getLevel(),
-            true, 0,
+            configuration.isRoundedBoundingArea(), 0,
             powerNode.getUuid()
         );
 
