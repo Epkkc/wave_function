@@ -22,6 +22,7 @@ import com.example.demo.java.fx.service.FxConnectionService;
 import com.example.demo.java.fx.service.FxElementService;
 import com.example.demo.java.fx.service.FxStatusService;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -139,14 +140,22 @@ public class DeserializeMain extends Application {
     }
 
     private static void fillMatrix(int rows, int columns, FxElementService elementService) {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                FxAbstractPowerNode powerNode = new FxBaseNode(i, j, elementService.getBaseSize());
-                matrix.fill(powerNode);
-                GridPane.setConstraints(powerNode.getStackPane(), j, i);
-                gridPane.getChildren().add(powerNode.getStackPane());
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                for (int i = 0; i < rows; i++) {
+                    for (int j = 0; j < columns; j++) {
+                        FxAbstractPowerNode powerNode = new FxBaseNode(i, j, elementService.getBaseSize());
+                        matrix.fill(powerNode);
+                        GridPane.setConstraints(powerNode.getStackPane(), j, i);
+                        gridPane.getChildren().add(powerNode.getStackPane());
+                    }
+                }
+                return null;
             }
-        }
+        };
+        task.run();
+
     }
 
     public static void fillGraphElements(Stage stage, FxConfiguration cfg) {
