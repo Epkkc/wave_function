@@ -2,6 +2,7 @@ package com.example.demo.java.fx.algorithm;
 
 import com.example.demo.base.algorithm.AbstractAlgorithm;
 import com.example.demo.base.factories.PowerNodeFactory;
+import com.example.demo.base.service.ConfigurationStaticSupplier;
 import com.example.demo.base.service.TopologyService;
 import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
@@ -55,7 +56,7 @@ public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerL
 
     @Override
     protected void afterAllTransformersSet() {
-        sleep(1000);
+        sleep(ConfigurationStaticSupplier.fxAlgorithmAfterAllTransformersSetTimeout);
     }
 
     @Override

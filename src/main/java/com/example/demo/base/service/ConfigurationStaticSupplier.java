@@ -17,9 +17,27 @@ import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_500;
 
 public class ConfigurationStaticSupplier {
 
-    private static final Map<VoltageLevel, TransformerConfiguration> transformerConfigurations = new HashMap<>();
-    private static final Map<VoltageLevel, LoadConfiguration> loadConfigurations = new HashMap<>();
-    private static final Map<VoltageLevel, GeneratorConfiguration> generatorConfigurations = new HashMap<>();
+    public static int rows = 40;
+    public static int columns = 40;
+    public static int numberOfNodes = 20;
+    public static int numberOfEdges = 19;
+    public static int baseAlgorithmIterations = 100;
+    public static double fxGridPadding = 2d;
+    public static double fxGridVGap = 4d;
+    public static double fxGridHGap = 4d;
+    public static double fxBaseSize = 45;
+    public static int fxLineDisappearanceDuration = 3_000;
+    public static int cimExportProportionalityFactor = 4;
+    public static int cimExportInitialXOffset = 0;
+    public static int cimExportInitialYOffset = 0;
+    // todo добавить настройки для СИМ-а, такие как сопротивление линий (может быть добавить их в LoadConfiguration)
+    public static int fxAlgorithmAfterAllTransformersSetTimeout = 2_000;
+
+
+    public static final Map<VoltageLevel, TransformerConfiguration> transformerConfigurations = new HashMap<>();
+    public static final Map<VoltageLevel, LoadConfiguration> loadConfigurations = new HashMap<>();
+    public static final Map<VoltageLevel, GeneratorConfiguration> generatorConfigurations = new HashMap<>();
+
 
     static {
         // Трансформаторы напряжением 35/10 кВ имеют следующий ряд мощностей 1000, 1600, 2500, 4000, 6300
@@ -78,7 +96,7 @@ public class ConfigurationStaticSupplier {
         loadConfigurations.put(LEVEL_10, LoadConfiguration.builder()
             .level(LEVEL_10)
             .enabled(true)
-            .minLoad(50) // todo при 100 и max = 200 много фэйлов (около 60)
+            .minLoad(50)
             .maxLoad(100)
             .boundingAreaFrom(2)
             .boundingAreaTo(4)
@@ -135,17 +153,5 @@ public class ConfigurationStaticSupplier {
             .boundingArea(LEVEL_500.getBoundingArea() - 2)
             .transformerArea(3)
             .build());
-    }
-
-    public static Map<VoltageLevel, TransformerConfiguration> getTransformerConfigurations() {
-        return transformerConfigurations;
-    }
-
-    public static Map<VoltageLevel, LoadConfiguration> getLoadConfigurations() {
-        return loadConfigurations;
-    }
-
-    public static Map<VoltageLevel, GeneratorConfiguration> getGeneratorConfigurations() {
-        return generatorConfigurations;
     }
 }

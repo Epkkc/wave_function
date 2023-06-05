@@ -1,6 +1,7 @@
 package com.example.demo.java.fx.service;
 
 import com.example.demo.base.model.grid.Matrix;
+import com.example.demo.base.service.ConfigurationStaticSupplier;
 import com.example.demo.base.service.element.AbstractElementService;
 import com.example.demo.java.fx.model.power.FxAbstractPowerNode;
 import com.example.demo.java.fx.model.power.FxPowerLine;
@@ -28,7 +29,7 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
     private final ScrollPane scrollPane;
     private final Group root;
     private final GridPane gridPane;
-    private final int timeLineLength = 2_000;
+    private final int timeLineLength = ConfigurationStaticSupplier.fxLineDisappearanceDuration;
 
     public FxElementService(Matrix<FxAbstractPowerNode> matrix, FxConfiguration configuration, ScrollPane scrollPane, Group root, GridPane gridPane) {
         super(matrix);
@@ -80,6 +81,7 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
         line.getLine().setStroke(Color.BLACK);
         Timeline timeline = new Timeline();
 
+        // todo для итоговой версии удалить это
 //        Text removingText = getRemovingLabel(line);
 //        Platform.runLater(() -> {
 //            root.getChildren().add(removingText);
@@ -99,7 +101,7 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
         node.setStrokeColor(Color.BLACK);
 
         Timeline timeline = new Timeline();
-
+// todo для итоговой версии удалить это
 //        Text removingText = getRemovingLabel(line);
 //        Platform.runLater(() -> {
 //            node.getStackPane().getChildren().add(removingText); // alligment top
@@ -118,6 +120,7 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
         }));
     }
 
+    // todo для итоговой версии удалить это
     private Text getRemovingLabel(FxPowerLine line) {
         Bounds layoutBounds = line.getLine().getLayoutBounds();
 

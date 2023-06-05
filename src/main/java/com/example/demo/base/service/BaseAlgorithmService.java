@@ -47,11 +47,16 @@ public class BaseAlgorithmService {
 
         BaseExportService exportService = new BaseExportService(configuration, elementService, matrix);
 
-        CimExportService<BasePowerNode, BaseLine> cimExportService = new BaseCimExportService<>(configuration, elementService);
+        CimExportService<BasePowerNode, BaseLine> cimExportService = new BaseCimExportService<>(
+            ConfigurationStaticSupplier.cimExportProportionalityFactor,
+            ConfigurationStaticSupplier.cimExportInitialXOffset,
+            ConfigurationStaticSupplier.cimExportInitialYOffset,
+            configuration,
+            elementService);
 
-        configuration.setTransformerConfigurations(ConfigurationStaticSupplier.getTransformerConfigurations());
-        configuration.setLoadConfigurations(ConfigurationStaticSupplier.getLoadConfigurations());
-        configuration.setGeneratorConfigurations(ConfigurationStaticSupplier.getGeneratorConfigurations());
+        configuration.setTransformerConfigurations(ConfigurationStaticSupplier.transformerConfigurations);
+        configuration.setLoadConfigurations(ConfigurationStaticSupplier.loadConfigurations);
+        configuration.setGeneratorConfigurations(ConfigurationStaticSupplier.generatorConfigurations);
 
         Algorithm algorithm = new BaseAlgorithm(
             matrix,

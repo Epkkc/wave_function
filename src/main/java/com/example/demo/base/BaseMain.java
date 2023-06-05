@@ -2,21 +2,16 @@ package com.example.demo.base;
 
 import com.example.demo.base.model.configuration.GeneralResult;
 import com.example.demo.base.service.BaseAlgorithmService;
+import com.example.demo.base.service.ConfigurationStaticSupplier;
 
 public class BaseMain {
 
-    static int rows = 50;
-    static int columns = 50;
-    static int numberOfNodes = 40;
-    static int numberOfEdges = 39;
-
     public static void main(String[] args) {
 
-        int iters = 10;
         int failedCount = 0;
         boolean totalValid = true;
-        for (int i = 0; i < iters; i++) {
-            BaseAlgorithmService baseAlgorithmService = new BaseAlgorithmService(rows, columns, numberOfNodes, numberOfEdges);
+        for (int i = 0; i < ConfigurationStaticSupplier.baseAlgorithmIterations; i++) {
+            BaseAlgorithmService baseAlgorithmService = new BaseAlgorithmService(ConfigurationStaticSupplier.rows, ConfigurationStaticSupplier.columns, ConfigurationStaticSupplier.numberOfNodes, ConfigurationStaticSupplier.numberOfEdges);
             GeneralResult result = baseAlgorithmService.startAlgo();
             boolean valid = result.getErrorMessage().isEmpty();
             totalValid &= valid;
