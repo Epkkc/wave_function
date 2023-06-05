@@ -19,6 +19,7 @@ import com.example.demo.base.model.status.BlockType;
 import com.example.demo.base.model.status.StatusMetaDto;
 import com.example.demo.base.model.status.StatusType;
 import com.example.demo.base.service.BaseConfiguration;
+import com.example.demo.base.service.ConfigurationStaticSupplier;
 import com.example.demo.base.service.TopologyService;
 import com.example.demo.base.service.connection.ConnectionService;
 import com.example.demo.base.service.element.ElementService;
@@ -78,13 +79,17 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
         validateScheme();
 
+        String generatedFileName = null;
+        if (ConfigurationStaticSupplier.baseExport) {
+            System.out.println("Export json");
+            generatedFileName = exportService.saveAsFile();
+        }
 
-        System.out.println("Export json");
-        String generatedFileName = exportService.saveAsFile();
-
-        System.out.println("Export cim");
-        String cimFileName = cimExportService.exportIntoCim();
-
+        String cimFileName = null;
+        if (ConfigurationStaticSupplier.cimExport) {
+            System.out.println("Export cim");
+            cimFileName = cimExportService.exportIntoCim();
+        }
         System.out.println("Finish");
 
         // todo вынести в отдельный метод для формирования результата

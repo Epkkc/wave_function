@@ -21,6 +21,8 @@ public class ConfigurationStaticSupplier {
     public static int columns = 40;
     public static int numberOfNodes = 20;
     public static int numberOfEdges = 19;
+    public static boolean baseExport = false;
+    public static boolean cimExport = false;
     public static int baseAlgorithmIterations = 100;
     public static double fxGridPadding = 2d;
     public static double fxGridVGap = 4d;
