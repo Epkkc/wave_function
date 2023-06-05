@@ -49,7 +49,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     protected final CFG configurationService;
     protected final PowerNodeFactory<PNODE> nodeFactory;
     protected final ExportService<PNODE, LINE> exportService;
-    protected final CimExportService<PNODE, LINE> cimExportService; // todo доделать CimExportService и сделать для него интерфейс
+    protected final CimExportService<PNODE, LINE> cimExportService;
     protected final Random random = new Random();
     protected final boolean randomFirst;
     private static final int NEGATIVE_LOAD_POWER = -1;
@@ -145,7 +145,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
         boolean edgeRequirement = elementService.getTotalNumberOfEdges() == configurationService.getRequiredNumberOfEdges();
         if (!edgeRequirement) {
-            errorMessage.add(String.format("Не выполнено условие по количеству нод: требуемое = %s , фактическое = %s", configurationService.getRequiredNumberOfEdges(),
+            errorMessage.add(String.format("Не выполнено условие по количеству линий: требуемое = %s , фактическое = %s", configurationService.getRequiredNumberOfEdges(),
                 elementService.getTotalNumberOfEdges()));
         }
 
@@ -589,7 +589,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
     }
 
     protected void fillLoadsAndGenerators() {
-        // todo продебажить, тут есть какая-то ошибка, НЕТ ЭТО НЕ ОШИБКА, ПРОСТО НЕ ХВАТАЛО availablePower для расстановки новой ноды
         List<PNODE> nodes = matrix.getAll(
             node -> node.getStatuses().stream()
                 .anyMatch(status -> status.getType().getBlockType().equals(BlockType.SHOULD)

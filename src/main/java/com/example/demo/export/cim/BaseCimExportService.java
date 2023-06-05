@@ -41,11 +41,10 @@ import static java.lang.Math.sqrt;
 @RequiredArgsConstructor
 public class BaseCimExportService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements CimExportService<PNODE, LINE> {
 
-    // TODO КОНФИГУРАЦИЯ
     // https://jsonformatter.org/xml-formatter
-    private final double LENGTH_KOEF = 4;
-    private final double INITIAL_X = 0;
-    private final double INITIAL_y = 0;
+    private final double PROPORTIONALITY_FACTOR;
+    private final double INITIAL_X_OFFSET;
+    private final double INITIAL_y_OFFSET;
 
     protected final BaseConfiguration configuration;
     protected final ElementService<PNODE, LINE> elementService;
@@ -291,9 +290,8 @@ public class BaseCimExportService<PNODE extends AbstractPowerNode<? extends Base
                 // Пример: ACLine_39703b1f-7323-4260-870f-57d68103269c
                 String acLineId = getACLineId(line.getUuid());
 
-                // terminal.id пример: T_ACLine_39703b1f-7323-4260-870f-57d68103269c
-                Terminal terminal1 = createTerminal(acLineId, connectivityNode1);
-                Terminal terminal2 = createTerminal(acLineId, connectivityNode2);
+                Terminal terminal1 = createTerminal(String.join("_", acLineId, connectivityNode1.getRdfId()), connectivityNode1);//todo терминалы имеют одинаковое название
+                Terminal terminal2 = createTerminal(String.join("_", acLineId, connectivityNode2.getRdfId()), connectivityNode2);
 
                 ACLine acLine = createACLine(acLineId, connection.getVoltageLevel(), line.isBreaker(), calculateLength(transformer, elementService.getNode(dto.getNodeUuid())),
                     List.of(terminal1, terminal2));
@@ -329,7 +327,7 @@ public class BaseCimExportService<PNODE extends AbstractPowerNode<? extends Base
     }
 
     private boolean transformerWasCreated(String nodeUuid) {
-        return powerTransformers.containsKey(getTransformerId(getTransformerId(nodeUuid)));
+        return powerTransformers.containsKey(getTransformerId(nodeUuid));
     }
 
     private PowerTransformer getTransformerFromMap(String nodeUuid) {
@@ -455,7 +453,7 @@ public class BaseCimExportService<PNODE extends AbstractPowerNode<? extends Base
 
     private double calculateLength(PNODE node1, PNODE node2) {
         double lengthInUnits = sqrt(pow(node1.getX() - node2.getX(), 2) + pow(node1.getY() - node2.getY(), 2));
-        return lengthInUnits * LENGTH_KOEF;
+        return lengthInUnits * PROPORTIONALITY_FACTOR;
     }
 
 }

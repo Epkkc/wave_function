@@ -1,6 +1,7 @@
 package com.example.demo.java.fx;
 
 import com.example.demo.base.model.configuration.GeneralResult;
+import com.example.demo.base.service.ConfigurationStaticSupplier;
 import com.example.demo.java.fx.service.FxAlgorithmService;
 import com.example.demo.thread.StoppableThread;
 import javafx.application.Application;
@@ -8,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -20,22 +22,16 @@ import java.util.concurrent.FutureTask;
 
 public class FxMain extends Application {
 
-    static int rows = 16;
-    static int columns = 30;
-    static int numberOfNodes = 20;
-    static int numberOfEdges = 200;
 
-    public static boolean CONTROL_PRESSED = false;
 
     public static void main(String[] args) {
         launch();
-
     }
 
     @Override
     public void start(Stage primaryStage) {
 
-        FxAlgorithmService algorithmService = new FxAlgorithmService(rows, columns, numberOfNodes, numberOfEdges);
+        FxAlgorithmService algorithmService = new FxAlgorithmService(ConfigurationStaticSupplier.rows, ConfigurationStaticSupplier.columns, ConfigurationStaticSupplier.numberOfNodes, ConfigurationStaticSupplier.numberOfEdges);
 
         Group sceneRoot = new Group();
 
@@ -45,10 +41,18 @@ public class FxMain extends Application {
         stopMessage.mouseTransparentProperty().set(true);
         sceneRoot.getChildren().add(stopMessage);
 
-        Scene scene = new Scene(sceneRoot, Color.WHITE); // 969faf
+        Scene scene = new Scene(sceneRoot, Color.WHITE);
         scene.setFill(Color.WHITE);
 
-        FutureTask<GeneralResult> future = new FutureTask<>(() -> algorithmService.startAlgo(sceneRoot));
+        FutureTask<GeneralResult> future = new FutureTask<>(() -> {
+            GeneralResult result = algorithmService.startAlgo(sceneRoot);
+            boolean valid = result.getErrorMessage().isEmpty();
+            System.out.printf("valid = %s%n", valid);
+            for (String errorMessage : result.getErrorMessage()) {
+                System.out.println(errorMessage);
+            }
+            return result;
+        });
 
         StoppableThread thread = new StoppableThread(future);
         thread.setName("Didli");
@@ -70,13 +74,11 @@ public class FxMain extends Application {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
 
-//        primaryStage.setTitle("Wavefunction Collapse Algorithm");
-//        primaryStage.getIcons().add(new Image("C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\com\\example\\demo\\icon.png"));
-//        primaryStage.show();
+        primaryStage.setTitle("Wavefunction Collapse Algorithm");
+        primaryStage.getIcons().add(new Image("C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\com\\example\\demo\\icon.png"));
+        primaryStage.show();
 
         thread.start();
-
-        // todo обработать получение результата как в BaseMain
     }
 
     private StackPane getStopMessageBlock(String message) {
@@ -96,10 +98,4 @@ public class FxMain extends Application {
         return stackPane;
     }
 
-    private void onControl() {
-        CONTROL_PRESSED = true;
-    }
-    private void offControl() {
-        CONTROL_PRESSED = false;
-    }
 }

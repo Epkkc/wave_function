@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RdfResource {
     public RdfResource(String rdfResource) {
-        this.rdfResource = String.join("_", "#", rdfResource);
+        this.rdfResource = "#" + rdfResource;
     }
 
     @XmlAttribute(name = "rdf:resource", required = true)

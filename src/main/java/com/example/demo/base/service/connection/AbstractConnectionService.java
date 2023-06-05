@@ -86,16 +86,9 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
     }
 
     protected boolean getBreakerProperty(PNODE node1, PNODE node2) {
-        // Если соединяются нагрузка и ПС, то устанавливаем breaker
-        // Если ПС является порождающей нагрузку нодой, то этот метод не должен быть вызван
-//        return node1.getNodeType().equals(PowerNodeType.SUBSTATION) && node2.getNodeType().equals(PowerNodeType.LOAD) ||
-//            node2.getNodeType().equals(PowerNodeType.SUBSTATION) && node1.getNodeType()
-//                .equals(PowerNodeType.LOAD); // Breaker устанавливается в том случае, когда нагрузка соединяется с ПС, с которой ещё не был соединён фидер
-
-        // todo удалить всё, что выше
         // breaker устанавливался в следующих случаях:
         // 1) Когда соединяются две LOAD, принадлежащие к разным фидерам (эта логика реализована в методе nodeTypeMatchCondition -> loadsBelongDifferentFeeders)
-        // 2) Когда LOAD с chainLinkNumber = 1 соединяется с другой SUBSTATION
+        // 2) Когда LOAD с chainLinkNumber = 1 соединяется с другой SUBSTATION //todo это ещё уточняется
         return nodesAreLoads(node1, node2);
 
     }
@@ -134,7 +127,7 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
                     && loadsBelongDifferentFeeders(mainNode, freeNode)
                     && feedersAreNotConnected(mainNode, freeNode)
                     && limitCondition(mainNode, freeNode)
-//                    || PowerNodeType.SUBSTATION.equals(freeNode.getNodeType())
+//                    || PowerNodeType.SUBSTATION.equals(freeNode.getNodeType()) // todo это уточняется
 //                    && substationBelongDifferentFeeder(mainNode, freeNode)
                     ;
             }
@@ -217,7 +210,6 @@ public abstract class AbstractConnectionService<PNODE extends AbstractPowerNode<
 
     protected boolean loadsBelongDifferentFeeders(PNODE mainLoad, PNODE freeLoad) {
         // Проверка условия, что две соединяемые нагрузки принадлежат к разным фидерам
-        // todo вызвать для каждой нагрузки getSourceConnectedSubstation, если эти ноды не равны, то соединить
         PNODE sourceConnectedSubstationMain = topologyService.getSourceConnectedSubstation(mainLoad)
             .orElseThrow(() -> new UnsupportedOperationException("Unable to find SourceConnectedSubstation for node : " + mainLoad));
         PNODE sourceConnectedSubstationFree = topologyService.getSourceConnectedSubstation(freeLoad)

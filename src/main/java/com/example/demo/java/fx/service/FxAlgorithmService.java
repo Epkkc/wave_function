@@ -43,7 +43,7 @@ public class FxAlgorithmService {
 
 
     public GeneralResult startAlgo(Group sceneParent) {
-        FxConfiguration configuration = new FxConfiguration(rows, columns, numberOfNodes, numberOfEdges, 2d, 4d, 4d, 45);
+        FxConfiguration configuration = new FxConfiguration(rows, columns, numberOfNodes, numberOfEdges, ConfigurationStaticSupplier.fxGridPadding, ConfigurationStaticSupplier.fxGridVGap, ConfigurationStaticSupplier.fxGridHGap, ConfigurationStaticSupplier.fxBaseSize);
 
         Matrix<FxAbstractPowerNode> matrix = new Matrix<>(rows, columns);
 
@@ -61,11 +61,16 @@ public class FxAlgorithmService {
 
         ExportService<FxAbstractPowerNode, FxPowerLine> exportService = new AbstractExportService<>(configuration, elementService, matrix);
 
-        CimExportService<FxAbstractPowerNode, FxPowerLine> cimExportService = new BaseCimExportService<>(configuration, elementService);
+        CimExportService<FxAbstractPowerNode, FxPowerLine> cimExportService = new BaseCimExportService<>(
+            ConfigurationStaticSupplier.cimExportProportionalityFactor,
+            ConfigurationStaticSupplier.cimExportInitialXOffset,
+            ConfigurationStaticSupplier.cimExportInitialYOffset,
+            configuration,
+            elementService);
 
-        configuration.setTransformerConfigurations(ConfigurationStaticSupplier.getTransformerConfigurations());
-        configuration.setLoadConfigurations(ConfigurationStaticSupplier.getLoadConfigurations());
-        configuration.setGeneratorConfigurations(ConfigurationStaticSupplier.getGeneratorConfigurations());
+        configuration.setTransformerConfigurations(ConfigurationStaticSupplier.transformerConfigurations);
+        configuration.setLoadConfigurations(ConfigurationStaticSupplier.loadConfigurations);
+        configuration.setGeneratorConfigurations(ConfigurationStaticSupplier.generatorConfigurations);
 
         Algorithm algorithm = new FxAlgorithm(
             matrix,
