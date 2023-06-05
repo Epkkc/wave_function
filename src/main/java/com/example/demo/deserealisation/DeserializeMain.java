@@ -50,7 +50,7 @@ public class DeserializeMain extends Application {
     static DeserializationService deserializationService = new DeserializationService();
 
     static String path = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\";
-    static String fileName = "scheme_05_06_2023T09_52_33_808.json";
+    static String fileName = "scheme_05_06_2023T11_14_31_662.json";
     static boolean SET_STATUSES = ConfigurationStaticSupplier.deserializationAlgorithmSetStatuses;
 
     public static void main(String[] args) {
@@ -64,10 +64,11 @@ public class DeserializeMain extends Application {
         int columns = saveDto.getColumns();
 
         // -1 - заглушечные данные
-        configuration = new FxConfiguration(rows, columns, -1, -1, 2d, 4d, 4d, 50);
+        configuration = new FxConfiguration(rows, columns, -1, -1, ConfigurationStaticSupplier.fxGridPadding, ConfigurationStaticSupplier.fxGridVGap, ConfigurationStaticSupplier.fxGridHGap, ConfigurationStaticSupplier.fxBaseSize);
         configuration.setTransformerConfigurations(saveDto.getTransformerConfigurations());
         configuration.setLoadConfigurations(saveDto.getLoadConfigurations());
         configuration.setGeneratorConfigurations(saveDto.getGeneratorConfigurations());
+        configuration.setBaseBlockingStatusConfiguration(saveDto.getBaseBlockingStatusConfiguration());
 
         matrix = new Matrix<>(rows, columns);
 

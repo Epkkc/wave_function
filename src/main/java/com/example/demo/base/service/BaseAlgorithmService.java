@@ -9,6 +9,7 @@ import com.example.demo.base.model.enums.PowerNodeType;
 import com.example.demo.base.model.grid.Matrix;
 import com.example.demo.base.model.power.BaseLine;
 import com.example.demo.base.model.power.BasePowerNode;
+import com.example.demo.base.model.status.BaseBlockingStatusConfiguration;
 import com.example.demo.base.service.connection.BaseConnectionService;
 import com.example.demo.base.service.connection.ConnectionService;
 import com.example.demo.base.service.element.BaseElementService;
@@ -57,6 +58,7 @@ public class BaseAlgorithmService {
         configuration.setTransformerConfigurations(ConfigurationStaticSupplier.transformerConfigurations);
         configuration.setLoadConfigurations(ConfigurationStaticSupplier.loadConfigurations);
         configuration.setGeneratorConfigurations(ConfigurationStaticSupplier.generatorConfigurations);
+        configuration.setBaseBlockingStatusConfiguration(new BaseBlockingStatusConfiguration(ConfigurationStaticSupplier.baseBlockingStatusRoundedArea, ConfigurationStaticSupplier.baseBlockingStatusBoundingAreaRadius));
 
         Algorithm algorithm = new BaseAlgorithm(
             matrix,

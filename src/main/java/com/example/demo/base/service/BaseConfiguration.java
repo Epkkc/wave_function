@@ -4,6 +4,7 @@ import com.example.demo.base.model.configuration.GeneratorConfiguration;
 import com.example.demo.base.model.configuration.LoadConfiguration;
 import com.example.demo.base.model.configuration.TransformerConfiguration;
 import com.example.demo.base.model.enums.VoltageLevel;
+import com.example.demo.base.model.status.BaseBlockingStatusConfiguration;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +22,7 @@ public class BaseConfiguration {
     protected Map<VoltageLevel, TransformerConfiguration> transformerConfigurations;
     protected Map<VoltageLevel, LoadConfiguration> loadConfigurations;
     protected Map<VoltageLevel, GeneratorConfiguration> generatorConfigurations;
+    protected BaseBlockingStatusConfiguration baseBlockingStatusConfiguration;
 
     public List<TransformerConfiguration> getTransformerConfigurationList() {
         return transformerConfigurations.values().stream()

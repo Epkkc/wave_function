@@ -38,6 +38,7 @@ public class AbstractExportService<PNODE extends AbstractPowerNode<? extends Bas
             .transformerConfigurations(configuration.getTransformerConfigurations())
             .loadConfigurations(configuration.getLoadConfigurations())
             .generatorConfigurations(configuration.getGeneratorConfigurations())
+            .baseBlockingStatusConfiguration(configuration.getBaseBlockingStatusConfiguration())
             .build();
 
         final String PREFIX = "scheme_";
@@ -45,7 +46,7 @@ public class AbstractExportService<PNODE extends AbstractPowerNode<? extends Bas
         String date = LocalDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("dd_MM_yyyy'T'hh_mm_ss_SSS"));
         String fileName = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\" + PREFIX + date + JSON;
         File file = new File(fileName);
-        System.out.println("File name: " + PREFIX + date);
+        System.out.println("File name: " + PREFIX + date + JSON);
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(objectMapper.writeValueAsString(dto));
         } catch (Exception e) {

@@ -17,8 +17,8 @@ import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_500;
 
 public class ConfigurationStaticSupplier {
 
-    public static int rows = 40;
-    public static int columns = 40;
+    public static int rows = 16;
+    public static int columns = 30;
     public static int numberOfNodes = 20;
     public static int numberOfEdges = 19;
     public static boolean baseExport = true;
@@ -35,6 +35,8 @@ public class ConfigurationStaticSupplier {
     // todo добавить настройки для СИМ-а, такие как сопротивление линий (может быть добавить их в LoadConfiguration)
     public static int fxAlgorithmAfterAllTransformersSetTimeout = 2_000;
     public static boolean deserializationAlgorithmSetStatuses = true;
+    public static boolean baseBlockingStatusRoundedArea = false;
+    public static int baseBlockingStatusBoundingAreaRadius = 2;
 
 
     public static final Map<VoltageLevel, TransformerConfiguration> transformerConfigurations = new HashMap<>();

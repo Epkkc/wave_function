@@ -12,6 +12,7 @@ import com.example.demo.base.model.status.BaseStatus;
 import com.example.demo.base.model.status.StatusMetaDto;
 import com.example.demo.base.model.status.StatusType;
 import com.example.demo.base.service.BaseConfiguration;
+import com.example.demo.base.service.ConfigurationStaticSupplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -206,14 +207,21 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
     }
 
     private void addBaseBlockingStatus(int x, int y, String nodeUuid) {
-        matrix.getArea(x, y).forEach(node -> PowerNodeType.getValidValues().forEach(
-            pnt -> {
-                List<StatusMetaDto> res = new ArrayList<>();
-                for (VoltageLevel level : VoltageLevel.values()) {
-                    res.add(new StatusMetaDto(level, 0, nodeUuid));
-                }
-                node.addStatus(pnt.getBlockingStatus(), res);
-            })
+        matrix.getArea(x, y, baseConfiguration.getBaseBlockingStatusConfiguration().getRadius()).forEach(node ->
+            PowerNodeType.getValidValues().forEach(
+                pnt -> {
+                    if (baseConfiguration.getBaseBlockingStatusConfiguration().isRounded()) {
+                        // Отбрасываем все ноды, которые выходят за зону
+                        if (sqrt(pow(node.getX() - x, 2) + pow(node.getY() - y, 2)) > (baseConfiguration.getBaseBlockingStatusConfiguration().getRadius())) {
+                            return;
+                        }
+                    }
+                    List<StatusMetaDto> res = new ArrayList<>();
+                    for (VoltageLevel level : VoltageLevel.values()) {
+                        res.add(new StatusMetaDto(level, 0, nodeUuid));
+                    }
+                    node.addStatus(pnt.getBlockingStatus(), res);
+                })
         );
     }
 

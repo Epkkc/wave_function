@@ -4,6 +4,7 @@ import com.example.demo.base.algorithm.Algorithm;
 import com.example.demo.base.factories.PowerNodeFactory;
 import com.example.demo.base.model.configuration.GeneralResult;
 import com.example.demo.base.model.grid.Matrix;
+import com.example.demo.base.model.status.BaseBlockingStatusConfiguration;
 import com.example.demo.base.service.BaseTopologyService;
 import com.example.demo.base.service.ConfigurationStaticSupplier;
 import com.example.demo.base.service.TopologyService;
@@ -71,6 +72,7 @@ public class FxAlgorithmService {
         configuration.setTransformerConfigurations(ConfigurationStaticSupplier.transformerConfigurations);
         configuration.setLoadConfigurations(ConfigurationStaticSupplier.loadConfigurations);
         configuration.setGeneratorConfigurations(ConfigurationStaticSupplier.generatorConfigurations);
+        configuration.setBaseBlockingStatusConfiguration(new BaseBlockingStatusConfiguration(ConfigurationStaticSupplier.baseBlockingStatusRoundedArea, ConfigurationStaticSupplier.baseBlockingStatusBoundingAreaRadius));
 
         Algorithm algorithm = new FxAlgorithm(
             matrix,
