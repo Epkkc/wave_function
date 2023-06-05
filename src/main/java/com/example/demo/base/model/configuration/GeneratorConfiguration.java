@@ -21,10 +21,11 @@ public class GeneratorConfiguration {
     private int minNumberOfBlocks;
     private int maxNumberOfBlocks;
     private int blockPower;
-    private int boundingArea;
-    private int transformerArea;
+    private int boundingAreaFrom;
+    private int boundingAreaTo;
     private boolean roundedBoundingArea; // Является ли форма boundingArea круглой или квадратной
     private boolean enabled;
     private double maxLineLength; // Максимальная длина линии, которой будет соединён генератор с трансформатором
+    private int generationRate; // Шанс генерации ноды от 0 до 100 %
 
 }

@@ -17,8 +17,8 @@ import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_500;
 
 public class ConfigurationStaticSupplier {
 
-    public static int rows = 16;
-    public static int columns = 30;
+    public static int rows = 40;
+    public static int columns = 40;
     public static int numberOfNodes = 20;
     public static int numberOfEdges = 19;
     public static boolean baseExport = true;
@@ -34,7 +34,7 @@ public class ConfigurationStaticSupplier {
     public static int cimExportInitialYOffset = 0;
     // todo добавить настройки для СИМ-а, такие как сопротивление линий (может быть добавить их в LoadConfiguration)
     public static int fxAlgorithmAfterAllTransformersSetTimeout = 2_000;
-    public static boolean deserializationAlgorithmSetStatuses = false;
+    public static boolean deserializationAlgorithmSetStatuses = true;
 
 
     public static final Map<VoltageLevel, TransformerConfiguration> transformerConfigurations = new HashMap<>();
@@ -116,7 +116,7 @@ public class ConfigurationStaticSupplier {
             .build());
         loadConfigurations.put(LEVEL_35, LoadConfiguration.builder()
             .level(LEVEL_35)
-            .enabled(false)
+            .enabled(true)
             .minLoad(300)
             .maxLoad(400)
             .boundingAreaFrom(2)
@@ -124,7 +124,7 @@ public class ConfigurationStaticSupplier {
             .roundedBoundingArea(true)
             .maxLineLength(4)
             .maxChainLength(1)
-            .generationRate(40)
+            .generationRate(20)
             .maxConnectedFeeders(2)
             .build());
 
@@ -134,9 +134,10 @@ public class ConfigurationStaticSupplier {
             .minNumberOfBlocks(2)
             .maxNumberOfBlocks(4)
             .blockPower(1500)
-            .boundingArea(LEVEL_35.getBoundingArea() - 4)
-            .transformerArea(2)
+            .boundingAreaFrom(2)
+            .boundingAreaTo(4)
             .roundedBoundingArea(true)
+            .generationRate(60)
             .build());
         generatorConfigurations.put(LEVEL_110, GeneratorConfiguration.builder()
             .level(LEVEL_110)
@@ -144,17 +145,18 @@ public class ConfigurationStaticSupplier {
             .minNumberOfBlocks(3)
             .maxNumberOfBlocks(6)
             .blockPower(2400)
-            .boundingArea(LEVEL_110.getBoundingArea() - 4)
-            .transformerArea(3)
+            .boundingAreaFrom(2)
+            .boundingAreaTo(5)
             .roundedBoundingArea(true)
+            .generationRate(70)
             .build());
         generatorConfigurations.put(LEVEL_220, GeneratorConfiguration.builder()
             .level(LEVEL_220)
             .enabled(false)
             .minNumberOfBlocks(3)
             .maxNumberOfBlocks(6)
-            .blockPower(400)
-            .boundingArea(LEVEL_220.getBoundingArea() - 2).transformerArea(3)
+            .boundingAreaFrom(2)
+            .boundingAreaTo(5)
             .build());
         generatorConfigurations.put(LEVEL_500, GeneratorConfiguration.builder()
             .level(LEVEL_500)
@@ -162,8 +164,8 @@ public class ConfigurationStaticSupplier {
             .minNumberOfBlocks(3)
             .maxNumberOfBlocks(6)
             .blockPower(600)
-            .boundingArea(LEVEL_500.getBoundingArea() - 2)
-            .transformerArea(3)
+            .boundingAreaFrom(2)
+            .boundingAreaTo(5)
             .roundedBoundingArea(true)
             .build());
     }

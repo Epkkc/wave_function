@@ -31,7 +31,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
     @Override
     public void setTransformerStatusToArea(PNODE powerNode, List<TransformerConfiguration> transformerConfigurations) {
         for (TransformerConfiguration configuration : transformerConfigurations) {
-            // Установка BLOCK_TRANSFORMER статусов
+            // Установка BLOCK_SUBSTATION статусов
             addStatusAreaTo(
                 powerNode.getX(), powerNode.getY(),
                 configuration.getBoundingAreaFrom(),
@@ -41,7 +41,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                 powerNode.getUuid()
             );
 
-            // Установка should статусов
+            // Установка SHOULD_SUBSTATION статусов
             // Устанавливаем SHOULD_TRANSFORMER статусы только если powerNode.chainLinkOrder < configuration.maxChainLength
             // (Если = то у следующих элементов уже будет +1, что превысит лимит maxChainLength)
             // Высшему классу напряжения присваиваем номер цепочки в ноде + 1, остальным (низким) присваиваем номер цепочки = 1
@@ -72,6 +72,19 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                 );
             }
 
+            // Установка SHOULD_GENERATOR статусов
+            GeneratorConfiguration generatorConfiguration = baseConfiguration.getGeneratorConfiguration(configuration.getLevel());
+            if (generatorConfiguration != null && generatorConfiguration.isEnabled()) {
+                addRingStatusArea(
+                    powerNode.getX(), powerNode.getY(),
+                    generatorConfiguration.getBoundingAreaFrom(),
+                    generatorConfiguration.getBoundingAreaTo(),
+                    StatusType.SHOULD_GENERATOR,
+                    generatorConfiguration.getLevel(),
+                    generatorConfiguration.isRoundedBoundingArea(), 1,
+                    powerNode.getUuid()
+                );
+            }
         }
 
         addBaseBlockingStatus(powerNode.getX(), powerNode.getY(), powerNode.getUuid());
@@ -111,7 +124,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
         // Установка blocking статусов
         addStatusAreaTo(
             powerNode.getX(), powerNode.getY(),
-            configuration.getBoundingArea(),
+            configuration.getBoundingAreaFrom(),
             powerNode.getNodeType().getBlockingStatus(),
             configuration.getLevel(),
             configuration.isRoundedBoundingArea(), 0,

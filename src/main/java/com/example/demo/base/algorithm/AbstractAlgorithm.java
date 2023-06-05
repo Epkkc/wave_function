@@ -166,24 +166,25 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
     private void finalizeScheme() {
         System.out.println("Finalizing scheme");
-
+        System.out.println("deleteExcessLoads");
         deleteExcessLoads();
-
+        System.out.println("finalizeUnconnectedNodes");
         finalizeUnconnectedNodes();
-
+        System.out.println("finalizeExcessLines");
         finalizeExcessLines();
-
+        System.out.println("finalizeGenerators");
         finalizeGenerators();
 
         // Повтор требуется для того, чтобы покрыть сценарий, когда обмотка трансформатора соединена с другими нодами
         // исключительно через breaker-ы. Тогда в негативном сценарии все линии с breaker-ами будут удалены методом выше
         // и обмотка останется ни с чем не соединённой.
+        System.out.println("finalizeUnconnectedNodes");
         finalizeUnconnectedNodes();
-
+        System.out.println("finalizeExcessLines");
         finalizeExcessLines();
-
+        System.out.println("finalizeGenerators");
         finalizeGenerators();
-
+        System.out.println("deleteExcessLoads");
         deleteExcessLoads();
 
         printSchemeMetaInformation("After finalizing");
@@ -283,6 +284,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                     Optional<PNODE> resultNode = matrix.toNodeList().stream()
                         .filter(node -> hasShouldStatus(node, connection.getVoltageLevel(), PowerNodeType.LOAD, unconnectedNode.getUuid()))
                         .findFirst();
+                    System.out.println("ResultNode : " + resultNode);
 
                     resultNode.ifPresent(node -> {
                         LoadConfiguration loadConfiguration = configurationService.getLoadConfiguration(connection.getVoltageLevel());
@@ -447,6 +449,8 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         connectionService.connectNode(node);
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setTransformerStatusToArea(node, transformerConfigurations);
+
+        System.out.println(node);
     }
 
 
@@ -465,6 +469,8 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         connectionService.connectNode(load, ignoreUuids);
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setLoadStatusToArea(load, loadCfg);
+
+        System.out.println(load);
     }
 
     protected void ignoreConnectedSubstationAndLoadsOfSameFeeder(PNODE node, VoltageLevel voltageLevel, Set<String> ignoreUuids) {
@@ -489,6 +495,8 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         connectionService.connectNodes(generator, transformer, genCfg.getLevel());
         // Заполняем area статусом, согласно только что добавленной ноде
         statusService.setGeneratorStatusToArea(generator, genCfg);
+
+        System.out.println(generator);
     }
 
     protected void fillTransformers() {
@@ -546,8 +554,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                     getLevelChainNumberDto(powerNode, currentConfiguration, voltageLevels, first));
                 fillTransformerToGrid(resultNode, nodeTransformerConfigurations);
 
-                System.out.println(resultNode);
-
                 afterTransformerSet(currentConfiguration);
 
                 count++;
@@ -600,20 +606,19 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                     && status.getType().getNodeType().equals(PowerNodeType.LOAD)));
 
         // Расставляем ноды до тех пор, пока есть SHOULD_LOAD статусы и не достигнут предел по количеству нод
-        boolean setAnyLoad = true;
-        while (!nodes.isEmpty() && isThereLimitOfNodes() && setAnyLoad) {
-            setAnyLoad = false;
-            for (LoadConfiguration loadConfiguration : configurationService.getLoadConfigurationList()) {
+        boolean thereIsShouldNodes = true;
+        while (!nodes.isEmpty() && isThereLimitOfNodes() && thereIsShouldNodes) {
+            thereIsShouldNodes = false;
+
+            ArrayList<LoadConfiguration> shuffledConfigurations = new ArrayList<>(configurationService.getLoadConfigurationList());
+            Collections.shuffle(shuffledConfigurations);
+
+            for (LoadConfiguration loadConfiguration : shuffledConfigurations) {
                 if (!loadConfiguration.isEnabled()) {
                     continue;
                 }
 
-                int rate = loadConfiguration.getGenerationRate() - random.nextInt(99);
-                if (rate < 0) {
-                    continue;
-                }
-
-                List<PNODE> nodesWithVoltageLevel = nodes.stream().filter(node -> node.getStatuses().stream()
+                List<PNODE> shouldNodes = nodes.stream().filter(node -> node.getStatuses().stream()
                         .anyMatch(status ->
                             status.getType().getBlockType().equals(BlockType.SHOULD)
                                 && status.getVoltageLevels().contains(loadConfiguration.getLevel())
@@ -621,11 +626,18 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                     )
                     .toList();
 
-                if (nodesWithVoltageLevel.isEmpty()) {
+                if (shouldNodes.isEmpty()) {
                     continue;
                 }
 
-                PNODE resultNode = RandomUtils.randomValue(nodesWithVoltageLevel);
+                thereIsShouldNodes = true;
+
+                int rate = loadConfiguration.getGenerationRate() - random.nextInt(99);
+                if (rate < 0) {
+                    continue;
+                }
+
+                PNODE resultNode = RandomUtils.randomValue(shouldNodes);
 
                 if (resultNode == null) {
                     throw new UnsupportedOperationException("PowerNode is null");
@@ -652,7 +664,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                 }
 
                 fillLoadToGrid(resultNode, loadConfiguration, shouldStatus);
-                setAnyLoad = true;
                 afterLoadSet(loadConfiguration);
             }
 
@@ -694,56 +705,48 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
     protected void checkGeneratorNeed() {
         // Если суммарная нагрузка больше или равна суммарной генерации, то необходимо поставить генератор
-        while (elementService.getSumPower() <= elementService.getSumLoad()) {
+        boolean thereIsShouldNodes = true;
+        while (elementService.getSumPower() <= elementService.getSumLoad() && thereIsShouldNodes) {
+            thereIsShouldNodes = false;
 
             ArrayList<GeneratorConfiguration> shuffledConfigurations = new ArrayList<>(configurationService.getGeneratorConfigurationList());
             Collections.shuffle(shuffledConfigurations);
 
-            PNODE resultNode = null;
             for (GeneratorConfiguration generatorConfiguration : shuffledConfigurations) {
-
                 if (!generatorConfiguration.isEnabled()) {
                     continue;
                 }
 
-                List<PNODE> transformers = matrix.getAll(
-                        node -> PowerNodeType.SUBSTATION.equals(node.getNodeType())
-                            && node.getConnections().containsKey(generatorConfiguration.getLevel())
-                    ).stream()
-                    .sorted(Comparator.comparingInt(node -> node.getConnections().get(generatorConfiguration.getLevel()).getConnectedNodes())).toList();
+                List<PNODE> shouldNodes = matrix.toNodeList().stream().filter(node -> node.getStatuses().stream()
+                        .anyMatch(status ->
+                            status.getType().getBlockType().equals(BlockType.SHOULD)
+                                && status.getVoltageLevels().contains(generatorConfiguration.getLevel())
+                                && status.getType().getNodeType().equals(PowerNodeType.GENERATOR))
+                    )
+                    .toList();
 
-                if (transformers.isEmpty()) {
+                if (shouldNodes.isEmpty()) {
                     continue;
                 }
 
-                for (PNODE transformer : transformers) {
-                    List<PNODE> area = matrix.getArea(transformer.getX(), transformer.getY(), generatorConfiguration.getTransformerArea()).stream()
-                        .filter(node -> PowerNodeType.EMPTY.equals(node.getNodeType()))
-                        .filter(node -> node.getStatuses().stream()
-                            .noneMatch(status -> StatusType.BLOCK_GENERATOR.equals(status.getType())
-                                && status.getVoltageLevels().contains(generatorConfiguration.getLevel())))
-                        .collect(Collectors.toList());
+                thereIsShouldNodes = true;
 
-                    if (area.isEmpty()) continue;
-
-                    // Нода для размещения нагрузки
-                    resultNode = RandomUtils.randomValue(area);
-
-                    if (resultNode == null) {
-                        throw new UnsupportedOperationException("PowerNode is null");
-                    }
-
-                    createAndFillGenerator(generatorConfiguration, transformer, resultNode);
-                    break;
+                int rate = generatorConfiguration.getGenerationRate() - random.nextInt(99); //todo добавить поле generationRate
+                if (rate < 0) {
+                    continue;
                 }
 
-                if (resultNode != null) {
-                    break;
-                }
-            }
+                PNODE resultNode = RandomUtils.randomValue(shouldNodes);
 
-            if (resultNode == null) {
-                throw new UnsupportedOperationException("Unable to put another generator in grid");
+                if (resultNode == null) {
+                    throw new UnsupportedOperationException("PowerNode is null");
+                }
+
+                StatusMetaDto shouldStatus = getShouldStatus(resultNode, generatorConfiguration.getLevel(), PowerNodeType.GENERATOR);
+                PNODE parentSubstation = elementService.getNode(shouldStatus.getNodeUuid());
+
+                createAndFillGenerator(generatorConfiguration, parentSubstation, resultNode);
+                break;
             }
         }
     }

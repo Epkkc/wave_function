@@ -50,7 +50,7 @@ public class DeserializeMain extends Application {
     static DeserializationService deserializationService = new DeserializationService();
 
     static String path = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\";
-    static String fileName = "scheme_test_transformer_110_35_10_1.json";
+    static String fileName = "scheme_05_06_2023T09_52_33_808.json";
     static boolean SET_STATUSES = ConfigurationStaticSupplier.deserializationAlgorithmSetStatuses;
 
     public static void main(String[] args) {

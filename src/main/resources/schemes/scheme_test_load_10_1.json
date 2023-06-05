@@ -117,8 +117,8 @@
       "minNumberOfBlocks": 3,
       "maxNumberOfBlocks": 6,
       "blockPower": 600,
-      "boundingArea": 58,
-      "transformerArea": 3,
+      "boundingAreaFrom": 2,
+      "boundingAreaTo": 5,
       "roundedBoundingArea": true,
       "enabled": false,
       "maxLineLength": 0.0
@@ -128,8 +128,8 @@
       "minNumberOfBlocks": 3,
       "maxNumberOfBlocks": 6,
       "blockPower": 2400,
-      "boundingArea": 14,
-      "transformerArea": 3,
+      "boundingAreaFrom": 2,
+      "boundingAreaTo": 5,
       "roundedBoundingArea": true,
       "enabled": true,
       "maxLineLength": 0.0
@@ -139,8 +139,8 @@
       "minNumberOfBlocks": 2,
       "maxNumberOfBlocks": 4,
       "blockPower": 1500,
-      "boundingArea": 2,
-      "transformerArea": 2,
+      "boundingAreaFrom": 2,
+      "boundingAreaTo": 5,
       "roundedBoundingArea": true,
       "enabled": true,
       "maxLineLength": 0.0
@@ -150,8 +150,8 @@
       "minNumberOfBlocks": 3,
       "maxNumberOfBlocks": 6,
       "blockPower": 400,
-      "boundingArea": 33,
-      "transformerArea": 3,
+      "boundingAreaFrom": 2,
+      "boundingAreaTo": 4,
       "roundedBoundingArea": false,
       "enabled": false,
       "maxLineLength": 0.0
