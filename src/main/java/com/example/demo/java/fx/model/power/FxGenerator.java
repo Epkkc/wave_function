@@ -72,7 +72,7 @@ public class FxGenerator extends FxAbstractPowerNode {
         shapes.add(path1);
         shapes.add(path2);
 
-        connections.put(dto.getVoltageLevel(), new ConnectionPoint(0, -circleRadius, dto.getVoltageLevel(), 100, dto.getChainLinkNumber()));
+        connections.put(dto.getVoltageLevel(), new ConnectionPoint(0, -circleRadius, dto.getVoltageLevel(), dto.getChainLinkNumber()));
 
         addHoverListeners();
     }

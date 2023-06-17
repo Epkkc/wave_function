@@ -19,8 +19,8 @@ public class ConnectionPoint extends BaseConnection {
      */
     protected double y;
 
-    public ConnectionPoint(double x, double y, VoltageLevel voltageLevel, int limit, int chainLinkOrder) {
-        super(voltageLevel, limit, chainLinkOrder);
+    public ConnectionPoint(double x, double y, VoltageLevel voltageLevel, int chainLinkOrder) {
+        super(voltageLevel, chainLinkOrder);
         this.x = x;
         this.y = y;
     }

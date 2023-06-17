@@ -21,15 +21,10 @@ public class BaseConnection {
      */
     protected int chainLinkOrder;
 
-    /**
-     * Ограничение на максимальное количество присоединений
-     */
-    protected int limit;
     protected List<NodeLineDto> nodeLineDtos = new ArrayList<>();
 
-    public BaseConnection(VoltageLevel voltageLevel, int limit, int chainLinkOrder) {
+    public BaseConnection(VoltageLevel voltageLevel, int chainLinkOrder) {
         this.voltageLevel = voltageLevel;
-        this.limit = limit;
         this.chainLinkOrder = chainLinkOrder;
     }
 
@@ -38,9 +33,7 @@ public class BaseConnection {
     }
 
     public boolean addConnection(String nodeUuid, String lineUuid) {
-        if (getConnectedNodes() < limit && nodeLineDtos.stream().noneMatch(dto -> dto.getNodeUuid().equals(nodeUuid))) {
-//            connectedUuids.add(nodeUuid);
-//            lineUuids.add(lineUuid);
+        if (nodeLineDtos.stream().noneMatch(dto -> dto.getNodeUuid().equals(nodeUuid))) {
             nodeLineDtos.add(new NodeLineDto(nodeUuid, lineUuid));
             return true;
         }

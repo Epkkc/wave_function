@@ -67,9 +67,9 @@ public class FxTwoSubStation extends FxAbstractPowerNode {
         circle2.setStrokeWidth(size * 8 / 300);
         circle2.setTranslateX(offset);
 
-        connections.put(level1, new ConnectionPoint(-offset - radius, 0, level1, 100, dto1.getChainLinkNumber()));
+        connections.put(level1, new ConnectionPoint(-offset - radius, 0, level1, dto1.getChainLinkNumber()));
 
-        connections.put(level2, new ConnectionPoint(offset + radius, 0, level2, 100, dto2.getChainLinkNumber()));
+        connections.put(level2, new ConnectionPoint(offset + radius, 0, level2, dto2.getChainLinkNumber()));
 
         Bounds bounds1 = circle1.localToScreen(circle1.getLayoutBounds());
 

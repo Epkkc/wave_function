@@ -79,7 +79,7 @@ public class FxLoad extends FxAbstractPowerNode {
         shapes.add(rightLine);
         shapes.add(leftLine);
 
-        connections.put(dto.getVoltageLevel(), new ConnectionPoint(0, -length, dto.getVoltageLevel(), 100, dto.getChainLinkNumber()));
+        connections.put(dto.getVoltageLevel(), new ConnectionPoint(0, -length, dto.getVoltageLevel(), dto.getChainLinkNumber()));
 
         addHoverListener();
     }

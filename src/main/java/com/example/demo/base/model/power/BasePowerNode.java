@@ -17,7 +17,7 @@ public class BasePowerNode extends AbstractPowerNode<BaseStatus, BaseConnection>
     @Override
     protected void initConnections(List<LevelChainNumberDto> levelChainNumberDtos) {
         for (LevelChainNumberDto dto : levelChainNumberDtos) {
-            connections.put(dto.getVoltageLevel(), new BaseConnection(dto.getVoltageLevel(), 100, dto.getChainLinkNumber()));
+            connections.put(dto.getVoltageLevel(), new BaseConnection(dto.getVoltageLevel(), dto.getChainLinkNumber()));
         }
     }
 
