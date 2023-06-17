@@ -17,14 +17,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Terminal extends BaseElement {
 
-//      <cim:Terminal rdf:ID = "_T_CLoad_8">
-//        <cim:Terminal.ConductingEquipment rdf:resource="#_CLoad_8"/>
-//        <cim:Terminal.ConnectivityNode rdf:resource="#_CN_8"/>
-//        <cim:ACDCTerminal.connected>true</cim:ACDCTerminal.connected>
-//        <cim:IdentifiedObject.mRID>T_CLoad_8</cim:IdentifiedObject.mRID>
-//        <nti:IdentifiedObject.projectID>rastrwin</nti:IdentifiedObject.projectID>
-//      </cim:Terminal>
-
     public Terminal(String rdfId, String mRID, String name, String conductingEquipmentRdfResource, ConnectivityNode connectivityNode) {
         super(rdfId, mRID, name);
         this.conductingEquipmentRdfResource = new RdfResource(conductingEquipmentRdfResource);

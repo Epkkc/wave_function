@@ -41,7 +41,6 @@ import static java.lang.Math.sqrt;
 @RequiredArgsConstructor
 public class BaseCimExportService<PNODE extends AbstractPowerNode<? extends BaseStatus, ? extends BaseConnection>, LINE extends AbstractLine<PNODE>> implements CimExportService<PNODE, LINE> {
 
-    // https://jsonformatter.org/xml-formatter
     private final double PROPORTIONALITY_FACTOR;
     private final double INITIAL_X_OFFSET;
     private final double INITIAL_y_OFFSET;

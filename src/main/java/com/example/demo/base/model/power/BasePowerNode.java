@@ -26,5 +26,4 @@ public class BasePowerNode extends AbstractPowerNode<BaseStatus, BaseConnection>
         return new BaseStatus(statusType, statusDtos);
     }
 
-
 }

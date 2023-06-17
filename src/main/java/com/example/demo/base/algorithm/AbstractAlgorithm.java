@@ -92,7 +92,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         }
         System.out.println("Finish");
 
-        // todo вынести в отдельный метод для формирования результата
         List<NodeTypeResult> nodeTypeResults = new ArrayList<>();
         for (PowerNodeType type : PowerNodeType.values()) {
             if (PowerNodeType.EMPTY.equals(type)) {
@@ -101,7 +100,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
             List<PNODE> collect = matrix.toNodeList()
                 .stream()
                 .filter(node -> type.equals(node.getNodeType()))
-                .toList(); // переделать на мапу Map<VoltageLevel,Long>, где long - это количество элементов в данной группе
+                .toList();
             for (VoltageLevel voltageLevel : VoltageLevel.values()) {
                 long count = collect.stream()
                     .filter(node -> node.getVoltageLevels().stream().map(VoltageLevel::getVoltageLevel).reduce(Math::max).map(value -> voltageLevel.getVoltageLevel() == value).orElse(false))
@@ -121,7 +120,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         System.out.println("Total generation = " + elementService.getSumPower());
     }
 
-    // todo вынести в отдельный класс Validator
     private List<String> validateScheme() {
 
         List<String> errorMessage = new ArrayList<>();
@@ -158,8 +156,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         if (!loadLessThanPower) {
             errorMessage.add(String.format("Суммарная нагрузка = %d больше, чем суммарная генерация = %d", elementService.getSumLoad(), elementService.getSumPower()));
         }
-
-        // todo добавить проверку на то, что у всех нод неотрицательный power
 
         return errorMessage;
     }
@@ -227,9 +223,8 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         Optional<PNODE> excessLoadOptional = getExcessLoad();
         if (excessLoadOptional.isPresent()) {
             PNODE excessLoad = excessLoadOptional.get();
-            elementService.removeNode(excessLoad, getBaseNode(excessLoad.getX(), excessLoad.getY())); // Удаление excessLoad ноды и линий с ней связанных
-            statusService.removeStatusesByNodeUuid(excessLoad.getUuid()); // Удаление статусов, порождённых excessLoad
-            // todo вернуть присоединённой подстанции load.power в availablePower
+            elementService.removeNode(excessLoad, getBaseNode(excessLoad.getX(), excessLoad.getY())); // Удаление необязательной ноды и линий с ней связанных
+            statusService.removeStatusesByNodeUuid(excessLoad.getUuid()); // Удаление статусов, порождённых необязательной нодой
             return true;
         } else {
             return false;
@@ -299,7 +294,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                         fillLoadToGrid(load, loadConfiguration, shouldStatus);
                     });
                 } else {
-                    // На схеме нет лишних нод, это означает, что мы не можем сделать схему валидной
+                    // На схеме отсутствуют лишние ноды, это означает, что мы не можем сделать схему валидной
                     System.out.println("There is no excess loads");
                     break OUTER;
                 }
@@ -311,7 +306,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
     protected abstract PNODE getBaseNode(int x, int y);
 
-    // todo вынести в TopologyService
     protected Optional<LINE> getExcessLine() {
         // Линия является лишней, если она соединяет две ноды, которые имеют минимум два соединения в этом connection-е
         return elementService.getLines().stream()
@@ -319,18 +313,15 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
             .findFirst();
     }
 
-    // todo вынести в TopologyService
     protected boolean excessLineCondition(LINE line) {
         return line.isBreaker() || pointsHaveExtraConnections(line) && substationsCheck(line);
     }
 
-    // todo вынести в TopologyService
     protected boolean pointsHaveExtraConnections(LINE line) {
         return connectionPointHasMoreThanOneConnection(line.getPoint1(), line.getVoltageLevel())
             && connectionPointHasMoreThanOneConnection(line.getPoint2(), line.getVoltageLevel());
     }
 
-    // todo вынести в TopologyService
     protected boolean substationsCheck(LINE line) {
         PNODE point1 = line.getPoint1();
         PNODE point2 = line.getPoint2();
@@ -344,12 +335,10 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         return false;
     }
 
-    // todo вынести в TopologyService
     private boolean substationsHaveEqualChainLinkOrder(LINE line) {
         return getChainLinkOrder(line.getPoint1(), line.getVoltageLevel()) == getChainLinkOrder(line.getPoint2(), line.getVoltageLevel());
     }
 
-    // todo вынести в TopologyService
     protected boolean pointConnectedWithAnotherSubstationWithLessChainLinkOrder(PNODE point, LINE line) {
         boolean connectedWithAnotherSubstation = false;
 
@@ -391,7 +380,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         return node.getConnections().get(voltageLevel).getConnectedNodes() > 1;
     }
 
-    // todo вынести в TopologyService
     protected Optional<PNODE> getExcessLoad() {
         // Сортируем по chainLinkOrder DESC и по общему количеству присоединений ASC
         List<PNODE> loads = matrix.toNodeList().stream()
@@ -546,11 +534,13 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
                         .orElseThrow(() -> new UnsupportedOperationException("Unable to find transformer configuration with voltage level = " + voltageLevel))
                     ).toList();
 
+
+
                 PNODE resultNode = nodeFactory.createNode(
                     PowerNodeType.SUBSTATION,
                     powerNode.getX(),
                     powerNode.getY(),
-                    currentConfiguration.getTransformerPowerSet().get(0), // todo настроить выбор мощности
+                    RandomUtils.randomValue(currentConfiguration.getTransformerPowerSet()),
                     getLevelChainNumberDto(powerNode, currentConfiguration, voltageLevels, first));
                 fillTransformerToGrid(resultNode, nodeTransformerConfigurations);
 
@@ -682,8 +672,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
     protected int getLoadPower(LoadConfiguration loadConfiguration, StatusMetaDto shouldStatus) {
         // Расчёт мощности нагрузки
-
-        // TODO При расстановке нагрузки уменьшать availablePower трансформатора
         PNODE parentNode = elementService.getNode(shouldStatus.getNodeUuid());
         PNODE sourceSubstation;
         if (PowerNodeType.SUBSTATION.equals(parentNode.getNodeType())) {
@@ -731,7 +719,7 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
                 thereIsShouldNodes = true;
 
-                int rate = generatorConfiguration.getGenerationRate() - random.nextInt(99); //todo добавить поле generationRate
+                int rate = generatorConfiguration.getGenerationRate() - random.nextInt(99);
                 if (rate < 0) {
                     continue;
                 }
@@ -760,7 +748,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         afterGeneratorSet(configuration);
     }
 
-    // todo вынести в новый PowerCalculationService
     protected int getGeneratorPower(GeneratorConfiguration configuration) {
 
         int numberOfBlocks = random.nextInt(configuration.getMaxNumberOfBlocks() + 1 - configuration.getMinNumberOfBlocks()) + configuration.getMinNumberOfBlocks();
@@ -777,7 +764,6 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
         return resPower;
     }
 
-    // todo вынести в StatusService
     protected StatusMetaDto getShouldStatus(PNODE powerNode, VoltageLevel voltageLevel, PowerNodeType powerNodeType, String uuid) {
         return powerNode.getStatuses()
             .stream()

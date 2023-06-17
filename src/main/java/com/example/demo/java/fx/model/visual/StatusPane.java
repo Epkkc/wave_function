@@ -21,7 +21,6 @@ public class StatusPane {
     }
 
     private void createHBox() {
-        // TODO перенести в параметры конструктора и привязать к параметру size
         double value = 0.5d;
         hbox = new HBox();
         hbox.setAlignment(Pos.BOTTOM_LEFT);

@@ -10,7 +10,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-// TODO сделать Iterable
 public class Matrix<T extends Coordinates> implements Iterable<T> {
 
     private final List<List<T>> matrix;
@@ -91,13 +90,11 @@ public class Matrix<T extends Coordinates> implements Iterable<T> {
             for (int j = 0; j <= Math.min(i, rows - 1); j++) {
                 if (i < columns) {
                     getNode(j, i).ifPresent(nodes::add);
-//                    nodes.add(matrix.get(j).get(i));
                 }
             }
             for (int j = Math.min(i, columns) - 1; j >= 0; j--) {
                 if (i < rows) {
                     getNode(i, j).ifPresent(nodes::add);
-//                    nodes.add(matrix.get(i).get(j));
                 }
             }
         }

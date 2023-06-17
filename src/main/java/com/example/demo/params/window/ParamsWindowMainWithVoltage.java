@@ -80,17 +80,8 @@ public class ParamsWindowMainWithVoltage extends Application {
 
         Label label = addLabel( row + 1, totalColumns);
         FxMain fxMain = new FxMain();
-        // todo через toggle checkbox-а можно спокойно сделать блокировку настроек генератора и нагрузки
-        //  при disable настройки трансформатора соответствующего напряжения
         Button button = addSubmitButton(transformerInputs, label, row, totalColumns);
         button.setOnAction(actionEvent -> {
-//            CheckBox enabledCheckBox1 = transformerInputs.get(35).getEnabledCheckBox();
-//            enabledCheckBox1.selectedProperty().set(false);
-//            CheckBox enabledCheckBox2 = generatorInputs.get(35).getEnabledCheckBox();
-//            enabledCheckBox2.selectedProperty().set(false);
-//            CheckBox enabledCheckBox3 = loadInputs.get(35).getEnabledCheckBox();
-//            enabledCheckBox3.selectedProperty().set(false);
-
             fxMain.start(stage);
         });
 

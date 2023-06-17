@@ -32,7 +32,6 @@ public class ConfigurationStaticSupplier {
     public static int cimExportProportionalityFactor = 4;
     public static int cimExportInitialXOffset = 0;
     public static int cimExportInitialYOffset = 0;
-    // todo добавить настройки для СИМ-а, такие как сопротивление линий (может быть добавить их в LoadConfiguration)
     public static int fxAlgorithmAfterAllTransformersSetTimeout = 2_000;
     public static boolean deserializationAlgorithmSetStatuses = true;
     public static boolean baseBlockingStatusRoundedArea = false;
@@ -46,12 +45,10 @@ public class ConfigurationStaticSupplier {
 
 
     static {
-        // Трансформаторы напряжением 35/10 кВ имеют следующий ряд мощностей 1000, 1600, 2500, 4000, 6300
-        // http://kabelmag2012.narod.ru/TransfS.html
         transformerConfigurations.put(LEVEL_500, TransformerConfiguration.builder()
             .level(LEVEL_500)
             .enabled(false)
-                .threeWindingEnabled(true)
+            .threeWindingEnabled(true)
             .transformerPowerSet(List.of(10000))
             .boundingAreaFrom(60)
             .boundingAreaTo(64)
@@ -59,8 +56,8 @@ public class ConfigurationStaticSupplier {
             .maxLineLength(64)
             .numberOfNodes(2)
             .maxChainLength(3)
-                .gap(2)
-                .timeout(2000)
+            .gap(2)
+            .timeout(2000)
             .build());
         transformerConfigurations.put(LEVEL_220, TransformerConfiguration.builder()
             .level(LEVEL_220)

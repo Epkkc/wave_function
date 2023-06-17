@@ -35,7 +35,6 @@ import java.util.List;
 @ToString(callSuper = true)
 public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, ConnectionPoint> implements Coordinates {
 
-
     protected double size;
     protected BasePane basePane;
     protected final double hoverOpacity = 0.5d;
@@ -67,7 +66,7 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
         Rectangle info = new Rectangle();
         info.setWidth(infoSize);
         info.setHeight(infoSize);
-        info.setFill(Color.DARKGRAY); // F6FAFB // F5F9FA // F4F8F9 // #363636 // F0FFFF // e7e7e7 // FFFFF0 // #F5F5F5 - ЭТО ЦВЕТ БЭКГРАУНДА ОКНА ВИНДОУС // #F8F8F8
+        info.setFill(Color.DARKGRAY);
         info.setStroke(Color.TRANSPARENT);
         info.setStrokeWidth(0);
         info.setOpacity(0.2);
@@ -111,32 +110,6 @@ public abstract class FxAbstractPowerNode extends AbstractPowerNode<FxStatus, Co
 
     public List<VoltageLevel> getVoltageLevels() {
         return connections.keySet().stream().toList();
-    }
-
-    // TODO Доработать этот метод (Желательно сделать универсальный метод для добавления hoveListener-ов)
-    protected void addHoverListener(Node node, VoltageLevel voltageLevel, String message, double x, double y) {
-        Text text = new Text();
-        text.setTextAlignment(TextAlignment.CENTER);
-        text.setFont(Font.getDefault());
-        text.setText(String.join("\n", nodeType.name(), Integer.toString(this.x), Integer.toString(this.y)));
-
-        StackPane stickyNotesPane = new StackPane();
-        stickyNotesPane.setPadding(new Insets(2));
-        stickyNotesPane.setStyle("-fx-background-color: rgba(255, 255, 255, 0.85);");
-        stickyNotesPane.getChildren().add(text);
-
-        Popup popup = new Popup();
-        popup.getContent().add(stickyNotesPane);
-
-        node.hoverProperty().addListener((obs, oldVal, newValue) -> {
-            if (newValue) {
-                setHoverOpacity(voltageLevel);
-                popup.show(node, x, y);
-            } else {
-                setDefaultOpacity(voltageLevel);
-                popup.hide();
-            }
-        });
     }
 
     protected void addHoverListener(Node node, String message) {

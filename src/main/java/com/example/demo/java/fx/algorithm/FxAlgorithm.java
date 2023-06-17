@@ -68,7 +68,6 @@ public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerL
 
     @Override
     protected void afterGeneratorSet(GeneratorConfiguration configuration) {
-//        sleep(configuration.getLevel().getTimeout());
         sleep(1000);
     }
 

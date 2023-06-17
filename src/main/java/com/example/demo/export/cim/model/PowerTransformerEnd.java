@@ -18,22 +18,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PowerTransformerEnd extends ServicedElement {
 
-
-//      <cim:PowerTransformerEnd rdf:ID = "_PTE_21_15">
-//        <cim:TransformerEnd.BaseVoltage rdf:resource="#_230"/>
-//        <cim:IdentifiedObject.mRID>PTE_21_15</cim:IdentifiedObject.mRID>
-//        <nti:IdentifiedObject.projectID>rastrwin</nti:IdentifiedObject.projectID>
-
-//        <cim:TransformerEnd.Terminal rdf:resource="#_T_CN_21_PTE_21_15"/>
-//        <cim:PowerTransformerEnd.PowerTransformer rdf:resource="#_PT_21_15"/>
-//        <cim:TransformerEnd.endNumber>1</cim:TransformerEnd.endNumber>
-//        <cim:PowerTransformerEnd.b>1.0E-4</cim:PowerTransformerEnd.b>
-//        <cim:PowerTransformerEnd.r>1.0E-4</cim:PowerTransformerEnd.r>
-//        <cim:PowerTransformerEnd.x>276.2604</cim:PowerTransformerEnd.x>
-//        <cim:PowerTransformerEnd.ratedS>33.51005</cim:PowerTransformerEnd.ratedS>
-//      </cim:PowerTransformerEnd>
-
-
     public PowerTransformerEnd(String rdfId, String mRID, String name, String baseVoltageRdfResource, boolean normallyInService, String terminalRdfResource,
                                String powerTransformerRdfResource, Integer endNumber, Terminal terminal, PowerTransformer powerTransformer) {
         super(rdfId, mRID, name, baseVoltageRdfResource, normallyInService);

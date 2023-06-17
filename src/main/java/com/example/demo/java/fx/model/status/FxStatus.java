@@ -38,7 +38,7 @@ public class FxStatus extends BaseStatus {
         Rectangle rectangle = new Rectangle();
         rectangle.setWidth(size);
         rectangle.setHeight(size);
-        rectangle.setFill(type.getColor()); // #363636
+        rectangle.setFill(type.getColor());
         rectangle.setStroke(Color.TRANSPARENT);
         rectangle.setStrokeWidth(0);
 

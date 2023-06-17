@@ -14,8 +14,6 @@ public class FxPowerNodeAbstractFactory implements PowerNodeFactory<FxAbstractPo
     private final HashMap<PowerNodeType, FxNodeFactory> factoriesMap = new HashMap<>();
 
     public FxPowerNodeAbstractFactory(FxElementService elementsService) {
-        // TODO:SPRING От этого конструктора можно будет отказаться, потому что elementService будет автоваириться в SubstationFactory
-        //  также, поскольку HashMap будет заполняться автоматически
         factoriesMap.put(PowerNodeType.SUBSTATION, new FxSubstationFactory(elementsService));
         factoriesMap.put(PowerNodeType.GENERATOR, new FxGeneratorFactory(elementsService));
         factoriesMap.put(PowerNodeType.LOAD, new FxLoadFactory(elementsService));

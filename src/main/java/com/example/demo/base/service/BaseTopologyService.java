@@ -107,7 +107,6 @@ public class BaseTopologyService<PNODE extends AbstractPowerNode<? extends BaseS
                 PNODE connectedNode = elementService.getNode(dto.getNodeUuid());
                 LINE line = elementService.getLine(dto.getLineUuid());
                 if (PowerNodeType.SUBSTATION.equals(connectedNode.getNodeType()) && line.isBreaker()) {
-                    // todo неактуально сейчас, поскольку нет возможности соединять нагрузки напрямую с ПС через breaker
                     connectedFeedersUuid.add(connectedNode.getUuid());
                 } else if (PowerNodeType.LOAD.equals(connectedNode.getNodeType()) && line.isBreaker()) {
                     PNODE sourceSubstation = getSourceSubstation(connectedNode.getUuid());

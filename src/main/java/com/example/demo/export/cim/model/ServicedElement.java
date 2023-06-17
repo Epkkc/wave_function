@@ -22,7 +22,6 @@ public class ServicedElement extends BaseElement{
         this.normallyInService = normallyInService;
     }
 
-//    @XmlElement(name = "cim:ConductingEquipment.BaseVoltage")
     @XmlElement(name = "ConductingEquipment.BaseVoltage", namespace = "http://iec.ch/TC57/2013/CIM-schema-cim16#")
     private RdfResource baseVoltage;
 

@@ -65,20 +65,6 @@ public class LineWidthDemo extends Application {
                 }
             }
         );
-
-//        scene.setOnKeyPressed(keyEvent -> {
-//                if (KeyCode.CAPS.equals(keyEvent.getCode())) {
-//                    if (spaceActive) {
-//                        line.setEndX(500);
-//
-//                    } else {
-//                        line.setEndX(200);
-//                    }
-//                    changeSpaceFlag();
-//                }
-//            }
-//        );
-
     }
 
     private void changeSpaceFlag() {

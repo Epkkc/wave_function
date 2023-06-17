@@ -22,8 +22,6 @@ import java.util.concurrent.FutureTask;
 
 public class FxMain extends Application {
 
-
-
     public static void main(String[] args) {
         launch();
     }

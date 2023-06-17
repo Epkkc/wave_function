@@ -178,10 +178,9 @@ public class DeserializeMain extends Application {
         scrollPane.setPrefViewportWidth(maximumWindowBounds.getWidth() - 15);
         scrollPane.getStyleClass().add("scroll-bar");
         scrollPane.getStyleClass().add("address");
-//        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; ");
         sceneRoot.getChildren().add(scrollPane);
 
-        Scene scene = new Scene(sceneRoot, Color.WHITE); // 969faf
+        Scene scene = new Scene(sceneRoot, Color.WHITE);
         scene.setFill(Color.WHITE);
 
         scene.getStylesheets().add(testCss);

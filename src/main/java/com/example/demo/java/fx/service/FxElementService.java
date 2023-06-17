@@ -81,19 +81,12 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
         line.getLine().setStroke(Color.BLACK);
         Timeline timeline = new Timeline();
 
-        // todo для итоговой версии удалить это
-//        Text removingText = getRemovingLabel(line);
-//        Platform.runLater(() -> {
-//            root.getChildren().add(removingText);
-//        });
-
         timeline.getKeyFrames().add(new KeyFrame(Duration.ZERO, new KeyValue(line.getLine().opacityProperty(), 1.0d)));
         timeline.getKeyFrames().add(new KeyFrame(Duration.millis(timeLineLength), new KeyValue(line.getLine().opacityProperty(), 0d)));
         timeline.play();
 
         timeline.setOnFinished(actionEvent -> Platform.runLater(() -> {
             root.getChildren().remove(line.getLine());
-//                root.getChildren().remove(removingText);
         }));
     }
 
@@ -101,11 +94,6 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
         node.setStrokeColor(Color.BLACK);
 
         Timeline timeline = new Timeline();
-// todo для итоговой версии удалить это
-//        Text removingText = getRemovingLabel(line);
-//        Platform.runLater(() -> {
-//            node.getStackPane().getChildren().add(removingText); // alligment top
-//        });
 
         for (DoubleProperty opacityProperty : node.getOpacityProperty()) {
             timeline.getKeyFrames().add(new KeyFrame(Duration.ZERO, new KeyValue(opacityProperty, 1.0d)));
@@ -118,32 +106,6 @@ public class FxElementService extends AbstractElementService<FxAbstractPowerNode
             gridPane.getChildren().remove(node.getStackPane());
             gridPane.add(replaceNode.getStackPane(), replaceNode.getY(), replaceNode.getX());
         }));
-    }
-
-    // todo для итоговой версии удалить это
-    private Text getRemovingLabel(FxPowerLine line) {
-        Bounds layoutBounds = line.getLine().getLayoutBounds();
-
-        double centerX = layoutBounds.getCenterX();
-        double centerY = layoutBounds.getCenterY();
-
-        double width = layoutBounds.getWidth();
-        double height = layoutBounds.getHeight();
-//        double angle = Math.atan(height / width);
-        // instantiating the Rotate class.
-        Rotate rotate = new Rotate();
-
-        //setting properties for the rotate object.
-        rotate.setAngle(30);
-        rotate.setPivotX(100);
-        rotate.setPivotY(300);
-
-        Text text = new Text("removing");
-//        text.setRotate();
-        text.setX(centerX);
-        text.setY(centerY);
-        text.setFill(Color.BLACK);
-        return text;
     }
 
 }

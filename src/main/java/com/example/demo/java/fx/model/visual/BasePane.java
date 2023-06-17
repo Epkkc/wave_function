@@ -39,5 +39,4 @@ public class BasePane {
         return new StatusPane(size);
     }
 
-
 }

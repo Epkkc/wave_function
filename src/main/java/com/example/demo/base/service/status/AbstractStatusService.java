@@ -158,7 +158,6 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                                 if (meta.getNodeUuid().equals(uuid)) {
                                     // Этот статус был порождён нодой uuid
                                     levelsForRemove.add(meta.getVoltageLevel());
-//                                status.removeVoltageLevels(List.of(meta.getVoltageLevel()));
                                 }
                             }
                         );

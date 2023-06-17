@@ -22,25 +22,6 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ACLine extends ServicedElement {
 
-//      <cim:ACLineSegment rdf:ID = "_3_19">
-//        <cim:ConductingEquipment.BaseVoltage rdf:resource="#_230"/>
-//        <cim:Equipment.normallyInService>true</cim:Equipment.normallyInService>
-//        <cim:IdentifiedObject.mRID>3_19</cim:IdentifiedObject.mRID>
-//        <cim:IdentifiedObject.name>ЛЭП 3_19</cim:IdentifiedObject.name>
-//        <nti:IdentifiedObject.projectID>rastrwin</nti:IdentifiedObject.projectID>
-
-//        <cim:ConductingEquipment.technicalReequipmentCost>10000000</cim:ConductingEquipment.technicalReequipmentCost>
-//        <cim:ConductingEquipment.capitalRepairCost>4750000</cim:ConductingEquipment.capitalRepairCost>
-//        <cim:ConductingEquipment.currentRepairCost>300000</cim:ConductingEquipment.currentRepairCost>
-//        <cim:Conductor.length>215.4</cim:Conductor.length>
-//        <cim:ACLineSegment.bch>-24.2</cim:ACLineSegment.bch>
-//        <cim:ACLineSegment.r>35.4483</cim:ACLineSegment.r>
-//        <cim:ACLineSegment.x>90.47</cim:ACLineSegment.x>
-//        <cim:ACLineSegment.rPerLength>0.165</cim:ACLineSegment.rPerLength>
-//        <cim:ACLineSegment.lPerLength>0.42</cim:ACLineSegment.lPerLength>
-//      </cim:ACLineSegment>
-
-
     public ACLine(String rdfId, String mRID, String name, String baseVoltageRdfResource, boolean normallyInService, Double length, List<Terminal> terminals) {
         super(rdfId, mRID, name, baseVoltageRdfResource, normallyInService);
         this.length = length;

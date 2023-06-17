@@ -18,24 +18,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ConformLoad extends ServicedElement {
 
-//      <cim:ConformLoad rdf:ID = "_CLoad_8">
-//        <cim:ConductingEquipment.BaseVoltage rdf:resource="#_115"/>
-//        <cim:Equipment.normallyInService>true</cim:Equipment.normallyInService>
-
-//        <cim:EnergyConsumer.pfixed>13.5</cim:EnergyConsumer.pfixed>
-//        <cim:EnergyConsumer.qfixed>5.8</cim:EnergyConsumer.qfixed>
-//        <cim:ConformLoad.pMaxSummerLoad>13.5</cim:ConformLoad.pMaxSummerLoad>
-//        <cim:ConformLoad.pMaxWinterLoad>13.9</cim:ConformLoad.pMaxWinterLoad>
-//        <cim:ConformLoad.qMaxSummerLoad>5.8</cim:ConformLoad.qMaxSummerLoad>
-//        <cim:ConformLoad.qMaxWinterLoad>6.2</cim:ConformLoad.qMaxWinterLoad>
-//        <cim:EnergyConsumer.rate>1.1</cim:EnergyConsumer.rate>
-
-//        <cim:IdentifiedObject.mRID>CLoad_8</cim:IdentifiedObject.mRID>
-//        <cim:IdentifiedObject.name>Нагрузка в узле 8</cim:IdentifiedObject.name>
-//        <nti:IdentifiedObject.projectID>rastrwin</nti:IdentifiedObject.projectID>
-//      </cim:ConformLoad>
-
-
     public ConformLoad(String rdfId, String mRID, String name, String baseVoltageRdfResource, boolean normallyInService, Double activePowerFixed, Double reactivePowerFixed,
                        Double activePowerMaxSummer, Double activePowerMaxWinter, Double reactivePowerMaxSummer, Double reactivePowerMaxWinter, Terminal terminal) {
         super(rdfId, mRID, name, baseVoltageRdfResource, normallyInService);

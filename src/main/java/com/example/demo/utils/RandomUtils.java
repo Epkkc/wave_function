@@ -37,7 +37,6 @@ public class RandomUtils {
 
         if (size < 1) return null;
 
-        // todo возвращать optional, либо удостоверяться здесь, что возвращаем не null, хотя почему бы и нет, если в коллекции напримре был null.
         return copy.get(random.nextInt(size));
     }
 

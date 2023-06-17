@@ -42,8 +42,6 @@ public class BaseConnection {
 
     public boolean removeConnection(String nodeUuid, String lineUuid) {
         if (nodeLineDtos.stream().anyMatch(dto -> dto.getNodeUuid().equals(nodeUuid))) {
-//            connectedNodeUuids.remove(nodeUuid);
-//            lineUuids.remove(lineUuid);
             nodeLineDtos.removeIf(dto -> dto.getNodeUuid().equals(nodeUuid) && dto.getLineUuid().equals(lineUuid));
             return true;
         }

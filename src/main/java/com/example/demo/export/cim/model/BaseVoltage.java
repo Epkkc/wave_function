@@ -16,14 +16,6 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BaseVoltage extends BaseElement {
 
-//      <cim:BaseVoltage rdf:ID = "_115">
-//        <cim:IdentifiedObject.mRID>115</cim:IdentifiedObject.mRID>
-//        <cim:IdentifiedObject.name>115 кВ</cim:IdentifiedObject.name>
-//        <nti:IdentifiedObject.projectID>rastrwin</nti:IdentifiedObject.projectID>
-//        <cim:BaseVoltage.nominalVoltage>115.0</cim:BaseVoltage.nominalVoltage>
-//      </cim:BaseVoltage>
-
-
     public BaseVoltage(String rdfId, String mRID, String name, Double nominalVoltage) {
         super(rdfId, mRID, name);
         this.nominalVoltage = nominalVoltage;

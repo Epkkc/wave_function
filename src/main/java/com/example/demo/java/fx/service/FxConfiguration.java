@@ -5,8 +5,6 @@ import lombok.Getter;
 
 @Getter
 public class FxConfiguration extends BaseConfiguration {
-    // TODO:SPRING При переходе сделать этот класс как @Property класс
-    //  baseSize рассчитывать в elementService, если количество тайлов умноженное на preferredSize меньше, чем размер экрана
 
     protected final double padding;
     protected final double vGap;

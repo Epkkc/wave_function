@@ -21,21 +21,6 @@ import java.util.Map;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PowerTransformer extends ServicedElement {
 
-//      <cim:PowerTransformer rdf:ID = "_PT_21_15">
-//        <cim:ConductingEquipment.BaseVoltage rdf:resource="#_230"/>
-//        <cim:Equipment.normallyInService>true</cim:Equipment.normallyInService>
-//        <cim:IdentifiedObject.mRID>PT_21_15</cim:IdentifiedObject.mRID>
-//        <cim:IdentifiedObject.name>Двухобм. ТР с узлами: 21 и 15</cim:IdentifiedObject.name>
-//        <nti:IdentifiedObject.projectID>rastrwin</nti:IdentifiedObject.projectID>
-
-//        <cim:ConductingEquipment.technicalReequipmentCost>13000000</cim:ConductingEquipment.technicalReequipmentCost>
-//        <cim:ConductingEquipment.capitalRepairCost>5750000</cim:ConductingEquipment.capitalRepairCost>
-//        <cim:ConductingEquipment.currentRepairCost>500000</cim:ConductingEquipment.currentRepairCost>
-//        <cim:PowerTransformer.uK_HighLow>16.5</cim:PowerTransformer.uK_HighLow>
-//        <cim:PowerTransformer.pK_HighLow>1.6</cim:PowerTransformer.pK_HighLow>
-//      </cim:PowerTransformer>
-
-
     public PowerTransformer(String rdfId, String mRID, String name, String baseVoltageRdfResource, boolean normallyInService) {
         super(rdfId, mRID, name, baseVoltageRdfResource, normallyInService);
     }
