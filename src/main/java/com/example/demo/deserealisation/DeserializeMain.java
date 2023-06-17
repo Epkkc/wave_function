@@ -51,7 +51,7 @@ public class DeserializeMain extends Application {
     static DeserializationService deserializationService = new DeserializationService();
 
     static String path = "C:\\Users\\mnikitin\\IdeaProjects\\other\\demo\\src\\main\\resources\\schemes\\";
-    static String fileName = "scheme_05_06_2023T11_14_31_662.json";
+    static String fileName = "scheme_test_transformer_220_110_35_1.json";
     static boolean SET_STATUSES = ConfigurationStaticSupplier.deserializationAlgorithmSetStatuses;
 
     public static void main(String[] args) {
@@ -170,14 +170,21 @@ public class DeserializeMain extends Application {
 
         Group sceneRoot = new Group();
 
+
+        String testCss = DeserializeMain.class.getResource("/css/scroll/scroll-bar-1.css").toExternalForm();
+
         javafx.scene.control.ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefViewportHeight(maximumWindowBounds.getHeight() - 38);
         scrollPane.setPrefViewportWidth(maximumWindowBounds.getWidth() - 15);
-
+        scrollPane.getStyleClass().add("scroll-bar");
+        scrollPane.getStyleClass().add("address");
+//        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; ");
         sceneRoot.getChildren().add(scrollPane);
 
         Scene scene = new Scene(sceneRoot, Color.WHITE); // 969faf
         scene.setFill(Color.WHITE);
+
+        scene.getStylesheets().add(testCss);
 
         Group root = new Group();
 

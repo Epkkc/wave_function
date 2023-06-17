@@ -17,7 +17,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
@@ -33,6 +36,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
     public void setTransformerStatusToArea(PNODE powerNode, List<TransformerConfiguration> transformerConfigurations) {
         for (TransformerConfiguration configuration : transformerConfigurations) {
             // Установка BLOCK_SUBSTATION статусов
+
             addStatusAreaTo(
                 powerNode.getX(), powerNode.getY(),
                 configuration.getBoundingAreaFrom(),
@@ -46,7 +50,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
             // Устанавливаем SHOULD_TRANSFORMER статусы только если powerNode.chainLinkOrder < configuration.maxChainLength
             // (Если = то у следующих элементов уже будет +1, что превысит лимит maxChainLength)
             // Высшему классу напряжения присваиваем номер цепочки в ноде + 1, остальным (низким) присваиваем номер цепочки = 1
-            if (getChainLinkOrder(powerNode, configuration.getLevel()) < configuration.getMaxChainLength()) {
+            if (getChainLinkOrder(powerNode, configuration.getLevel()) < configuration.getMaxChainLength() && !configHasMinVoltage(configuration.getLevel())) {
                 int chainLinkOrder = getChainLinkOrder(powerNode, configuration.getLevel()) + 1;
 
                 addRingStatusArea(powerNode.getX(), powerNode.getY(),
@@ -54,12 +58,14 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                     configuration.getBoundingAreaTo(),
                     powerNode.getNodeType().getShouldStatus(),
                     configuration.getLevel(),
-                    configuration.isRoundedBoundingArea(), chainLinkOrder,
+                    configuration.isRoundedBoundingArea(),
+                    chainLinkOrder,
                     powerNode.getUuid()
                 );
             }
 
             // Установка SHOULD_LOAD статусов
+
             LoadConfiguration loadConfiguration = baseConfiguration.getLoadConfiguration(configuration.getLevel());
             if (loadConfiguration != null && loadConfiguration.isEnabled()) {
                 addRingStatusArea(
@@ -74,6 +80,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
             }
 
             // Установка SHOULD_GENERATOR статусов
+
             GeneratorConfiguration generatorConfiguration = baseConfiguration.getGeneratorConfiguration(configuration.getLevel());
             if (generatorConfiguration != null && generatorConfiguration.isEnabled()) {
                 addRingStatusArea(
@@ -89,6 +96,11 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
         }
 
         addBaseBlockingStatus(powerNode.getX(), powerNode.getY(), powerNode.getUuid());
+    }
+
+    private boolean configHasMinVoltage(VoltageLevel voltageLevel) {
+        Integer min = baseConfiguration.getTransformerConfigurations().keySet().stream().map(VoltageLevel::getVoltageLevel).min(Comparator.comparingInt(level -> level)).orElseThrow(() -> new UnsupportedOperationException("Unable to find mimimum voltage level for transformer configurations"));
+        return voltageLevel.getVoltageLevel() == min;
     }
 
     @Override

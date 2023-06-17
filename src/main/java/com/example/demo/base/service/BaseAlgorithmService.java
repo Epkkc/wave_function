@@ -70,7 +70,7 @@ public class BaseAlgorithmService {
             factory,
             exportService,
             cimExportService,
-            false
+            ConfigurationStaticSupplier.randomFirstNode
         );
         GeneralResult result = algorithm.start();
 

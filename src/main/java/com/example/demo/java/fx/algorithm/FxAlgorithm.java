@@ -51,7 +51,7 @@ public class FxAlgorithm extends AbstractAlgorithm<FxAbstractPowerNode, FxPowerL
 
     @Override
     protected void afterTransformerSet(TransformerConfiguration configuration) {
-        sleep(configuration.getLevel().getTimeout());
+        sleep(configuration.getTimeout());
     }
 
     @Override

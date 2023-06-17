@@ -23,9 +23,12 @@ public class TransformerConfiguration {
     private int boundingAreaTo;
     private boolean roundedBoundingArea; // Является ли форма boundingArea круглой или квадратной
     private boolean enabled;
+    private boolean threeWindingEnabled;
     private List<Integer> transformerPowerSet;
     private int numberOfNodes;
     private double maxLineLength; // Максимальная длина линии, которой будет соединён трансформатор с трансформатором
     private int maxChainLength; // Максимальная длина цепочки трансформаторов
+    private int gap;
+    private int timeout;
 
 }

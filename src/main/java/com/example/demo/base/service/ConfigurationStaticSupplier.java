@@ -17,17 +17,17 @@ import static com.example.demo.base.model.enums.VoltageLevel.LEVEL_500;
 
 public class ConfigurationStaticSupplier {
 
-    public static int rows = 16;
-    public static int columns = 30;
+    public static int rows = 40;
+    public static int columns = 40;
     public static int numberOfNodes = 20;
     public static int numberOfEdges = 19;
-    public static boolean baseExport = true;
+    public static boolean baseExport = false;
     public static boolean cimExport = false;
-    public static int baseAlgorithmIterations = 1;
+    public static int baseAlgorithmIterations = 200;
     public static double fxGridPadding = 2d;
     public static double fxGridVGap = 4d;
     public static double fxGridHGap = 4d;
-    public static double fxBaseSize = 45;
+    public static double fxBaseSize = 35;
     public static int fxLineDisappearanceDuration = 3_000;
     public static int cimExportProportionalityFactor = 4;
     public static int cimExportInitialXOffset = 0;
@@ -37,6 +37,7 @@ public class ConfigurationStaticSupplier {
     public static boolean deserializationAlgorithmSetStatuses = true;
     public static boolean baseBlockingStatusRoundedArea = false;
     public static int baseBlockingStatusBoundingAreaRadius = 2;
+    public static boolean randomFirstNode = false;
 
 
     public static final Map<VoltageLevel, TransformerConfiguration> transformerConfigurations = new HashMap<>();
@@ -50,57 +51,72 @@ public class ConfigurationStaticSupplier {
         transformerConfigurations.put(LEVEL_500, TransformerConfiguration.builder()
             .level(LEVEL_500)
             .enabled(false)
-            .boundingAreaFrom(LEVEL_500.getBoundingArea())
-            .boundingAreaTo(LEVEL_500.getBoundingArea() + 4)
-            .roundedBoundingArea(true)
-            .maxLineLength(LEVEL_500.getBoundingArea() + 4)
+                .threeWindingEnabled(true)
             .transformerPowerSet(List.of(10000))
+            .boundingAreaFrom(60)
+            .boundingAreaTo(64)
+            .roundedBoundingArea(true)
+            .maxLineLength(64)
             .numberOfNodes(2)
             .maxChainLength(3)
+                .gap(2)
+                .timeout(2000)
             .build());
         transformerConfigurations.put(LEVEL_220, TransformerConfiguration.builder()
             .level(LEVEL_220)
             .enabled(false)
-            .boundingAreaFrom(LEVEL_220.getBoundingArea())
-            .boundingAreaTo(LEVEL_220.getBoundingArea() + 3)
+            .threeWindingEnabled(true)
+            .boundingAreaFrom(35)
+            .boundingAreaTo(38)
             .roundedBoundingArea(true)
-            .maxLineLength(LEVEL_220.getBoundingArea() + 3)
+            .maxLineLength(38)
             .transformerPowerSet(List.of(5000))
             .numberOfNodes(3)
             .maxChainLength(3)
+            .gap(2)
+            .timeout(2000)
             .build());
         transformerConfigurations.put(LEVEL_110, TransformerConfiguration.builder()
             .level(LEVEL_110)
             .enabled(true)
-            .boundingAreaFrom(LEVEL_110.getBoundingArea())
-            .boundingAreaTo(LEVEL_110.getBoundingArea() + 2)
+            .threeWindingEnabled(true)
+            .boundingAreaFrom(18)
+            .boundingAreaTo(20)
             .roundedBoundingArea(true)
-            .maxLineLength(LEVEL_110.getBoundingArea() + 2)
+            .maxLineLength(20)
             .transformerPowerSet(List.of(2500))
             .numberOfNodes(2)
             .maxChainLength(3)
+            .gap(2)
+            .timeout(2000)
             .build());
         transformerConfigurations.put(LEVEL_35, TransformerConfiguration.builder()
             .level(LEVEL_35)
             .enabled(true)
-            .boundingAreaFrom(LEVEL_35.getBoundingArea())
-            .boundingAreaTo(LEVEL_35.getBoundingArea() + 1)
+            .threeWindingEnabled(false)
+            .boundingAreaFrom(6)
+            .boundingAreaTo(7)
             .roundedBoundingArea(true)
-            .maxLineLength(LEVEL_35.getBoundingArea() + 1)
+            .maxLineLength(7)
             .transformerPowerSet(List.of(1000))
             .numberOfNodes(4)
             .maxChainLength(3)
+            .gap(1)
+            .timeout(1000)
             .build());
         transformerConfigurations.put(LEVEL_10, TransformerConfiguration.builder()
             .level(LEVEL_10)
             .enabled(true)
-            .boundingAreaFrom(LEVEL_10.getBoundingArea())
-            .boundingAreaTo(LEVEL_10.getBoundingArea() + 1)
+            .threeWindingEnabled(false)
+            .boundingAreaFrom(2)
+            .boundingAreaTo(3)
             .roundedBoundingArea(true)
-            .maxLineLength(LEVEL_10.getBoundingArea() + 1)
+            .maxLineLength(3)
             .transformerPowerSet(List.of(500))
             .numberOfNodes(1000)
             .maxChainLength(3)
+            .gap(0)
+            .timeout(500)
             .build());
 
         loadConfigurations.put(LEVEL_10, LoadConfiguration.builder()

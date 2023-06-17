@@ -156,5 +156,9 @@
       "enabled": false,
       "maxLineLength": 0.0
     }
+  },
+  "baseBlockingStatusConfiguration": {
+    "rounded": true,
+    "radius": 1
   }
 }

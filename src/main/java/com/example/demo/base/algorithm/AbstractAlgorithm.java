@@ -588,12 +588,12 @@ public abstract class AbstractAlgorithm<PNODE extends AbstractPowerNode<? extend
 
     protected List<VoltageLevel> getSubstationVoltageLevels(TransformerConfiguration configuration, boolean firstInCfg, int iter) {
         // Определяем будет ли трансформатор трёхобмоточным
-        boolean three = configuration.getLevel().isThreeWindings() && random.nextBoolean();
+        boolean three = configuration.isThreeWindingEnabled() && random.nextBoolean();
         List<TransformerConfiguration> transformerConfigurations = configurationService.getTransformerConfigurationList();
         if (three) {
             return List.of(configuration.getLevel(), transformerConfigurations.get(iter + 1).getLevel(), transformerConfigurations.get(iter + 2).getLevel());
         } else {
-            int gap = firstInCfg ? 1 : random.nextInt(configuration.getLevel().getGap()) + 1;
+            int gap = firstInCfg ? 1 : random.nextInt(configuration.getGap()) + 1;
             gap = Math.min(gap, transformerConfigurations.size());
             return List.of(configuration.getLevel(), transformerConfigurations.get(iter + gap).getLevel());
         }

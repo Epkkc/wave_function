@@ -162,5 +162,9 @@
       "generationRate": 40,
       "maxLineLength": 0.0
     }
+  },
+  "baseBlockingStatusConfiguration": {
+    "rounded": true,
+    "radius": 1
   }
 }

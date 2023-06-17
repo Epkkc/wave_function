@@ -84,7 +84,7 @@ public class FxAlgorithmService {
             fabric,
             exportService,
             cimExportService,
-            true
+            ConfigurationStaticSupplier.randomFirstNode
         );
 
         GeneralResult generalResult = null;
