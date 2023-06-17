@@ -172,7 +172,7 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
     }
 
     private void addRingStatusArea(int x, int y, int boundingAreaFrom, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder,
-                                   String nodeUuid, Integer availablePower) {
+                                   String nodeUuid) {
         matrix.getArea(x, y, boundingAreaTo).stream()
             .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
             .forEach(node -> {
@@ -190,17 +190,11 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                         return;
                     }
                 }
-                node.addStatus(statusType, List.of(new StatusMetaDto(voltageLevel, chainLinkOrder, nodeUuid, availablePower)));
+                node.addStatus(statusType, List.of(new StatusMetaDto(voltageLevel, chainLinkOrder, nodeUuid)));
             });
     }
 
-    private void addRingStatusArea(int x, int y, int boundingAreaFrom, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder,
-                                   String nodeUuid) {
-        addRingStatusArea(x, y, boundingAreaFrom, boundingAreaTo, statusType, voltageLevel, rounded, chainLinkOrder, nodeUuid, null);
-    }
-
-    private void addStatusAreaTo(int x, int y, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder, String nodeUuid,
-                                 Integer availablePower) {
+    private void addStatusAreaTo(int x, int y, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder, String nodeUuid) {
         matrix.getArea(x, y, boundingAreaTo).stream()
             .filter(node -> node.getNodeType().equals(PowerNodeType.EMPTY))
             .forEach(node -> {
@@ -210,12 +204,8 @@ public abstract class AbstractStatusService<PNODE extends AbstractPowerNode<? ex
                         return;
                     }
                 }
-                node.addStatus(statusType, List.of(new StatusMetaDto(voltageLevel, chainLinkOrder, nodeUuid, availablePower)));
+                node.addStatus(statusType, List.of(new StatusMetaDto(voltageLevel, chainLinkOrder, nodeUuid)));
             });
-    }
-
-    private void addStatusAreaTo(int x, int y, int boundingAreaTo, StatusType statusType, VoltageLevel voltageLevel, boolean rounded, int chainLinkOrder, String nodeUuid) {
-        addStatusAreaTo(x, y, boundingAreaTo, statusType, voltageLevel, rounded, chainLinkOrder, nodeUuid, null);
     }
 
     private void addBaseBlockingStatus(int x, int y, String nodeUuid) {
